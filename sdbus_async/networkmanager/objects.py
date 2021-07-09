@@ -70,7 +70,7 @@ NETWORK_MANAGER_SERVICE_NAME = 'org.freedesktop.NetworkManager'
 class NetworkManager(NetworkManagerInterfaceAsync):
     """Network Manger main object
 
-    Implements :py:class:`NetworkManagerInterface`
+    Implements :py:class:`NetworkManagerInterfaceAsync`
 
     Service name ``'org.freedesktop.NetworkManager'``
     and object path ``/org/freedesktop/NetworkManager`` is predetermined.
@@ -92,7 +92,7 @@ class NetworkManagerAgentManager(
         NetworkManagerSecretAgentManagerInterfaceAsync):
     """NetworkManager secrets manager
 
-    Implements :py:class:`NetworkManagerSecretAgentManagerInterface`.
+    Implements :py:class:`NetworkManagerSecretAgentManagerInterfaceAsync`.
 
     Service name ``'org.freedesktop.NetworkManager'``
     and object path ``/org/freedesktop/NetworkManager/AgentManager``
@@ -114,7 +114,7 @@ class NetworkManagerAgentManager(
 class NetworkManagerDnsManager(NetworkManagerDnsManagerInterfaceAsync):
     """NetworkManager DNS manager
 
-    Implements :py:class:`NetworkManagerDnsManagerInterface`.
+    Implements :py:class:`NetworkManagerDnsManagerInterfaceAsync`.
 
     Service name ``'org.freedesktop.NetworkManager'``
     and object path ``/org/freedesktop/NetworkManager/DnsManager``
@@ -136,7 +136,7 @@ class NetworkManagerDnsManager(NetworkManagerDnsManagerInterfaceAsync):
 class NetworkManagerSettings(NetworkManagerSettingsInterfaceAsync):
     """NetworkManager settings
 
-    Implements :py:class:`NetworkManagerSettingsInterface`.
+    Implements :py:class:`NetworkManagerSettingsInterfaceAsync`.
 
     Service name ``'org.freedesktop.NetworkManager'``
     and object path ``/org/freedesktop/NetworkManager/DnsManager``
@@ -159,7 +159,7 @@ class NetworkConnectionSettings(
         NetworkManagerSettingsConnectionInterfaceAsync):
     """Setting of specific connection
 
-    Implements :py:class:`NetworkManagerSettingsConnectionInterface`
+    Implements :py:class:`NetworkManagerSettingsConnectionInterfaceAsync`
     """
 
     def __init__(self, settings_path: str,
@@ -820,7 +820,7 @@ class NetworkDevicePPP(
 class ActiveConnection(NetworkManagerConnectionActiveInterfaceAsync):
     """Active connection object
 
-    Implements :py:class:`NetworkManagerConnectionActiveInterface`
+    Implements :py:class:`NetworkManagerConnectionActiveInterfaceAsync`
     """
 
     def __init__(self, connection_path: str,
@@ -846,8 +846,8 @@ class ActiveVPNConnection(
         NetworkManagerVPNConnectionInterfaceAsync):
     """Active VPN connection object
 
-    Implements :py:class:`NetworkManagerConnectionActiveInterface`
-    and :py:class:`NetworkManagerVPNConnectionInterface`
+    Implements :py:class:`NetworkManagerConnectionActiveInterfaceAsync`
+    and :py:class:`NetworkManagerVPNConnectionInterfaceAsync`
     """
     ...
 
@@ -855,7 +855,7 @@ class ActiveVPNConnection(
 class IPv4Config(NetworkManagerIP4ConfigInterfaceAsync):
     """IPv4 configuration interface
 
-    Implements :py:class:`NetworkManagerIP4ConfigInterface`
+    Implements :py:class:`NetworkManagerIP4ConfigInterfaceAsync`
     """
 
     def __init__(self, ip4_path: str, bus: Optional[SdBus] = None) -> None:
@@ -878,7 +878,7 @@ class IPv4Config(NetworkManagerIP4ConfigInterfaceAsync):
 class IPv6Config(NetworkManagerIP6ConfigInterfaceAsync):
     """IPv6 configuration interface
 
-    Implements :py:class:`NetworkManagerIP6ConfigInterface`
+    Implements :py:class:`NetworkManagerIP6ConfigInterfaceAsync`
     """
 
     def __init__(self, ip6_path: str, bus: Optional[SdBus] = None) -> None:
@@ -901,7 +901,7 @@ class IPv6Config(NetworkManagerIP6ConfigInterfaceAsync):
 class DHCPv4Config(NetworkManagerDHCP4ConfigInterfaceAsync):
     """DHCPv4 configuration interface
 
-    Implements :py:class:`NetworkManagerDHCP4ConfigInterface`
+    Implements :py:class:`NetworkManagerDHCP4ConfigInterfaceAsync`
     """
 
     def __init__(self, dhcp4_path: str, bus: Optional[SdBus] = None) -> None:
@@ -924,7 +924,7 @@ class DHCPv4Config(NetworkManagerDHCP4ConfigInterfaceAsync):
 class DHCPv6Config(NetworkManagerDHCP6ConfigInterfaceAsync):
     """DHCPv6 configuration interface
 
-    Implements :py:class:`NetworkManagerDHCP6ConfigInterface`
+    Implements :py:class:`NetworkManagerDHCP6ConfigInterfaceAsync`
     """
 
     def __init__(self, dhcpv6_path: str, bus: Optional[SdBus] = None) -> None:
@@ -947,7 +947,7 @@ class DHCPv6Config(NetworkManagerDHCP6ConfigInterfaceAsync):
 class AccessPoint(NetworkManagerAccessPointInterfaceAsync):
     """Access Point (WiFi point) object
 
-    Implements :py:class:`NetworkManagerAccessPointInterface`
+    Implements :py:class:`NetworkManagerAccessPointInterfaceAsync`
     """
 
     def __init__(self, point_path: str, bus: Optional[SdBus] = None) -> None:
@@ -970,7 +970,7 @@ class AccessPoint(NetworkManagerAccessPointInterfaceAsync):
 class WiFiP2PPeer(NetworkManagerWifiP2PPeerInterfaceAsync):
     """WiFi peer object
 
-    Implements :py:class:`NetworkManagerWifiP2PPeerInterface`
+    Implements :py:class:`NetworkManagerWifiP2PPeerInterfaceAsync`
     """
 
     def __init__(self, peer_path: str, bus: Optional[SdBus] = None) -> None:
@@ -993,7 +993,7 @@ class WiFiP2PPeer(NetworkManagerWifiP2PPeerInterfaceAsync):
 class ConfigCheckpoint(NetworkManagerCheckpointInterfaceAsync):
     """Configuration checkpoint interface
 
-    Implements :py:class:`NetworkManagerCheckpointInterface`
+    Implements :py:class:`NetworkManagerCheckpointInterfaceAsync`
     """
 
     def __init__(self, checkpoint_path: str,
