@@ -11,6 +11,7 @@ of `NetworkManager <https://wiki.gnome.org/Projects/NetworkManager>`_.
     objects
     device_interfaces
     other_interfaces
+    enums
 
 See `python-sdbus <https://github.com/igo95862/python-sdbus>`_ homepage if you are
 unfamiliar with python-sdbus.
