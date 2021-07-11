@@ -128,6 +128,20 @@ from .objects import (
     WiFiP2PPeer,
 )
 
+
+DEVICE_TYPE_TO_CLASS = {
+    DeviceType.ETHERNET: NetworkDeviceWired,
+    DeviceType.WIFI: NetworkDeviceWireless,
+    DeviceType.BLUETOOTH: NetworkDeviceBluetooth,
+    DeviceType.OLPC_MESH: NetworkDeviceOlpcMesh,
+    DeviceType.VETH: NetworkDeviceVeth,
+    DeviceType.WIREGUARD: NetworkDeviceWireGuard,
+    DeviceType.PPP: NetworkDevicePPP,
+    DeviceType.BRIDGE: NetworkDeviceBridge,
+    DeviceType.MODEM: NetworkDeviceModem,
+}
+
+
 __all__ = (
     'AccessPointCapabilities', 'BluetoothCapabilities',
     'ConnectionFlags', 'ConnectionState', 'ConnectionStateFlags',
@@ -218,4 +232,6 @@ __all__ = (
     'AccessPoint',
     'WiFiP2PPeer',
     'ConfigCheckpoint',
+
+    'DEVICE_TYPE_TO_CLASS',
 )
