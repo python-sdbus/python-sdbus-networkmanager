@@ -9,6 +9,7 @@ of `NetworkManager <https://wiki.gnome.org/Projects/NetworkManager>`_.
     :caption: Contents:
 
     objects
+    examples
     device_interfaces
     other_interfaces
     enums
