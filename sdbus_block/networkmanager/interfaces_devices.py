@@ -584,7 +584,7 @@ class NetworkManagerDeviceWifiP2PInterface(
     """Wi-Fi Peet to Peer device interface"""
 
     @dbus_method('a{sv}')
-    async def start_find(
+    def start_find(
         self,
         options: Dict[str, Tuple[str, Any]],
     ) -> None:
@@ -598,7 +598,7 @@ class NetworkManagerDeviceWifiP2PInterface(
         raise NotImplementedError
 
     @dbus_method()
-    async def stop_find(self) -> None:
+    def stop_find(self) -> None:
         """Stop find operation"""
         raise NotImplementedError
 
@@ -658,7 +658,7 @@ class NetworkManagerDeviceWirelessInterface(
     @dbus_method(
         result_signature='ao',
     )
-    async def get_all_access_points(
+    def get_all_access_points(
         self,
     ) -> List[str]:
         """Return the list of paths to all access points visible
@@ -669,7 +669,7 @@ class NetworkManagerDeviceWirelessInterface(
 
     @dbus_method('a{sv}',
                  )
-    async def request_scan(
+    def request_scan(
         self,
         options: Dict[str, Tuple[str, Any]],
     ) -> None:
@@ -734,7 +734,7 @@ class NetworkManagerDeviceInterface(
     @dbus_method(
         input_signature='a{sa{sv}}tu',
     )
-    async def reapply(
+    def reapply(
         self,
         connection: Dict[str, Dict[str, Tuple[str, Any]]],
         version_id: int,
@@ -752,7 +752,7 @@ class NetworkManagerDeviceInterface(
         input_signature='u',
         result_signature='a{sa{sv}}t',
     )
-    async def get_applied_connection(
+    def get_applied_connection(
         self,
         flags: int = 0,
     ) -> Tuple[Dict[str, Dict[str, Tuple[str, Any]]], int]:
@@ -765,14 +765,14 @@ class NetworkManagerDeviceInterface(
         raise NotImplementedError
 
     @dbus_method()
-    async def disconnect(
+    def disconnect(
         self,
     ) -> None:
         """Disconnect device and prevent from automatically activating"""
         raise NotImplementedError
 
     @dbus_method()
-    async def delete(
+    def delete(
         self,
     ) -> None:
         """Deletes the software device.
@@ -994,7 +994,7 @@ class NetworkManagerPPPInterface(
     @dbus_method(
         result_signature='ss',
     )
-    async def need_secrets(
+    def need_secrets(
         self,
     ) -> Tuple[str, str]:
         """Need secrets?
@@ -1004,7 +1004,7 @@ class NetworkManagerPPPInterface(
         raise NotImplementedError
 
     @dbus_method('a{sv}')
-    async def set_ip4_config(
+    def set_ip4_config(
         self,
         config: Dict[str, Tuple[str, Any]],
     ) -> None:
@@ -1012,7 +1012,7 @@ class NetworkManagerPPPInterface(
         raise NotImplementedError
 
     @dbus_method('a{sv}')
-    async def set_ip6_config(
+    def set_ip6_config(
         self,
         config: Dict[str, Tuple[str, Any]],
     ) -> None:
@@ -1020,7 +1020,7 @@ class NetworkManagerPPPInterface(
         raise NotImplementedError
 
     @dbus_method('u')
-    async def set_state(
+    def set_state(
         self,
         state: int,
     ) -> None:
@@ -1031,7 +1031,7 @@ class NetworkManagerPPPInterface(
         raise NotImplementedError
 
     @dbus_method('i')
-    async def set_ifindex(
+    def set_ifindex(
         self,
         ifindex: int,
     ) -> None:

@@ -101,7 +101,7 @@ class NetworkManagerSecretAgentManagerInterface(
     """Secret Agent Manager"""
 
     @dbus_method('s')
-    async def register(
+    def register(
         self,
         identifier: str,
     ) -> None:
@@ -112,7 +112,7 @@ class NetworkManagerSecretAgentManagerInterface(
         raise NotImplementedError
 
     @dbus_method('su')
-    async def register_with_capabilities(
+    def register_with_capabilities(
         self,
         identifier: str,
         capabilities: int,
@@ -124,7 +124,7 @@ class NetworkManagerSecretAgentManagerInterface(
         raise NotImplementedError
 
     @dbus_method()
-    async def unregister(
+    def unregister(
         self,
     ) -> None:
         """Notify NetworkManager that secret agent is no longer active"""
@@ -444,7 +444,7 @@ class NetworkManagerSecretAgentInterface(
         input_signature='a{sa{sv}}osasu',
         result_signature='a{sa{sv}}',
     )
-    async def get_secrets(
+    def get_secrets(
         self,
         connection: Dict[str, Dict[str, Tuple[str, Any]]],
         connection_path: str,
@@ -456,7 +456,7 @@ class NetworkManagerSecretAgentInterface(
         raise NotImplementedError
 
     @dbus_method('os')
-    async def cancel_get_secrets(
+    def cancel_get_secrets(
         self,
         connection_path: str,
         setting_name: str,
@@ -465,7 +465,7 @@ class NetworkManagerSecretAgentInterface(
         raise NotImplementedError
 
     @dbus_method('a{sa{sv}}o')
-    async def save_secrets(
+    def save_secrets(
         self,
         connection: Dict[str, Dict[str, Tuple[str, Any]]],
         connection_path: str,
@@ -474,7 +474,7 @@ class NetworkManagerSecretAgentInterface(
         raise NotImplementedError
 
     @dbus_method('a{sa{sv}}o')
-    async def delete_secrets(
+    def delete_secrets(
         self,
         connection: Dict[str, Dict[str, Tuple[str, Any]]],
         connection_path: str,
@@ -489,7 +489,7 @@ class NetworkManagerSettingsConnectionInterface(
     """Represents a single network connection"""
 
     @dbus_method('a{sa{sv}}')
-    async def update(
+    def update(
         self,
         properties: Dict[str, Dict[str, Tuple[str, Any]]],
     ) -> None:
@@ -500,7 +500,7 @@ class NetworkManagerSettingsConnectionInterface(
         raise NotImplementedError
 
     @dbus_method('a{sa{sv}}')
-    async def update_unsaved(
+    def update_unsaved(
         self,
         properties: Dict[str, Dict[str, Tuple[str, Any]]],
     ) -> None:
@@ -508,7 +508,7 @@ class NetworkManagerSettingsConnectionInterface(
         raise NotImplementedError
 
     @dbus_method()
-    async def delete(
+    def delete(
         self,
     ) -> None:
         """Delete connection"""
@@ -517,7 +517,7 @@ class NetworkManagerSettingsConnectionInterface(
     @dbus_method(
         result_signature='a{sa{sv}}',
     )
-    async def get_settings(
+    def get_settings(
         self,
     ) -> Dict[str, Dict[str, Tuple[str, Any]]]:
         """Get connection settings"""
@@ -527,7 +527,7 @@ class NetworkManagerSettingsConnectionInterface(
         input_signature='s',
         result_signature='a{sa{sv}}',
     )
-    async def get_secrets(
+    def get_secrets(
         self,
         setting_name: str,
     ) -> Dict[str, Dict[str, Tuple[str, Any]]]:
@@ -535,14 +535,14 @@ class NetworkManagerSettingsConnectionInterface(
         raise NotImplementedError
 
     @dbus_method()
-    async def clear_secrets(
+    def clear_secrets(
         self,
     ) -> None:
         """Clear connection secrets"""
         raise NotImplementedError
 
     @dbus_method()
-    async def save(
+    def save(
         self,
     ) -> None:
         """Save connection settings to storage"""
@@ -552,7 +552,7 @@ class NetworkManagerSettingsConnectionInterface(
         input_signature='a{sa{sv}}ua{sv}',
         result_signature='a{sv}',
     )
-    async def update2(
+    def update2(
         self,
         settings: Dict[str, Dict[str, Tuple[str, Any]]],
         flags: int,
@@ -588,7 +588,7 @@ class NetworkManagerSettingsInterface(
     @dbus_method(
         result_signature='ao',
     )
-    async def list_connections(
+    def list_connections(
         self,
     ) -> List[str]:
         """List of connection object paths"""
@@ -598,7 +598,7 @@ class NetworkManagerSettingsInterface(
         input_signature='s',
         result_signature='o',
     )
-    async def get_connection_by_uuid(
+    def get_connection_by_uuid(
         self,
         uuid: str,
     ) -> str:
@@ -609,7 +609,7 @@ class NetworkManagerSettingsInterface(
         input_signature='a{sa{sv}}',
         result_signature='o',
     )
-    async def add_connection(
+    def add_connection(
         self,
         connection: Dict[str, Dict[str, Tuple[str, Any]]],
     ) -> str:
@@ -620,7 +620,7 @@ class NetworkManagerSettingsInterface(
         input_signature='a{sa{sv}}',
         result_signature='o',
     )
-    async def add_connection_unsaved(
+    def add_connection_unsaved(
         self,
         connection: Dict[str, Dict[str, Tuple[str, Any]]],
     ) -> str:
@@ -631,7 +631,7 @@ class NetworkManagerSettingsInterface(
         input_signature='a{sa{sv}}ua{sv}',
         result_signature='oa{sv}',
     )
-    async def add_connection2(
+    def add_connection2(
         self,
         settings: Dict[str, Dict[str, Tuple[str, Any]]],
         flags: int,
@@ -644,7 +644,7 @@ class NetworkManagerSettingsInterface(
         input_signature='as',
         result_signature='bas',
     )
-    async def load_connections(
+    def load_connections(
         self,
         filenames: List[str],
     ) -> Tuple[bool, List[str]]:
@@ -657,14 +657,14 @@ class NetworkManagerSettingsInterface(
     @dbus_method(
         result_signature='b',
     )
-    async def reload_connections(
+    def reload_connections(
         self,
     ) -> bool:
         """Reload all connection from disk"""
         raise NotImplementedError
 
     @dbus_method('s')
-    async def save_hostname(
+    def save_hostname(
         self,
         hostname: str,
     ) -> None:
@@ -696,7 +696,7 @@ class NetworkManagerVPNPluginInterface(
     """Interface provided by VPN plugins"""
 
     @dbus_method('a{sa{sv}}')
-    async def connect(
+    def connect(
         self,
         connection: Dict[str, Dict[str, Tuple[str, Any]]],
     ) -> None:
@@ -707,7 +707,7 @@ class NetworkManagerVPNPluginInterface(
         raise NotImplementedError
 
     @dbus_method('a{sa{sv}}a{sv}')
-    async def connect_interactive(
+    def connect_interactive(
         self,
         connection: Dict[str, Dict[str, Tuple[str, Any]]],
         details: Dict[str, Tuple[str, Any]],
@@ -723,7 +723,7 @@ class NetworkManagerVPNPluginInterface(
         input_signature='a{sa{sv}}',
         result_signature='s',
     )
-    async def need_secrets(
+    def need_secrets(
         self,
         settings: Dict[str, Dict[str, Tuple[str, Any]]],
     ) -> str:
@@ -734,14 +734,14 @@ class NetworkManagerVPNPluginInterface(
         raise NotImplementedError
 
     @dbus_method()
-    async def disconnect(
+    def disconnect(
         self,
     ) -> None:
         """Disconnect from VPN"""
         raise NotImplementedError
 
     @dbus_method('a{sv}')
-    async def set_config(
+    def set_config(
         self,
         config: Dict[str, Tuple[str, Any]],
     ) -> None:
@@ -749,7 +749,7 @@ class NetworkManagerVPNPluginInterface(
         raise NotImplementedError
 
     @dbus_method('a{sv}')
-    async def set_ip4_config(
+    def set_ip4_config(
         self,
         config: Dict[str, Tuple[str, Any]],
     ) -> None:
@@ -757,7 +757,7 @@ class NetworkManagerVPNPluginInterface(
         raise NotImplementedError
 
     @dbus_method('a{sv}')
-    async def set_ip6_config(
+    def set_ip6_config(
         self,
         config: Dict[str, Tuple[str, Any]],
     ) -> None:
@@ -765,7 +765,7 @@ class NetworkManagerVPNPluginInterface(
         raise NotImplementedError
 
     @dbus_method('s')
-    async def set_failure(
+    def set_failure(
         self,
         reason: str,
     ) -> None:
@@ -773,7 +773,7 @@ class NetworkManagerVPNPluginInterface(
         raise NotImplementedError
 
     @dbus_method('a{sa{sv}}')
-    async def new_secrets(
+    def new_secrets(
         self,
         connection: Dict[str, Dict[str, Tuple[str, Any]]],
     ) -> None:
@@ -852,7 +852,7 @@ class NetworkManagerInterface(
     """Main network manager interface"""
 
     @dbus_method('u')
-    async def reload(
+    def reload(
         self,
         flags: int = 0x0,
     ) -> None:
@@ -872,7 +872,7 @@ class NetworkManagerInterface(
     @dbus_method(
         result_signature='ao',
     )
-    async def get_devices(
+    def get_devices(
         self,
     ) -> List[str]:
         """Get list of device object paths known"""
@@ -881,7 +881,7 @@ class NetworkManagerInterface(
     @dbus_method(
         result_signature='ao',
     )
-    async def get_all_devices(
+    def get_all_devices(
         self,
     ) -> List[str]:
         """Get list of device object paths with placeholders"""
@@ -891,7 +891,7 @@ class NetworkManagerInterface(
         input_signature='s',
         result_signature='o',
     )
-    async def get_device_by_ip_iface(
+    def get_device_by_ip_iface(
         self,
         iface: str,
     ) -> str:
@@ -902,7 +902,7 @@ class NetworkManagerInterface(
         input_signature='ooo',
         result_signature='o',
     )
-    async def activate_connection(
+    def activate_connection(
         self,
         connection: str = '/',
         device: str = '/',
@@ -918,7 +918,7 @@ class NetworkManagerInterface(
         input_signature='a{sa{sv}}oo',
         result_signature='oo',
     )
-    async def add_and_activate_connection(
+    def add_and_activate_connection(
         self,
         connection: Dict[str, Dict[str, Tuple[str, Any]]],
         device: str,
@@ -931,7 +931,7 @@ class NetworkManagerInterface(
         input_signature='a{sa{sv}}ooa{sv}',
         result_signature='ooa{sv}',
     )
-    async def add_and_activate_connection2(
+    def add_and_activate_connection2(
         self,
         connection: Dict[str, Dict[str, Tuple[str, Any]]],
         device: str,
@@ -942,7 +942,7 @@ class NetworkManagerInterface(
         raise NotImplementedError
 
     @dbus_method('o')
-    async def deactivate_connection(
+    def deactivate_connection(
         self,
         active_connection: str,
     ) -> None:
@@ -950,7 +950,7 @@ class NetworkManagerInterface(
         raise NotImplementedError
 
     @dbus_method('b')
-    async def sleep(
+    def sleep(
         self,
         sleep: bool,
     ) -> None:
@@ -958,7 +958,7 @@ class NetworkManagerInterface(
         raise NotImplementedError
 
     @dbus_method('b')
-    async def enable(
+    def enable(
         self,
         enable: bool,
     ) -> None:
@@ -968,14 +968,14 @@ class NetworkManagerInterface(
     @dbus_method(
         result_signature='a{ss}',
     )
-    async def get_permissions(
+    def get_permissions(
         self,
     ) -> Dict[str, str]:
         """Returns the permissions of caller"""
         raise NotImplementedError
 
     @dbus_method('ss')
-    async def set_logging(
+    def set_logging(
         self,
         level: str,
         domains: str,
@@ -986,7 +986,7 @@ class NetworkManagerInterface(
     @dbus_method(
         result_signature='ss',
     )
-    async def get_logging(
+    def get_logging(
         self,
     ) -> Tuple[str, str]:
         """Get current logging settings"""
@@ -995,7 +995,7 @@ class NetworkManagerInterface(
     @dbus_method(
         result_signature='u',
     )
-    async def check_connectivity(
+    def check_connectivity(
         self,
     ) -> int:
         """Get current connectivity state
@@ -1008,7 +1008,7 @@ class NetworkManagerInterface(
         result_signature='u',
         method_name='State',
     )
-    async def get_state(
+    def get_state(
         self,
     ) -> int:
         """Get current NetworkManager state
@@ -1021,7 +1021,7 @@ class NetworkManagerInterface(
         input_signature='aouu',
         result_signature='o',
     )
-    async def checkpoint_create(
+    def checkpoint_create(
         self,
         devices: List[str],
         rollback_timeout: int,
@@ -1034,7 +1034,7 @@ class NetworkManagerInterface(
         raise NotImplementedError
 
     @dbus_method('o')
-    async def checkpoint_destroy(
+    def checkpoint_destroy(
         self,
         checkpoint: str,
     ) -> None:
@@ -1045,7 +1045,7 @@ class NetworkManagerInterface(
         input_signature='o',
         result_signature='a{su}',
     )
-    async def checkpoint_rollback(
+    def checkpoint_rollback(
         self,
         checkpoint: str,
     ) -> Dict[str, int]:
@@ -1053,7 +1053,7 @@ class NetworkManagerInterface(
         raise NotImplementedError
 
     @dbus_method('ou')
-    async def checkpoint_adjust_rollback_timeout(
+    def checkpoint_adjust_rollback_timeout(
         self,
         checkpoint: str,
         add_timeout: int,
