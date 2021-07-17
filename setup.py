@@ -64,6 +64,6 @@ setup(
     },
     python_requires='>=3.7',
     install_requires=[
-        'sdbus>=0.8.0',
+        'sdbus>=0.8rc2',
     ],
 )
