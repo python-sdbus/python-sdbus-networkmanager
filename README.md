@@ -13,7 +13,7 @@ See [python-sdbus requirements](https://github.com/igo95862/python-sdbus#require
 
 ## Installation
 
-`pip install --only-binary ':all:' sdbus`
+`pip install --only-binary ':all:' sdbus-networkmanager`
 
 # [Documentation](https://python-sdbus-networkmanager.readthedocs.io/en/latest/)
 
