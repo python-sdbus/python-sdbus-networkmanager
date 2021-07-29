@@ -29,7 +29,7 @@ setup(
     description=('NetworkManager binds for sdbus.'),
     long_description=long_description,
     long_description_content_type='text/markdown',
-    version='1.0.1',
+    version='1.1rc1',
     url='https://github.com/igo95862/python-sdbus',
     author='igo95862',
     author_email='igo95862@yandex.ru',
