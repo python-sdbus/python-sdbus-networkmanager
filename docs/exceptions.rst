@@ -4,7 +4,7 @@ NetworkManager errors and exceptions
 Agent Manager errors
 --------------------
 
- .. autoexception:: sdbus_async.networkmanager.NmAgentManagerFailedError
+.. autoexception:: sdbus_async.networkmanager.NmAgentManagerFailedError
 
 .. autoexception:: sdbus_async.networkmanager.NmAgentManagerPermissionDeniedError
 
