@@ -1,6 +1,8 @@
 NetworkManager errors and exceptions
 ====================================
 
+.. autoexception:: sdbus_async.networkmanager.NetworkManagerBaseError
+
 Agent Manager errors
 --------------------
 

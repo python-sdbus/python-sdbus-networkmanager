@@ -86,6 +86,7 @@ from .objects import (AccessPoint, ActiveConnection, ActiveVPNConnection,
                       NetworkManagerDnsManager, NetworkManagerSettings,
                       WiFiP2PPeer)
 from .exceptions import (
+    NetworkManagerBaseError,
     NmAgentManagerFailedError,
     NmAgentManagerPermissionDeniedError,
     NmAgentManagerInvalidIdentifierError,
@@ -257,6 +258,7 @@ __all__ = (
 
     'DEVICE_TYPE_TO_CLASS',
 
+    'NetworkManagerBaseError',
     'NmAgentManagerFailedError',
     'NmAgentManagerPermissionDeniedError',
     'NmAgentManagerInvalidIdentifierError',
