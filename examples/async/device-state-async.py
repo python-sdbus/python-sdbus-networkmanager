@@ -51,20 +51,19 @@ async def list_active_hardware_networkdevice_states(only_hw: bool) -> None:
 
         # Create the strings for the columns using the names of the enums:
         dev: str = await generic.interface
-        type = title(DeviceType(await generic.device_type))
+        dtype = title(DeviceType(await generic.device_type))
         state = title(DeviceState(await generic.state))
         connectivity = title(ConnectivityState(await generic.ip4_connectivity))
 
-        if await generic.active_connection == "/":  # No active connection
-            id = ""
-        else:
+        name: str = ""
+        if await generic.active_connection != "/":  # Connection is active
             # ActiveConnection() gets propertites from active connection path:
             active_conn = ActiveConnection(await generic.active_connection)
-            id: str = await active_conn.id
+            name = await active_conn.id
             if await active_conn.default:
-                id += " [primary connection]"
+                name += " [primary connection]"
 
-        print(f"{dev:<17} {type:<8} {state:<12} {connectivity:<8} {id:<14}")
+        print(f"{dev:<17} {dtype:<8} {state:<12} {connectivity:<8} {name:<14}")
 
 
 if __name__ == "__main__":
