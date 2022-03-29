@@ -1,4 +1,4 @@
-# Copyright (C) 2022 igo95862
+# Copyright (C) 2022 igo95862, bernhardkaindl
 
 # This file is part of python-sdbus
 
@@ -22,8 +22,8 @@ from typing import Any, Dict, Tuple
 # "Any" might be str, int, bool (e.g. autoconnect), List[Ip] and maybe others
 NetworkManagerSetting = Tuple[str, Any]
 
-# A group of settings, eg. "connection", "ipv4, "ipv6", etc:
-NetworkManagerSettingsGroup = Dict[str, NetworkManagerSetting]
+# A settings domain, e.g. ipv4.*, ipv6.*, 802-11-wireless-security.*, etc:
+NetworkManagerSettingsDomain = Dict[str, NetworkManagerSetting]
 
 # All settings and properites of a connection, e.g. returned by get_settings()
-NetworkManagerConnectionProperties = Dict[str, NetworkManagerSettingsGroup]
+NetworkManagerConnectionProperties = Dict[str, NetworkManagerSettingsDomain]

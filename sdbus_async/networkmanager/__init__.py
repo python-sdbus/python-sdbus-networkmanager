@@ -195,7 +195,7 @@ from .exceptions import (
 )
 from .types import (
     NetworkManagerSetting,
-    NetworkManagerSettingsGroup,
+    NetworkManagerSettingsDomain,
     NetworkManagerConnectionProperties,
 )
 
@@ -371,6 +371,6 @@ __all__ = (
     'NmVpnPluginInteractiveNotSupportedError',
 
     'NetworkManagerSetting',
-    'NetworkManagerSettingsGroup',
+    'NetworkManagerSettingsDomain',
     'NetworkManagerConnectionProperties',
 )
