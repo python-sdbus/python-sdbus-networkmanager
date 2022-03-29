@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 from __future__ import annotations
 
-from typing import Optional
+from typing import List, Optional
 
 from sdbus.sd_bus_internals import SdBus
 
@@ -148,6 +148,22 @@ class NetworkManagerSettings(NetworkManagerSettingsInterface):
             NETWORK_MANAGER_SERVICE_NAME,
             '/org/freedesktop/NetworkManager/Settings',
             bus)
+
+    def get_connections_by_id(self, connection_id: str) -> List[str]:
+        """Helper method to get a list of connection profile paths
+        which use the given connection identifier.
+
+        :param str connection_id: The connection identifier of the connections,
+        e.g. "Ethernet connection 1"
+        :return: List of connection profile paths using the given identifier.
+        """
+        connection_paths_with_matching_id = []
+        for connection_path in self.connections:
+            profile = NetworkConnectionSettings(connection_path)
+            # profile.get_settings()["connection"]["id"][1] gives the id value:
+            if profile.get_settings()["connection"]["id"][1] == connection_id:
+                connection_paths_with_matching_id.append(connection_path)
+        return connection_paths_with_matching_id
 
 
 class NetworkConnectionSettings(
