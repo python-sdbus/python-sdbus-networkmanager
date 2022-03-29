@@ -23,6 +23,8 @@ from typing import Any, Dict, List, Tuple
 
 from sdbus import DbusInterfaceCommon, dbus_method, dbus_property
 
+from .types import NetworkManagerConnectionProperties
+
 
 class NetworkManagerAccessPointInterface(
         DbusInterfaceCommon,
@@ -446,7 +448,7 @@ class NetworkManagerSecretAgentInterface(
     )
     def get_secrets(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
         connection_path: str,
         setting_name: str,
         hints: List[str],
@@ -467,7 +469,7 @@ class NetworkManagerSecretAgentInterface(
     @dbus_method('a{sa{sv}}o')
     def save_secrets(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
         connection_path: str,
     ) -> None:
         """Save given secrets"""
@@ -476,7 +478,7 @@ class NetworkManagerSecretAgentInterface(
     @dbus_method('a{sa{sv}}o')
     def delete_secrets(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
         connection_path: str,
     ) -> None:
         """Delete secrets"""
@@ -491,7 +493,7 @@ class NetworkManagerSettingsConnectionInterface(
     @dbus_method('a{sa{sv}}')
     def update(
         self,
-        properties: Dict[str, Dict[str, Tuple[str, Any]]],
+        properties: NetworkManagerConnectionProperties,
     ) -> None:
         """Update connection settings.
 
@@ -502,7 +504,7 @@ class NetworkManagerSettingsConnectionInterface(
     @dbus_method('a{sa{sv}}')
     def update_unsaved(
         self,
-        properties: Dict[str, Dict[str, Tuple[str, Any]]],
+        properties: NetworkManagerConnectionProperties,
     ) -> None:
         """Update connection settings but do not save to disk"""
         raise NotImplementedError
@@ -519,7 +521,7 @@ class NetworkManagerSettingsConnectionInterface(
     )
     def get_settings(
         self,
-    ) -> Dict[str, Dict[str, Tuple[str, Any]]]:
+    ) -> NetworkManagerConnectionProperties:
         """Get connection settings"""
         raise NotImplementedError
 
@@ -554,7 +556,7 @@ class NetworkManagerSettingsConnectionInterface(
     )
     def update2(
         self,
-        settings: Dict[str, Dict[str, Tuple[str, Any]]],
+        settings: NetworkManagerConnectionProperties,
         flags: int,
         args: Dict[str, Tuple[str, Any]],
     ) -> Dict[str, Tuple[str, Any]]:
@@ -611,7 +613,7 @@ class NetworkManagerSettingsInterface(
     )
     def add_connection(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
     ) -> str:
         """Add connection and save to disk"""
         raise NotImplementedError
@@ -622,7 +624,7 @@ class NetworkManagerSettingsInterface(
     )
     def add_connection_unsaved(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
     ) -> str:
         """Add connection and do not save"""
         raise NotImplementedError
@@ -633,7 +635,7 @@ class NetworkManagerSettingsInterface(
     )
     def add_connection2(
         self,
-        settings: Dict[str, Dict[str, Tuple[str, Any]]],
+        settings: NetworkManagerConnectionProperties,
         flags: int,
         args: Dict[str, Tuple[str, Any]],
     ) -> Tuple[str, Dict[str, Tuple[str, Any]]]:
@@ -698,7 +700,7 @@ class NetworkManagerVPNPluginInterface(
     @dbus_method('a{sa{sv}}')
     def connect(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
     ) -> None:
         """Connect to described connection
 
@@ -709,7 +711,7 @@ class NetworkManagerVPNPluginInterface(
     @dbus_method('a{sa{sv}}a{sv}')
     def connect_interactive(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
         details: Dict[str, Tuple[str, Any]],
     ) -> None:
         """Connect to described connection
@@ -725,7 +727,7 @@ class NetworkManagerVPNPluginInterface(
     )
     def need_secrets(
         self,
-        settings: Dict[str, Dict[str, Tuple[str, Any]]],
+        settings: NetworkManagerConnectionProperties,
     ) -> str:
         """Asks plugin if connection will require secrets
 
@@ -775,9 +777,12 @@ class NetworkManagerVPNPluginInterface(
     @dbus_method('a{sa{sv}}')
     def new_secrets(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
     ) -> None:
-        """Called in response to secrets_required signal"""
+        """Called in response to secrets_required signal
+
+        param: Describes the connection including the new secrets
+        """
         raise NotImplementedError
 
     @dbus_property('u')
@@ -920,7 +925,7 @@ class NetworkManagerInterface(
     )
     def add_and_activate_connection(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
         device: str,
         specific_object: str,
     ) -> Tuple[str, str]:
@@ -933,7 +938,7 @@ class NetworkManagerInterface(
     )
     def add_and_activate_connection2(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
         device: str,
         specific_object: str,
         options: Dict[str, Tuple[str, Any]],
