@@ -151,6 +151,11 @@ from .exceptions import (
     NmVpnPluginInvalidConnectionError,
     NmVpnPluginInteractiveNotSupportedError,
 )
+from .types import (
+    NetworkManagerSetting,
+    NetworkManagerSettingsDomain,
+    NetworkManagerConnectionProperties,
+)
 
 DEVICE_TYPE_TO_CLASS = {
     DeviceType.ETHERNET: NetworkDeviceWired,
@@ -322,4 +327,8 @@ __all__ = (
     'NmVpnPluginLaunchFailedError',
     'NmVpnPluginInvalidConnectionError',
     'NmVpnPluginInteractiveNotSupportedError',
+
+    'NetworkManagerSetting',
+    'NetworkManagerSettingsDomain',
+    'NetworkManagerConnectionProperties',
 )

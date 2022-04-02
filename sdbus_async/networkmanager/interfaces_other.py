@@ -24,6 +24,8 @@ from typing import Any, Dict, List, Tuple
 from sdbus import (DbusInterfaceCommonAsync, dbus_method_async,
                    dbus_property_async, dbus_signal_async)
 
+from .types import NetworkManagerConnectionProperties
+
 
 class NetworkManagerAccessPointInterfaceAsync(
         DbusInterfaceCommonAsync,
@@ -464,7 +466,7 @@ class NetworkManagerSecretAgentInterfaceAsync(
     )
     async def get_secrets(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
         connection_path: str,
         setting_name: str,
         hints: List[str],
@@ -485,7 +487,7 @@ class NetworkManagerSecretAgentInterfaceAsync(
     @dbus_method_async('a{sa{sv}}o')
     async def save_secrets(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
         connection_path: str,
     ) -> None:
         """Save given secrets"""
@@ -494,7 +496,7 @@ class NetworkManagerSecretAgentInterfaceAsync(
     @dbus_method_async('a{sa{sv}}o')
     async def delete_secrets(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
         connection_path: str,
     ) -> None:
         """Delete secrets"""
@@ -509,7 +511,7 @@ class NetworkManagerSettingsConnectionInterfaceAsync(
     @dbus_method_async('a{sa{sv}}')
     async def update(
         self,
-        properties: Dict[str, Dict[str, Tuple[str, Any]]],
+        properties: NetworkManagerConnectionProperties,
     ) -> None:
         """Update connection settings.
 
@@ -520,7 +522,7 @@ class NetworkManagerSettingsConnectionInterfaceAsync(
     @dbus_method_async('a{sa{sv}}')
     async def update_unsaved(
         self,
-        properties: Dict[str, Dict[str, Tuple[str, Any]]],
+        properties: NetworkManagerConnectionProperties,
     ) -> None:
         """Update connection settings but do not save to disk"""
         raise NotImplementedError
@@ -537,7 +539,7 @@ class NetworkManagerSettingsConnectionInterfaceAsync(
     )
     async def get_settings(
         self,
-    ) -> Dict[str, Dict[str, Tuple[str, Any]]]:
+    ) -> NetworkManagerConnectionProperties:
         """Get connection settings"""
         raise NotImplementedError
 
@@ -572,7 +574,7 @@ class NetworkManagerSettingsConnectionInterfaceAsync(
     )
     async def update2(
         self,
-        settings: Dict[str, Dict[str, Tuple[str, Any]]],
+        settings: NetworkManagerConnectionProperties,
         flags: int,
         args: Dict[str, Tuple[str, Any]],
     ) -> Dict[str, Tuple[str, Any]]:
@@ -639,7 +641,7 @@ class NetworkManagerSettingsInterfaceAsync(
     )
     async def add_connection(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
     ) -> str:
         """Add connection and save to disk"""
         raise NotImplementedError
@@ -650,7 +652,7 @@ class NetworkManagerSettingsInterfaceAsync(
     )
     async def add_connection_unsaved(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
     ) -> str:
         """Add connection and do not save"""
         raise NotImplementedError
@@ -661,7 +663,7 @@ class NetworkManagerSettingsInterfaceAsync(
     )
     async def add_connection2(
         self,
-        settings: Dict[str, Dict[str, Tuple[str, Any]]],
+        settings: NetworkManagerConnectionProperties,
         flags: int,
         args: Dict[str, Tuple[str, Any]],
     ) -> Tuple[str, Dict[str, Tuple[str, Any]]]:
@@ -736,7 +738,7 @@ class NetworkManagerVPNPluginInterfaceAsync(
     @dbus_method_async('a{sa{sv}}')
     async def connect(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
     ) -> None:
         """Connect to described connection
 
@@ -747,7 +749,7 @@ class NetworkManagerVPNPluginInterfaceAsync(
     @dbus_method_async('a{sa{sv}}a{sv}')
     async def connect_interactive(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
         details: Dict[str, Tuple[str, Any]],
     ) -> None:
         """Connect to described connection
@@ -763,7 +765,7 @@ class NetworkManagerVPNPluginInterfaceAsync(
     )
     async def need_secrets(
         self,
-        settings: Dict[str, Dict[str, Tuple[str, Any]]],
+        settings: NetworkManagerConnectionProperties,
     ) -> str:
         """Asks plugin if connection will require secrets
 
@@ -813,9 +815,12 @@ class NetworkManagerVPNPluginInterfaceAsync(
     @dbus_method_async('a{sa{sv}}')
     async def new_secrets(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
     ) -> None:
-        """Called in response to secrets_required signal"""
+        """Called in response to secrets_required signal
+
+        param: Describes the connection including the new secrets.
+        """
         raise NotImplementedError
 
     @dbus_property_async('u')
@@ -999,7 +1004,7 @@ class NetworkManagerInterfaceAsync(
     )
     async def add_and_activate_connection(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
         device: str,
         specific_object: str,
     ) -> Tuple[str, str]:
@@ -1012,7 +1017,7 @@ class NetworkManagerInterfaceAsync(
     )
     async def add_and_activate_connection2(
         self,
-        connection: Dict[str, Dict[str, Tuple[str, Any]]],
+        connection: NetworkManagerConnectionProperties,
         device: str,
         specific_object: str,
         options: Dict[str, Tuple[str, Any]],
