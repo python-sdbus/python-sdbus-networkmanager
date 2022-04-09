@@ -72,7 +72,7 @@ def add_wifi_psk_connection_profile(args: Namespace) -> str:
             "id": ("s", args.conn_id),
             "uuid": ("s", str(args.uuid)),
             "type": ("s", "802-11-wireless"),
-            "autoconnect": ("b", args.auto),
+            "autoconnect": ("b", bool(hasattr(args, "auto") and args.auto)),
         },
         "802-11-wireless": {
             "mode": ("s", "infrastructure"),
@@ -89,13 +89,14 @@ def add_wifi_psk_connection_profile(args: Namespace) -> str:
     }
 
     # To bind the new connection to a specific interface, use this:
-    if args.interface_name:
+    if hasattr(args, "interface_name") and args.interface_name:
         properties["connection"]["interface-name"] = ("s", args.interface_name)
 
     s = NetworkManagerSettings()
-    addconnection = s.add_connection if args.save else s.add_connection_unsaved
+    save = bool(hasattr(args, "save") and args.save)
+    addconnection = s.add_connection if save else s.add_connection_unsaved
     connection_settings_dbus_path = addconnection(properties)
-    created = "created and saved" if args.save else "created"
+    created = "created and saved" if save else "created"
     info(f"New unsaved connection profile {created}, show it with:")
     info(f'nmcli connection show "{args.conn_id}"|grep -v -e -- -e default')
     info("Settings used:")
