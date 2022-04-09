@@ -3,9 +3,9 @@
 #
 # Example to create a new Ethernet network connection profile:
 #
-# examples/block/add-eth-connection.py --help
-# usage: add-eth-connection.py [-h] [-c CONN_ID] [-u UUID] [-i INTERFACE_NAME]
-#                              [-4 IP4] [-g GW] [-a] [--save]
+# examples/block/add-eth-connection-async.py --help
+# usage: add-eth-connection-async.py [-h] [-c CONN_ID] [-u UUID] [-4 IP4]
+#                                    [-i INTERFACE_NAME] [-g GW] [-a] [--save]
 #
 # Optional arguments have example values:
 #
@@ -22,6 +22,7 @@
 # Connection Profile settings are described at:
 # https://networkmanager.dev/docs/api/latest/ref-settings.html
 
+import asyncio
 import sdbus
 import functools
 import logging
@@ -29,11 +30,11 @@ import pprint
 import sys
 from uuid import uuid4
 from argparse import ArgumentParser, Namespace
-from sdbus_block.networkmanager import NetworkManagerSettings
-from sdbus_block.networkmanager import NetworkManagerConnectionProperties
+from sdbus_async.networkmanager import NetworkManagerSettings
+from sdbus_async.networkmanager import NetworkManagerConnectionProperties
 
 
-def add_ethernet_connection(args: Namespace) -> str:
+async def add_ethernet_connection_async(args: Namespace) -> str:
     """Add a (by default) temporary (not yet saved) network connection profile
     :param Namespace args: autoconnect, conn_id, psk, save, ssid, uuid
     :return: dbus connection path of the created connection profile
@@ -41,7 +42,7 @@ def add_ethernet_connection(args: Namespace) -> str:
     info = logging.getLogger().info
 
     # If we add many connections using the same id, things get messy. Check:
-    if NetworkManagerSettings().get_connections_by_id(args.conn_id):
+    if await NetworkManagerSettings().get_connections_by_id(args.conn_id):
         info(f'Connections using ID "{args.conn_id}" exist, remove them:')
         info(f'Run: nmcli connection delete "{args.conn_id}"')
         return ""
@@ -77,7 +78,7 @@ def add_ethernet_connection(args: Namespace) -> str:
 
     s = NetworkManagerSettings()
     addconnection = s.add_connection if args.save else s.add_connection_unsaved
-    connection_settings_dbus_path = addconnection(properties)
+    connection_settings_dbus_path = await addconnection(properties)
     created = "created and saved" if args.save else "created"
 
     info(f"New unsaved connection profile {created}, show it with:")
@@ -100,7 +101,7 @@ if __name__ == "__main__":
     p.add_argument("--save", dest="save", action="store_true", help="Save")
     args = p.parse_args()
     sdbus.set_default_bus(sdbus.sd_bus_open_system())
-    if connection_dpath := add_ethernet_connection(args):
+    if connection_dpath := asyncio.run(add_ethernet_connection_async(args)):
         print(f"Path of the new connection: {connection_dpath}")
         print(f"UUID of the new connection: {args.uuid}")
     else:
