@@ -55,7 +55,7 @@ from sdbus_async.networkmanager import NetworkManagerSettings
 from sdbus_async.networkmanager import NetworkManagerConnectionProperties
 
 
-async def add_wifi_psk_connection_profile_async(args: Namespace) -> str:
+async def add_wifi_psk_connection_async(args: Namespace) -> str:
     """Add a temporary (not yet saved) network connection profile
     :param Namespace args: autoconnect, conn_id, psk, save, ssid, uuid
     :return: dbus connection path of the created connection profile
@@ -118,6 +118,8 @@ if __name__ == "__main__":
     p.add_argument("--save", dest="save", action="store_true", help="Save")
     args = p.parse_args()
     sdbus.set_default_bus(sdbus.sd_bus_open_system())
-    connection_dpath = asyncio.run(add_wifi_psk_connection_profile_async(args))
-    print(f"Path of the new connection: {connection_dpath}")
-    print(f"UUID of the new connection: {args.uuid}")
+    if connection_dpath := asyncio.run(add_wifi_psk_connection_async(args)):
+        print(f"Path of the new connection: {connection_dpath}")
+        print(f"UUID of the new connection: {args.uuid}")
+    else:
+        print("Error: No new connection created.")
