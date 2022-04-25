@@ -1,22 +1,5 @@
 #!/usr/bin/env python
 # SPDX-License-Identifier: LGPL-2.1-or-later
-#
-# Example which lists the details of NetworkManager's connection profiles.
-# This is the asyncio variant of this example using sdbus_async.networkmanager.
-# The blocking variant of this example is examples/block/list-connections.py
-#
-# Configuration settings are described at
-# https://networkmanager.dev/docs/api/latest/ref-settings.html
-#
-# Example output:
-# | name: Wired connection 1
-# | uuid: b2caabdc-98bb-3f88-8d28-d10369d6ded9
-# | type: 802-3-ethernet
-# |       interface-name: enx001e101f0000
-# | ipv4: method: manual
-# |       ipaddr: 192.168.178.34/24
-# |       route-metric: 200
-# | ipv6: method: disabled
 import asyncio
 import sdbus
 from sdbus_async.networkmanager import (
@@ -33,9 +16,6 @@ async def list_connection_profiles_async() -> None:
         connectionsettings_service = NetworkConnectionSettings(con_path)
         profile = await connectionsettings_service.connection_profile()
         connection = profile.connection
-        # Skip connection profiles for bridges and wireless networks
-        if connection.connection_type in ("bridge", "802-11-wireless"):
-            continue
         print("-------------------------------------------------------------")
         print("name:", connection.connection_id)
         print("uuid:", connection.uuid)
@@ -54,7 +34,28 @@ async def list_connection_profiles_async() -> None:
         if profile.ipv6:
             print("ipv6: method:", profile.ipv6.method)
 
+        # Expect that the deprecated fields addresses and routes are removed:
+        settings = await connectionsettings_service.get_settings()
+        for domain in ["ipv4", "ipv6"]:
+            for setting in ["addresses", "routes"]:
+                settings[domain].pop(setting)
+        assert profile.to_dbus() == settings
 
-if __name__ == "__main__":
+
+def test_settings_not_changed_by_dataclasses() -> None:
+    """Test the from_dbus() and to_dbus() functions of the dataclasses and
+    that the type of Field(metadata.dbus_type) of the dataclass is correct.
+
+    Note: The test data used by this test comes from the NetworkManager running
+    on the system. It is good to test with real data and good for diagnosing
+    issues, but it not alway be present and it cannot check all fields."""
+
+    # TODO: Generate several tests with different fixed connection profiles.
+    # Tip: They can use real connection profiles, saved in .json data files.
+
     sdbus.set_default_bus(sdbus.sd_bus_open_system())
     asyncio.run(list_connection_profiles_async())
+
+
+if __name__ == "__main__":
+    test_settings_not_changed_by_dataclasses()

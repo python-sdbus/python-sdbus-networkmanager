@@ -63,6 +63,7 @@ from .interfaces_other import (NetworkManagerAccessPointInterfaceAsync,
                                NetworkManagerSettingsInterfaceAsync,
                                NetworkManagerVPNConnectionInterfaceAsync,
                                NetworkManagerWifiP2PPeerInterfaceAsync)
+from .settings import ConnectionProfile as ConnectionProfile
 
 NETWORK_MANAGER_SERVICE_NAME = 'org.freedesktop.NetworkManager'
 
@@ -157,7 +158,6 @@ class NetworkManagerSettings(NetworkManagerSettingsInterfaceAsync):
     async def get_connections_by_id(self, connection_id: str) -> List[str]:
         """Helper method to get a list of connection profile paths
         which use the given connection identifier.
-
         :param str connection_id: The connection identifier of the connections,
         e.g. "Ethernet connection 1"
         :return: List of connection profile paths using the given identifier.
@@ -166,8 +166,9 @@ class NetworkManagerSettings(NetworkManagerSettingsInterfaceAsync):
         connection_paths: List[str] = await self.connections
         for connection_path in connection_paths:
             settings = NetworkConnectionSettings(connection_path)
+            # We could use NetworkConnectionSettings.connection_profile() here,
+            # but in the interest of speed, access the connection id directly:
             settings_properites = await settings.get_settings()
-            # settings_properites["connection"]["id"][1] gives the id value:
             if settings_properites["connection"]["id"][1] == connection_id:
                 connection_paths_with_matching_id.append(connection_path)
         return connection_paths_with_matching_id
@@ -195,6 +196,9 @@ class NetworkConnectionSettings(
             NETWORK_MANAGER_SERVICE_NAME,
             settings_path,
             bus)
+
+    async def connection_profile(self) -> ConnectionProfile:
+        return ConnectionProfile.from_dbus(await self.get_settings())
 
 
 class NetworkDeviceGeneric(
