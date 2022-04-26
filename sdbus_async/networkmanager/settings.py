@@ -34,11 +34,13 @@ from .types import (
 
 class NetworkManagerSettingsMixin:
     def to_dbus(self) -> NetworkManagerSettingsDomain:
+        """Return a dbus dict of this settings domain for NetworkManager"""
         new_dict: NetworkManagerSettingsDomain = {}
 
         for x in fields(self):
             value = getattr(self, x.name)
-            if value == x.default:  # get_settings() doesn't return such fields
+            # get_settings() doesn't return settings using the default and we
+            if value in [x.default, {}, []]:  # also don't return empty fields
                 continue
             if x.metadata['dbus_type'] == 'aa{sv}':
                 packed_variant = ('aa{sv}', [x.to_dbus() for x in value])
@@ -1102,7 +1104,7 @@ class EthernetSettings(NetworkManagerSettingsMixin):
 
     auto_negotiate: Optional[bool] = field(
         metadata={'dbus_name': 'auto-negotiate', 'dbus_type': 'b'},
-        default=None  # auto-negotiate is always sent by nm
+        default=False  # Note: auto-negotiate is always sent by nm
     )
     """When TRUE, enforce auto-negotiation of speed and duplex mode. If
     "speed" and "duplex" properties are both specified, only that single
@@ -1356,8 +1358,9 @@ class NetworkManngerSettings:
             value = getattr(self, x.name)
             if value is None:
                 continue
-
-            new_dict[x.metadata['dbus_name']] = value.to_dbus()
+            settingsdomain_dict = value.to_dbus()
+            if settingsdomain_dict != {}:
+                new_dict[x.metadata['dbus_name']] = settingsdomain_dict
 
         return new_dict
 

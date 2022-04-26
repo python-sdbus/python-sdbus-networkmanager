@@ -5,8 +5,28 @@ import sdbus
 from sdbus_async.networkmanager import (
     NetworkManagerSettings,
     NetworkConnectionSettings,
+    NetworkManagerConnectionProperties,
 )
 from typing import List
+
+
+def remove_empty_settings(profile: NetworkManagerConnectionProperties) -> None:
+    """Remove empty arrays and dicts from which are not needed by NM"""
+    for domainsettings in profile.values():
+        todelete = [
+            property
+            for property, value in domainsettings.items()
+            if value[1] in [[], {}]
+        ]
+        for delete in todelete:
+            domainsettings.pop(delete)
+    todelete = [
+        domain
+        for domain, domainsettings in profile.items()
+        if domainsettings == {}
+    ]
+    for delete in todelete:
+        profile.pop(delete)
 
 
 async def list_connection_profiles_async() -> None:
@@ -37,8 +57,14 @@ async def list_connection_profiles_async() -> None:
         # Expect that the deprecated fields addresses and routes are removed:
         settings = await connectionsettings_service.get_settings()
         for domain in ["ipv4", "ipv6"]:
-            for setting in ["addresses", "routes"]:
-                settings[domain].pop(setting)
+            for property in ["addresses", "routes"]:
+                settings[domain].pop(property)
+        # 802-3-ethernet.auto-negotiate defaults to False but NM returns it:
+        if ethernet := settings.get("802-3-ethernet"):
+            if ethernet["auto-negotiate"][1] is False:
+                ethernet.pop("auto-negotiate")
+        remove_empty_settings(settings)
+
         assert profile.to_dbus() == settings
 
 
