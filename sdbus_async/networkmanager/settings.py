@@ -33,6 +33,18 @@ from .types import (
 
 
 class NetworkManagerSettingsMixin:
+    def to_dict(self) -> Dict[str, Dict[str, Any]]:
+        """Return a simple dict (without signatures) of this settings domain"""
+        new_dict = {}
+        for x in fields(self):
+            value = getattr(self, x.name)
+            if value in [x.default, {}, []]:
+                continue
+            if x.metadata['dbus_type'] == 'aa{sv}':
+                value = [x.to_dict() for x in value]
+            new_dict[x.metadata['dbus_name']] = value
+        return new_dict
+
     def to_dbus(self) -> NetworkManagerSettingsDomain:
         """Return a dbus dict of this settings domain for NetworkManager"""
         new_dict: NetworkManagerSettingsDomain = {}
@@ -1350,6 +1362,17 @@ class NetworkManngerSettings:
                   'settings_class': ProxySettings},
         default=None,
     )
+
+    def to_dict(self) -> Dict[str, Dict[str, Any]]:
+        new_dict = {}
+        for x in fields(self):
+            settingsdomain_dataclass = getattr(self, x.name)
+            if settingsdomain_dataclass is None:
+                continue
+            settingsdomain_dict = settingsdomain_dataclass.to_dict()
+            if settingsdomain_dict != {}:
+                new_dict[x.metadata['dbus_name']] = settingsdomain_dict
+        return new_dict
 
     def to_dbus(self) -> NetworkManagerConnectionProperties:
         new_dict: NetworkManagerConnectionProperties = {}

@@ -19,6 +19,7 @@
 # | ipv6: method: disabled
 import asyncio
 import sdbus
+import pprint
 from sdbus_async.networkmanager import (
     NetworkManagerSettings,
     NetworkConnectionSettings,
@@ -54,6 +55,7 @@ async def list_connection_profiles_async() -> None:
         if profile.ipv6:
             print("ipv6: method:", profile.ipv6.method)
 
+        pprint.pprint(profile.to_dict())
 
 if __name__ == "__main__":
     sdbus.set_default_bus(sdbus.sd_bus_open_system())
