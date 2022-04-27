@@ -85,7 +85,7 @@ async def add_wifi_psk_connection_profile_async(args: Namespace) -> None:
         ),
         ipv4=Ipv4Settings(method="auto"),
         ipv6=Ipv6Settings(method="auto"),
-        wifi_settings=WifiSettings(ssid=args.ssid.encode("utf-8")),
+        wifi=WifiSettings(ssid=args.ssid.encode("utf-8")),
         wifi_security=WifiSecuritySettings(
             key_mgmt=args.key_mgmt, auth_alg="open", psk=args.password
         ),

@@ -1362,7 +1362,7 @@ class NetworkManngerSettings:
                   'settings_class': EthernetSettings},
         default=None,
     )
-    wifi_settings: Optional[WifiSettings] = field(
+    wifi: Optional[WifiSettings] = field(
         metadata={'dbus_name': '802-11-wireless',
                   'settings_class': WifiSettings},
         default=None,
