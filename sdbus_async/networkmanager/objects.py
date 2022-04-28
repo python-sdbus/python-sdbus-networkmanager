@@ -21,7 +21,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import cast, List, Optional
 
 from sdbus.sd_bus_internals import SdBus
 
@@ -63,7 +63,7 @@ from .interfaces_other import (NetworkManagerAccessPointInterfaceAsync,
                                NetworkManagerSettingsInterfaceAsync,
                                NetworkManagerVPNConnectionInterfaceAsync,
                                NetworkManagerWifiP2PPeerInterfaceAsync)
-from .settings import ConnectionProfile as ConnectionProfile
+from .settings import ConnectionProfile, ConnectionSettings
 
 NETWORK_MANAGER_SERVICE_NAME = 'org.freedesktop.NetworkManager'
 
@@ -199,6 +199,14 @@ class NetworkConnectionSettings(
 
     async def connection_profile(self) -> ConnectionProfile:
         return ConnectionProfile.from_dbus(await self.get_settings())
+
+    async def connection_settings(self) -> ConnectionSettings:
+        return cast(
+            ConnectionSettings,  # from_dbus return:NetworkManagerSettingsMixin
+            ConnectionSettings.from_dbus(
+                (await self.get_settings())["connection"]
+            ),
+        )
 
 
 class NetworkDeviceGeneric(
