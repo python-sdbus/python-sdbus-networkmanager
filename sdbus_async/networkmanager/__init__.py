@@ -27,6 +27,7 @@ from .enums import (
     ConnectionStateFlags,
     ConnectionStateReason,
     ConnectionType,
+    ConnectionTypeOfDeviceType,
     ConnectivityState,
     DeviceCapabilities,
     DeviceInterfaceFlags,
@@ -239,7 +240,7 @@ __all__ = (
     'ModemCapabilities', 'NetworkManagerConnectivityState',
     'NetworkManagerState', 'SecretAgentCapabilities', 'VpnFailure',
     'VpnState', 'WiFiOperationMode', 'WirelessCapabilities',
-    'WpaSecurityFlags',
+    'WpaSecurityFlags', 'ConnectionTypeOfDeviceType',
 
     'NetworkManagerDeviceBluetoothInterfaceAsync',
     'NetworkManagerDeviceBondInterfaceAsync',
