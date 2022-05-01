@@ -23,6 +23,7 @@ from dataclasses import dataclass, field, fields
 from typing import Any, Dict, List, Optional
 
 from .settings.base import NetworkManagerSettingsMixin
+from .settings.datatypes import AddressData, RouteData
 from .types import NetworkManagerConnectionProperties
 
 # See https://networkmanager.dev/docs/api/latest/nm-settings-dbus.html
@@ -133,34 +134,6 @@ class ConnectionSettings(NetworkManagerSettingsMixin):
     )
     zone: Optional[str] = field(
         metadata={'dbus_name': 'zone', 'dbus_type': 's'},
-        default=None,
-    )
-
-
-@dataclass
-class AddressData(NetworkManagerSettingsMixin):
-    address: str = field(
-        metadata={'dbus_name': 'address', 'dbus_type': 's'},
-    )
-    prefix: int = field(
-        metadata={'dbus_name': 'prefix', 'dbus_type': 'u'},
-    )
-
-
-@dataclass
-class RouteData(NetworkManagerSettingsMixin):
-    dest: str = field(
-        metadata={'dbus_name': 'dest', 'dbus_type': 's'},
-    )
-    prefix: int = field(
-        metadata={'dbus_name': 'prefix', 'dbus_type': 'u'},
-    )
-    next_hop: Optional[str] = field(
-        metadata={'dbus_name': 'next-hop', 'dbus_type': 's'},
-        default=None,
-    )
-    metric: Optional[int] = field(
-        metadata={'dbus_name': 'metric', 'dbus_type': 'u'},
         default=None,
     )
 
