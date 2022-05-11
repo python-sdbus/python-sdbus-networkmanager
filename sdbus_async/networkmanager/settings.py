@@ -24,6 +24,7 @@ from typing import Any, Dict, List, Optional
 
 from .settings.base import NetworkManagerSettingsMixin
 from .settings.datatypes import AddressData, RouteData
+from .settings.wireless_security import WirelessSecuritySettings
 from .types import NetworkManagerConnectionProperties
 
 # See https://networkmanager.dev/docs/api/latest/nm-settings-dbus.html
@@ -339,90 +340,6 @@ class WifiSettings(NetworkManagerSettingsMixin):
 
 
 @dataclass
-class WifiSecuritySettings(NetworkManagerSettingsMixin):
-    auth_alg: Optional[str] = field(
-        metadata={'dbus_name': 'auth-alg', 'dbus_type': 's'},
-        default=None,
-    )
-    fils: Optional[int] = field(
-        metadata={'dbus_name': 'fils', 'dbus_type': 'i'},
-        default=None,
-    )
-    group: Optional[List[str]] = field(
-        metadata={'dbus_name': 'group', 'dbus_type': 'as'},
-        default=None,
-    )
-    key_mgmt: Optional[str] = field(
-        metadata={'dbus_name': 'key-mgmt', 'dbus_type': 's'},
-        default=None,
-    )
-    leap_password: Optional[int] = field(
-        metadata={'dbus_name': 'leap-password', 'dbus_type': 's'},
-        default=None,
-    )
-    leap_password_flags: Optional[int] = field(
-        metadata={'dbus_name': 'leap-password-flags', 'dbus_type': 'u'},
-        default=None,
-    )
-    leap_username: Optional[str] = field(
-        metadata={'dbus_name': 'leap-username', 'dbus_type': 's'},
-        default=None,
-    )
-    pairwise: Optional[List[str]] = field(
-        metadata={'dbus_name': 'pairwise', 'dbus_type': 'as'},
-        default=None,
-    )
-    pmf: Optional[int] = field(
-        metadata={'dbus_name': 'pmf', 'dbus_type': 'i'},
-        default=None,
-    )
-    proto: Optional[List[str]] = field(
-        metadata={'dbus_name': 'proto', 'dbus_type': 'as'},
-        default=None,
-    )
-    psk: Optional[str] = field(
-        metadata={'dbus_name': 'psk', 'dbus_type': 's'},
-        default=None,
-    )
-    psk_flags: Optional[int] = field(
-        metadata={'dbus_name': 'psk-flags', 'dbus_type': 'u'},
-        default=None,
-    )
-    wep_key_flags: Optional[int] = field(
-        metadata={'dbus_name': 'wep-key-flags', 'dbus_type': 'u'},
-        default=None,
-    )
-    wep_key_type: Optional[int] = field(
-        metadata={'dbus_name': 'wep-key-type', 'dbus_type': 'u'},
-        default=None,
-    )
-    wep_key0: Optional[str] = field(
-        metadata={'dbus_name': 'wep-key0', 'dbus_type': 's'},
-        default=None,
-    )
-    wep_key1: Optional[str] = field(
-        metadata={'dbus_name': 'wep-key1', 'dbus_type': 's'},
-        default=None,
-    )
-    wep_key2: Optional[str] = field(
-        metadata={'dbus_name': 'wep-key2', 'dbus_type': 's'},
-        default=None,
-    )
-    wep_key3: Optional[str] = field(
-        metadata={'dbus_name': 'wep-key3', 'dbus_type': 's'},
-        default=None,
-    )
-    wep_tx_keyidx: Optional[int] = field(
-        metadata={'dbus_name': 'wep-tx-keyidx', 'dbus_type': 'u'},
-        default=None,
-    )
-    wps_method: Optional[int] = field(
-        metadata={'dbus_name': 'wps-method', 'dbus_type': 'u'},
-        default=None,
-    )
-
-
-@dataclass
 class NetworkManngerSettings:
     connection_settings: Optional[ConnectionSettings] = field(
         metadata={'dbus_name': 'connection',
@@ -439,9 +356,9 @@ class NetworkManngerSettings:
                   'settings_class': WifiSettings},
         default=None,
     )
-    wifi_security: Optional[WifiSecuritySettings] = field(
+    wifi_security: Optional[WirelessSecuritySettings] = field(
         metadata={'dbus_name': '802-11-wireless-security',
-                  'settings_class': WifiSecuritySettings},
+                  'settings_class': WirelessSecuritySettings},
         default=None,
     )
 
