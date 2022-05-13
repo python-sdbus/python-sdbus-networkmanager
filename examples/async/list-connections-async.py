@@ -19,6 +19,7 @@
 # | ipv6: method: disabled
 import asyncio
 import sdbus
+import pprint
 from sdbus_async.networkmanager import (
     NetworkManagerSettings,
     NetworkConnectionSettings,
@@ -29,33 +30,30 @@ from typing import List
 async def list_connection_profiles_async() -> None:
     networkmanager_settings = NetworkManagerSettings()
     connections_paths: List[str] = await networkmanager_settings.connections
-    for connection_path in connections_paths:
-        connection_settings = NetworkConnectionSettings(connection_path)
-        settings = await connection_settings.get_settings()
-        connection = settings["connection"]
+    for dbus_connection_path in connections_paths:
+        await print_connection_profile(dbus_connection_path)
 
-        # Skip connection profiles for bridges and wireless networks
-        if connection["type"][1] in ("bridge", "802-11-wireless"):
-            continue
 
-        print("-------------------------------------------------------------")
-        print("name:", connection["id"][1])
-        print("uuid:", connection["uuid"][1])
-        print("type:", connection["type"][1])
-        if "interface-name" in connection:
-            print("      interface-name:", connection["interface-name"][1])
-
-        if "ipv4" in settings:
-            ipv4 = settings["ipv4"]
-            print("ipv4: method:", ipv4["method"][1])
-            if "address-data" in ipv4:
-                for a in ipv4["address-data"][1]:
-                    print(f'      ipaddr: {a["address"][1]}/{a["prefix"][1]}')
-            if "route-metric" in ipv4:
-                print(f'      route-metric: {ipv4["route-metric"][1]}')
-
-        if "ipv6" in settings:
-            print("ipv6: method:", settings["ipv6"]["method"][1])
+async def print_connection_profile(connection_path: str) -> None:
+    connectionsettings_service = NetworkConnectionSettings(connection_path)
+    profile = await connectionsettings_service.connection_profile()
+    connection = profile.connection
+    print("-------------------------------------------------------------")
+    print("name:", connection.connection_id)
+    print("uuid:", connection.uuid)
+    print("type:", connection.connection_type)
+    if connection.interface_name:
+        print("      interface-name:", connection.interface_name)
+    if profile.ipv4:
+        print("ipv4: method:", profile.ipv4.method)
+        if profile.ipv4.address_data:
+            for address in profile.ipv4.address_data:
+                print(f'      ipaddr: {address.address}/{address.prefix}')
+        if profile.ipv4.route_metric:
+            print(f'      route-metric: {profile.ipv4.route_metric}')
+    if profile.ipv6:
+        print("ipv6: method:", profile.ipv6.method)
+    pprint.pprint(profile.to_dbus())
 
 
 if __name__ == "__main__":

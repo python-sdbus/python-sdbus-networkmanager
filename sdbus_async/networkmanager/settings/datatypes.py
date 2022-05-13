@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import List, Optional
 
 from .base import NetworkManagerSettingsMixin
 
@@ -107,4 +107,17 @@ class Vlans(NetworkManagerSettingsMixin):
     )
     untagged: bool = field(
         metadata={'dbus_name': 'untagged', 'dbus_type': 'b'},
+    )
+
+
+@dataclass
+class WireguardPeers(NetworkManagerSettingsMixin):
+    public_key: str = field(
+        metadata={'dbus_name': 'public-key', 'dbus_type': 's'},
+    )
+    endpoint: int = field(
+        metadata={'dbus_name': 'endpoint', 'dbus_type': 's'},
+    )
+    allowed_ips: List[str] = field(
+        metadata={'dbus_name': 'allowed-ips', 'dbus_type': 'as'},
     )

@@ -24,6 +24,8 @@ from typing import Any, Dict, List, Optional
 
 from .settings.base import NetworkManagerSettingsMixin
 from .settings.datatypes import AddressData, RouteData
+from .settings.wireless import WirelessSettings
+from .settings.wireless_security import WirelessSecuritySettings
 from .types import NetworkManagerConnectionProperties
 
 # See https://networkmanager.dev/docs/api/latest/nm-settings-dbus.html
@@ -256,192 +258,34 @@ class Ipv4Settings(NetworkManagerSettingsMixin):
 
 
 @dataclass
-class WifiSettings(NetworkManagerSettingsMixin):
-    ap_isolation: Optional[int] = field(
-        metadata={'dbus_name': 'ap-isolation', 'dbus_type': 'i'},
-        default=None,
-    )
-    assigned_mac_address: Optional[str] = field(
-        metadata={'dbus_name': 'assigned-mac-address', 'dbus_type': 's'},
-        default=None,
-    )
-    band: Optional[str] = field(
-        metadata={'dbus_name': 'band', 'dbus_type': 's'},
-        default=None,
-    )
-    bssid: Optional[bytes] = field(
-        metadata={'dbus_name': 'bssid', 'dbus_type': 'ay'},
-        default=None,
-    )
-    channel: Optional[int] = field(
-        metadata={'dbus_name': 'channel', 'dbus_type': 'u'},
-        default=None,
-    )
-    cloned_mac_address: Optional[bytes] = field(
-        metadata={'dbus_name': 'cloned-mac-address', 'dbus_type': 'ay'},
-        default=None,
-    )
-    generate_mac_address_mask: Optional[str] = field(
-        metadata={'dbus_name': 'generate-mac-address-mask',
-                  'dbus_type': 's'},
-        default=None,
-    )
-    hidden: Optional[bool] = field(
-        metadata={'dbus_name': 'hidden', 'dbus_type': 'b'},
-        default=None,
-    )
-    mac_address: Optional[bytes] = field(
-        metadata={'dbus_name': 'mac-address', 'dbus_type': 'ay'},
-        default=None,
-    )
-    mac_address_blacklist: Optional[List[str]] = field(
-        metadata={'dbus_name': 'mac-address-blacklist',
-                  'dbus_type': 'as'},
-        default=None,
-    )
-    mac_address_randomization: Optional[int] = field(
-        metadata={'dbus_name': 'mac-address-randomization',
-                  'dbus_type': 'u'},
-        default=None,
-    )
-    mode: Optional[str] = field(
-        metadata={'dbus_name': 'mode', 'dbus_type': 's'},
-        default=None,
-    )
-    mtu: Optional[int] = field(
-        metadata={'dbus_name': 'mtu', 'dbus_type': 'u'},
-        default=None,
-    )
-    powersave: Optional[int] = field(
-        metadata={'dbus_name': 'powersave', 'dbus_type': 'u'},
-        default=None,
-    )
-    rate: Optional[int] = field(
-        metadata={'dbus_name': 'rate', 'dbus_type': 'u'},
-        default=None,
-    )
-    seen_bssids: Optional[List[str]] = field(
-        metadata={'dbus_name': 'seen-bssids', 'dbus_type': 'as'},
-        default=None,
-    )
-    ssid: Optional[bytes] = field(
-        metadata={'dbus_name': 'ssid', 'dbus_type': 'ay'},
-        default=None,
-    )
-    tx_power: Optional[int] = field(
-        metadata={'dbus_name': 'tx-power', 'dbus_type': 'u'},
-        default=None,
-    )
-    wake_on_wlan: Optional[int] = field(
-        metadata={'dbus_name': 'wake-on-wlan', 'dbus_type': 'u'},
-        default=None,
-    )
-
-
-@dataclass
-class WifiSecuritySettings(NetworkManagerSettingsMixin):
-    auth_alg: Optional[str] = field(
-        metadata={'dbus_name': 'auth-alg', 'dbus_type': 's'},
-        default=None,
-    )
-    fils: Optional[int] = field(
-        metadata={'dbus_name': 'fils', 'dbus_type': 'i'},
-        default=None,
-    )
-    group: Optional[List[str]] = field(
-        metadata={'dbus_name': 'group', 'dbus_type': 'as'},
-        default=None,
-    )
-    key_mgmt: Optional[str] = field(
-        metadata={'dbus_name': 'key-mgmt', 'dbus_type': 's'},
-        default=None,
-    )
-    leap_password: Optional[int] = field(
-        metadata={'dbus_name': 'leap-password', 'dbus_type': 's'},
-        default=None,
-    )
-    leap_password_flags: Optional[int] = field(
-        metadata={'dbus_name': 'leap-password-flags', 'dbus_type': 'u'},
-        default=None,
-    )
-    leap_username: Optional[str] = field(
-        metadata={'dbus_name': 'leap-username', 'dbus_type': 's'},
-        default=None,
-    )
-    pairwise: Optional[List[str]] = field(
-        metadata={'dbus_name': 'pairwise', 'dbus_type': 'as'},
-        default=None,
-    )
-    pmf: Optional[int] = field(
-        metadata={'dbus_name': 'pmf', 'dbus_type': 'i'},
-        default=None,
-    )
-    proto: Optional[List[str]] = field(
-        metadata={'dbus_name': 'proto', 'dbus_type': 'as'},
-        default=None,
-    )
-    psk: Optional[str] = field(
-        metadata={'dbus_name': 'psk', 'dbus_type': 's'},
-        default=None,
-    )
-    psk_flags: Optional[int] = field(
-        metadata={'dbus_name': 'psk-flags', 'dbus_type': 'u'},
-        default=None,
-    )
-    wep_key_flags: Optional[int] = field(
-        metadata={'dbus_name': 'wep-key-flags', 'dbus_type': 'u'},
-        default=None,
-    )
-    wep_key_type: Optional[int] = field(
-        metadata={'dbus_name': 'wep-key-type', 'dbus_type': 'u'},
-        default=None,
-    )
-    wep_key0: Optional[str] = field(
-        metadata={'dbus_name': 'wep-key0', 'dbus_type': 's'},
-        default=None,
-    )
-    wep_key1: Optional[str] = field(
-        metadata={'dbus_name': 'wep-key1', 'dbus_type': 's'},
-        default=None,
-    )
-    wep_key2: Optional[str] = field(
-        metadata={'dbus_name': 'wep-key2', 'dbus_type': 's'},
-        default=None,
-    )
-    wep_key3: Optional[str] = field(
-        metadata={'dbus_name': 'wep-key3', 'dbus_type': 's'},
-        default=None,
-    )
-    wep_tx_keyidx: Optional[int] = field(
-        metadata={'dbus_name': 'wep-tx-keyidx', 'dbus_type': 'u'},
-        default=None,
-    )
-    wps_method: Optional[int] = field(
-        metadata={'dbus_name': 'wps-method', 'dbus_type': 'u'},
-        default=None,
-    )
-
-
-@dataclass
 class NetworkManngerSettings:
-    connection_settings: Optional[ConnectionSettings] = field(
+    """
+    NetworkManager is based on a concept of connection profiles, most often
+    referred to just as "connections". Connection profiles provide a network
+    configuration. When NetworkManager activates a connection profile on a
+    network device, the configuration will be applied and an active network
+    connection will be established. Users are free to create as many
+    connection profiles as they see fit. Thus they are flexible in having
+    various network configurations for different networking needs:
+    https://networkmanager.pages.freedesktop.org/NetworkManager/NetworkManager/nm-settings-dbus.html
+    """
+    connection_settings: ConnectionSettings = field(
         metadata={'dbus_name': 'connection',
                   'settings_class': ConnectionSettings},
-        default=None,
     )
     ipv4_settings: Optional[Ipv4Settings] = field(
         metadata={'dbus_name': 'ipv4',
                   'settings_class': Ipv4Settings},
         default=None,
     )
-    wifi_settings: Optional[WifiSettings] = field(
+    wifi: Optional[WirelessSettings] = field(
         metadata={'dbus_name': '802-11-wireless',
-                  'settings_class': WifiSettings},
+                  'settings_class': WirelessSettings},
         default=None,
     )
-    wifi_security: Optional[WifiSecuritySettings] = field(
+    wifi_security: Optional[WirelessSecuritySettings] = field(
         metadata={'dbus_name': '802-11-wireless-security',
-                  'settings_class': WifiSecuritySettings},
+                  'settings_class': WirelessSecuritySettings},
         default=None,
     )
 

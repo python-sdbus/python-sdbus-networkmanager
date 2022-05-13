@@ -11,11 +11,9 @@ from .base import NetworkManagerSettingsMixin
 class BondSettings(NetworkManagerSettingsMixin):
     """Bonding Settings"""
 
-    interface_name: Optional[str] = field(
+    interface_name: str = field(
         metadata={'dbus_name': 'interface-name', 'dbus_type': 's'},
-        default=None,
     )
-    options: Optional[Dict[str, str]] = field(
+    options: Dict[str, str] = field(
         metadata={'dbus_name': 'options', 'dbus_type': 'a{ss}'},
-        default={'Mode': 'Balance-Rr'},
     )
