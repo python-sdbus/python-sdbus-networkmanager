@@ -3,14 +3,20 @@
 # if possible, please make changes by also updating the script.
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import List, Optional
 from .base import NetworkManagerSettingsMixin
+from .datatypes import WireguardPeers
 
 
 @dataclass
 class WireguardSettings(NetworkManagerSettingsMixin):
     """WireGuard Settings"""
 
+    peers: List[WireguardPeers] = field(
+        metadata={'dbus_name': 'peers',
+                  'dbus_type': 'aa{sv}',
+                  'dbus_inner_class': WireguardPeers},
+    )
     fwmark: Optional[int] = field(
         metadata={'dbus_name': 'fwmark', 'dbus_type': 'u'},
         default=None,

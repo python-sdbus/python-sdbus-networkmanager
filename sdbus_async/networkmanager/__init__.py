@@ -193,6 +193,59 @@ from .exceptions import (
     NmVpnPluginInvalidConnectionError,
     NmVpnPluginInteractiveNotSupportedError,
 )
+from .settings.connection import ConnectionSettings
+from .settings.profile import ConnectionProfile
+from .settings.ipv4 import Ipv4Settings
+from .settings.ipv6 import Ipv6Settings
+from .settings.adsl import AdslSettings
+from .settings.bluetooth import BluetoothSettings
+from .settings.bond import BondSettings
+from .settings.bond_port import BondPortSettings
+from .settings.bridge import BridgeSettings
+from .settings.bridge_port import BridgePortSettings
+from .settings.cdma import CdmaSettings
+from .settings.dcb import DcbSettings
+from .settings.ethernet import EthernetSettings
+from .settings.gsm import GsmSettings
+from .settings.hostname import HostnameSettings
+from .settings.ieee802_1x import Ieee8021XSettings
+from .settings.infiniband import InfinibandSettings
+from .settings.ip_tunnel import IpTunnelSettings
+from .settings.lowpan import LowpanSettings
+from .settings.macsec import MacsecSettings
+from .settings.macvlan import MacvlanSettings
+from .settings.match import MatchSettings
+from .settings.olpc_mesh import OlpcMeshSettings
+from .settings.ovs_bridge import OvsBridgeSettings
+from .settings.ovs_dpdk import OvsDpdkSettings
+from .settings.ovs_external_ids import OvsExternalIdsSettings
+from .settings.ovs_interface import OvsInterfaceSettings
+from .settings.ovs_patch import OvsPatchSettings
+from .settings.ovs_port import OvsPortSettings
+from .settings.ppp import PppSettings
+from .settings.pppoe import PppoeSettings
+from .settings.proxy import ProxySettings
+from .settings.serial import SerialSettings
+from .settings.team import TeamSettings
+from .settings.team_port import TeamPortSettings
+from .settings.tun import TunSettings
+from .settings.user import UserSettings
+from .settings.veth import VethSettings
+from .settings.vlan import VlanSettings
+from .settings.vpn import VpnSettings
+from .settings.vrf import VrfSettings
+from .settings.vxlan import VxlanSettings
+from .settings.wifi_p2p import WifiP2PSettings
+from .settings.wimax import WimaxSettings
+from .settings.wireguard import WireguardSettings
+from .settings.wireless import WirelessSettings
+from .settings.wireless_security import WirelessSecuritySettings
+from .settings.wpan import WpanSettings
+from .settings.datatypes import (
+    AddressData,
+    RouteData,
+    WireguardPeers,
+)
 from .types import (
     NetworkManagerSetting,
     NetworkManagerSettingsDomain,
@@ -302,6 +355,59 @@ __all__ = (
     'AccessPoint',
     'WiFiP2PPeer',
     'ConfigCheckpoint',
+
+    'ConnectionProfile',
+    'ConnectionSettings',
+    'AdslSettings',
+    'BluetoothSettings',
+    'BondPortSettings',
+    'BondSettings',
+    'BridgePortSettings',
+    'BridgeSettings',
+    'CdmaSettings',
+    'DcbSettings',
+    'EthernetSettings',
+    'GsmSettings',
+    'HostnameSettings',
+    'Ieee8021XSettings',
+    'InfinibandSettings',
+    'IpTunnelSettings',
+    'Ipv4Settings',
+    'Ipv6Settings',
+    'LowpanSettings',
+    'MacsecSettings',
+    'MacvlanSettings',
+    'MatchSettings',
+    'OlpcMeshSettings',
+    'OvsBridgeSettings',
+    'OvsDpdkSettings',
+    'OvsExternalIdsSettings',
+    'OvsInterfaceSettings',
+    'OvsPatchSettings',
+    'OvsPortSettings',
+    'PppSettings',
+    'PppoeSettings',
+    'ProxySettings',
+    'SerialSettings',
+    'TeamPortSettings',
+    'TeamSettings',
+    'TunSettings',
+    'UserSettings',
+    'VethSettings',
+    'VlanSettings',
+    'VpnSettings',
+    'VrfSettings',
+    'VxlanSettings',
+    'WifiP2PSettings',
+    'WimaxSettings',
+    'WireguardSettings',
+    'WirelessSecuritySettings',
+    'WirelessSettings',
+    'WpanSettings',
+
+    'AddressData',
+    'RouteData',
+    'WireguardPeers',
 
     'DEVICE_TYPE_TO_CLASS',
 

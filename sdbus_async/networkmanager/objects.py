@@ -63,6 +63,7 @@ from .interfaces_other import (NetworkManagerAccessPointInterfaceAsync,
                                NetworkManagerSettingsInterfaceAsync,
                                NetworkManagerVPNConnectionInterfaceAsync,
                                NetworkManagerWifiP2PPeerInterfaceAsync)
+from .settings.profile import ConnectionProfile
 
 NETWORK_MANAGER_SERVICE_NAME = 'org.freedesktop.NetworkManager'
 
@@ -159,7 +160,7 @@ class NetworkManagerSettings(NetworkManagerSettingsInterfaceAsync):
         which use the given connection identifier.
 
         :param str connection_id: The connection identifier of the connections,
-        e.g. "Ethernet connection 1"
+                                  e.g. "Wired connection 1"
         :return: List of connection profile paths using the given identifier.
         """
         connection_paths_with_matching_id = []
@@ -195,6 +196,9 @@ class NetworkConnectionSettings(
             NETWORK_MANAGER_SERVICE_NAME,
             settings_path,
             bus)
+
+    async def connection_profile(self) -> ConnectionProfile:
+        return ConnectionProfile.from_dbus(await self.get_settings())
 
 
 class NetworkDeviceGeneric(
