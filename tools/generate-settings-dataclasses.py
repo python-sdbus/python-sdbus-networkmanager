@@ -26,7 +26,6 @@ dbus_type_name_map = {
     "au": "List[int]",
     "ay": "bytes",
     "a{ss}": "Dict[str, str]",
-    "a{sv}": "vardict",
     "aa{sv}": "List[Tuple[str, Any]]",
     "aau": "List[List[int]]",
     "aay": "List[bytes]",
@@ -42,6 +41,7 @@ dbus_name_type_map = {
     'array of string': 'as',
     'array of uint32': 'au',
     'array of vardict': 'aa{sv}',
+    "array of 'a{sv}'": 'aa{sv}',  # wireguard.peers uses this, fix NM upstream
     'boolean': 'b',
     'byte': 'y',
     'byte array': 'ay',
@@ -51,7 +51,6 @@ dbus_name_type_map = {
     'string': 's',
     'uint32': 'u',
     'uint64': 't',
-    'vardict': 'a{sv}',
 }
 
 ###############################################################################
@@ -61,29 +60,30 @@ _setting_name_order = [
     "ipv4",
     "ipv6",
     "generic",
-    "802-3-ethernet",
-    "802-11-wireless",
-    "802-11-wireless-security",
-    "gsm",
     "ethtool",
-    "6lowpan",
-    "802-1x",
     "adsl",
     "bluetooth",
     "bond",
+    "bond-port",
     "bridge",
     "bridge-port",
     "cdma",
     "dcb",
     "dummy",
+    "802-3-ethernet",
+    "gsm",
+    "hostname",
+    "802-1x",
     "infiniband",
     "ip-tunnel",
+    "6lowpan",
     "macsec",
     "macvlan",
     "match",
     "802-11-olpc-mesh",
     "ovs-bridge",
     "ovs-dpdk",
+    "ovs-external-ids",
     "ovs-interface",
     "ovs-patch",
     "ovs-port",
@@ -97,6 +97,7 @@ _setting_name_order = [
     "team-port",
     "tun",
     "user",
+    "veth",
     "vlan",
     "vpn",
     "vrf",
@@ -104,6 +105,8 @@ _setting_name_order = [
     "wifi-p2p",
     "wimax",
     "wireguard",
+    "802-11-wireless",
+    "802-11-wireless-security",
     "wpan",
 ]
 
@@ -124,6 +127,7 @@ list_modules = [
     "user",
     "vlan",
     "vpn",
+    "wireguard",
     "wireless",
     "wireless_security",
 ]
@@ -194,7 +198,16 @@ header = f"""# {license}\n# {script},
 # if possible, please make changes by also updating the script.
 """
 i = open("sdbus_async/networkmanager/settings/__init__.py", mode="w")
+p = open("sdbus_async/networkmanager/settings/profile.py", mode="r")
+profile_py = open("sdbus_async/networkmanager/settings/profile.py").read()
+start_string = "# start of the generated list of settings classes\n"
+start_index = profile_py.index(start_string) + len(start_string)
+# end_string = "    def to_dbus"
+end_string = "    # end of the generated list of settings classes\n"
+end_index = profile_py.index(end_string)
+p = open("sdbus_async/networkmanager/settings/profile.py", mode="w")
 i.write(header)
+p.write(profile_py[:start_index])
 classes = []
 for settingname in iter_keys_of_dicts(settings_roots, key_fcn_setting_name):
     settings = [d.get(settingname) for d in settings_roots]
@@ -233,15 +246,17 @@ for settingname in iter_keys_of_dicts(settings_roots, key_fcn_setting_name):
         f.write("from .datatypes import Vlans\n")
     if settingname.startswith("team"):
         f.write("from .datatypes import LinkWatchers\n")
+    if settingname == "wireguard":
+        f.write("from .datatypes import WireguardPeers as Peers\n")
     f.write("\n\n")
 
     setting_node = ElementTree.SubElement(root_node, "setting")
-    print(f"    {module}: Optional[{classname}] = field(")
-    print(f"        metadata={{'dbus_name': '{settingname}',")
-    print(f"                  'settings_class': {classname}}},")
-    print("        default=None,")
-    print("    )")
-    print("")
+    if module != "connection":
+        p.write(f"    {module}: Optional[{classname}] = field(\n")
+        p.write(f"        metadata={{'dbus_name': '{settingname}',\n")
+        p.write(f"                  'settings_class': {classname}}},\n")
+        p.write("        default=None,\n")
+        p.write("    )\n")
     f.write("@dataclass\n")
     f.write(f"class {classname}(NetworkManagerSettingsMixin):\n")
     setting_node.set("name", settingname)
@@ -261,21 +276,16 @@ for settingname in iter_keys_of_dicts(settings_roots, key_fcn_setting_name):
         if not t:
             t = "string"
         if t.startswith("array of legacy"):
-            print("    # Deprecated - TODO: ignore")
             continue
         if t not in dbus_name_type_map:
-            print(f"    # {settingname}.{property_name} type [{t}] not found")
+            print(f"{settingname}.{property_name}: type '{t}' not found")
             ty = t.replace(")", "")[-5:]
             if ty in dbus_name_type_map:
                 t = ty
         if t in ["{sv}'"]:
             t = "{sv}"
-        if t in ["array of 'a{sv}'"]:
-            if f"{settingname}.{property_name}" == "wireguard.peers":
-                print("# Has special class in settings.py")
-            continue
         dbustype = dbus_name_type_map[t]
-        if t == "array of vardict":
+        if dbustype == "aa{sv}":
             default = node_get_attr(properties_attrs, "default")
             inner_cls = (
                 property_name.title().replace("-", "").replace("data", "Data")
@@ -287,7 +297,12 @@ for settingname in iter_keys_of_dicts(settings_roots, key_fcn_setting_name):
             f.write(f"        default={str(default).title()},\n    )\n")
         else:
             attribute_type = dbus_type_name_map[dbustype]
-            f.write(f"    {attribute}: Optional[{attribute_type}] = field(\n")
+            optional = module != "bond"
+            if optional:
+                f.write(f"    {attribute}: Optional[{attribute_type}]")
+            else:
+                f.write(f"    {attribute}: {attribute_type}")
+            f.write(" = field(\n")
             meta = f"'dbus_name': '{property_name}', 'dbus_type':@'{dbustype}'"
             line = "metadata={" + meta + "},"
             wrapper = textwrap.TextWrapper(
@@ -301,7 +316,9 @@ for settingname in iter_keys_of_dicts(settings_roots, key_fcn_setting_name):
             default = node_get_attr(properties_attrs, "default")
             if default in ["{}", "0", "-1"]:
                 default = "None"
-            f.write(f"        default={str(default).title()},\n    )\n")
+            if optional:
+                f.write(f"        default={str(default).title()},\n")
+            f.write("    )\n")
             generate_descriptions_for_attributes = False
             if generate_descriptions_for_attributes:
                 desc = node_get_attr(properties_attrs, "description")
@@ -316,10 +333,8 @@ for settingname in iter_keys_of_dicts(settings_roots, key_fcn_setting_name):
                         f.write(line)
                     f.write('    """')
                 f.write("")
-            # node_set_attr(property_node, "alias", properties_attrs)
-i.write('__all__ = (\n')
-wrapper = textwrap.TextWrapper(width=76)
-lines = wrapper.wrap(text=', '.join(f"'{classname}'" for classname in classes))
-for line in lines:
-    i.write(f'    {line}\n')
+i.write('\n__all__ = (\n')
+for cls in classes:
+    i.write(f"    '{cls}',\n")
 i.write(")\n")
+p.write(profile_py[end_index:])

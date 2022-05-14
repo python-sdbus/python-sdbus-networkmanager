@@ -5,18 +5,13 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import List, Optional
 from .base import NetworkManagerSettingsMixin
-from .datatypes import WireguardPeers
+from .datatypes import WireguardPeers as Peers
 
 
 @dataclass
 class WireguardSettings(NetworkManagerSettingsMixin):
     """WireGuard Settings"""
 
-    peers: List[WireguardPeers] = field(
-        metadata={'dbus_name': 'peers',
-                  'dbus_type': 'aa{sv}',
-                  'dbus_inner_class': WireguardPeers},
-    )
     fwmark: Optional[int] = field(
         metadata={'dbus_name': 'fwmark', 'dbus_type': 'u'},
         default=None,
@@ -40,6 +35,12 @@ class WireguardSettings(NetworkManagerSettingsMixin):
     peer_routes: Optional[bool] = field(
         metadata={'dbus_name': 'peer-routes', 'dbus_type': 'b'},
         default=True,
+    )
+    peers: Optional[List[Peers]] = field(
+        metadata={'dbus_name': 'peers',
+                  'dbus_type': 'aa{sv}',
+                  'dbus_inner_class': Peers},
+        default=None,
     )
     private_key: Optional[str] = field(
         metadata={'dbus_name': 'private-key', 'dbus_type': 's'},
