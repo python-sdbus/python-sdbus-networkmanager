@@ -49,6 +49,21 @@ class NetworkManagerSettingsMixin:
         return cls(**unvarianted_options)
 
     @classmethod
+    def from_dict(cls,
+                  plain_dict: Dict[str, Any]
+                  ) -> NetworkManagerSettingsMixin:
+        options = {}
+        for dataclass_field in fields(cls):
+            dbus_name = dataclass_field.metadata["dbus_name"]
+            if dbus_name in plain_dict:
+                value = plain_dict[dbus_name]
+                if dataclass_field.metadata["dbus_type"] == 'aa{sv}':
+                    inner_class = cls.setting_name_to_inner_class(dbus_name)
+                    value = [inner_class.from_dict(item) for item in value]
+                options[dataclass_field.name] = value
+        return cls(**options)
+
+    @classmethod
     @lru_cache(maxsize=None)
     def setting_name_reverse_mapping(cls) -> Dict[str, str]:
         return {f.metadata['dbus_name']: f.name for f in fields(cls)}
