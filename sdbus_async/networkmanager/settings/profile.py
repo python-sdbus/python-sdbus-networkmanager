@@ -366,6 +366,22 @@ class ConnectionProfile:
             raise e
         return cls(**unvarianted_options)
 
+    @classmethod
+    def from_settings_dict(
+        cls, settings_dict: Dict[str, Dict[str, Any]]
+    ) -> ConnectionProfile:
+        """Return a ConnectionProfile created from a simple settings dict
+        A simple settings dict uses the same keys as from_dbus() and to_dbus()
+        but without the dbus variable signatures used by NetworkManader.py
+
+        This means a simple settings dict does not use the underscore in keys
+        like the attributes of this class have to use and use "id" and "type".
+        """
+        unvarianted_options: Dict[str, Any] = {
+            SETTING_DBUS_NAME_TO_NAME[k]: SETTING_TO_CLASS[k].from_dict(v)
+            for k, v in settings_dict.items()}
+        return cls(**unvarianted_options)
+
 
 SETTING_DBUS_NAME_TO_NAME: Dict[str, str] = {
     f.metadata['dbus_name']: f.name
