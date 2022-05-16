@@ -11,6 +11,15 @@ from .base import NetworkManagerSettingsMixin
 class ConnectionSettings(NetworkManagerSettingsMixin):
     """General Connection Profile Settings"""
 
+    connection_id: str = field(
+        metadata={'dbus_name': 'id', 'dbus_type': 's'},
+    )
+    connection_type: str = field(
+        metadata={'dbus_name': 'type', 'dbus_type': 's'},
+    )
+    uuid: str = field(
+        metadata={'dbus_name': 'uuid', 'dbus_type': 's'},
+    )
     auth_retries: Optional[int] = field(
         metadata={'dbus_name': 'auth-retries', 'dbus_type': 'i'},
         default=None,
@@ -37,10 +46,6 @@ class ConnectionSettings(NetworkManagerSettingsMixin):
     )
     gateway_ping_timeout: Optional[int] = field(
         metadata={'dbus_name': 'gateway-ping-timeout', 'dbus_type': 'u'},
-        default=None,
-    )
-    connection_id: Optional[str] = field(
-        metadata={'dbus_name': 'id', 'dbus_type': 's'},
         default=None,
     )
     interface_name: Optional[str] = field(
@@ -97,14 +102,6 @@ class ConnectionSettings(NetworkManagerSettingsMixin):
     )
     timestamp: Optional[int] = field(
         metadata={'dbus_name': 'timestamp', 'dbus_type': 't'},
-        default=None,
-    )
-    connection_type: Optional[str] = field(
-        metadata={'dbus_name': 'type', 'dbus_type': 's'},
-        default=None,
-    )
-    uuid: Optional[str] = field(
-        metadata={'dbus_name': 'uuid', 'dbus_type': 's'},
         default=None,
     )
     wait_device_timeout: Optional[int] = field(

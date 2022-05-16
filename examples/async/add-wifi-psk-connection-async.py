@@ -46,15 +46,16 @@
 import asyncio
 import binascii
 import functools
-import pprint
 import sdbus
 import uuid
 from argparse import ArgumentParser, Namespace
 from passlib.utils.pbkdf2 import pbkdf2  # type: ignore
+from pprint import pprint
 from sdbus_async.networkmanager import (
     NetworkManagerSettings as SettingsManager,
     ConnectionProfile,
     ConnectionSettings,
+    ConnectionType,
     Ipv4Settings,
     Ipv6Settings,
     WirelessSettings,
@@ -79,7 +80,7 @@ async def add_wifi_psk_connection_profile_async(args: Namespace) -> None:
     profile = ConnectionProfile(
         connection=ConnectionSettings(
             uuid=str(uuid.uuid4()),
-            connection_type='802-11-wireless',
+            connection_type=ConnectionType.WIFI,
             connection_id=args.conn_id,
             autoconnect=args.auto,
         ),
@@ -104,7 +105,7 @@ async def add_wifi_psk_connection_profile_async(args: Namespace) -> None:
 
     print(f'nmcli connection show "{args.conn_id}"|grep -v -e -- -e default')
     print("Settings used:")
-    functools.partial(pprint.pprint, sort_dicts=False)(profile.to_dbus())
+    functools.partial(pprint, sort_dicts=False)(profile.to_settings_dict())
 
 
 if __name__ == "__main__":
