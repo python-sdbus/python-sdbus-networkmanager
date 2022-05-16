@@ -26,6 +26,7 @@ from .enums import (
     ConnectionState,
     ConnectionStateFlags,
     ConnectionStateReason,
+    ConnectionType,
     ConnectivityState,
     DeviceCapabilities,
     DeviceInterfaceFlags,
@@ -269,7 +270,7 @@ DEVICE_TYPE_TO_CLASS = {
 __all__ = (
     'AccessPointCapabilities', 'BluetoothCapabilities',
     'ConnectionFlags', 'ConnectionState', 'ConnectionStateFlags',
-    'ConnectionStateReason', 'ConnectivityState',
+    'ConnectionStateReason', 'ConnectivityState', 'ConnectionType',
     'DeviceCapabilities', 'DeviceInterfaceFlags', 'DeviceMetered',
     'DeviceState', 'DeviceStateReason', 'DeviceType', 'IpTunnelMode',
     'ModemCapabilities', 'NetworkManagerConnectivityState',
