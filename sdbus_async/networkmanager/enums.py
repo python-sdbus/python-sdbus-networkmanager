@@ -596,6 +596,39 @@ class DeviceType(IntEnum):
     VRF = 31
 
 
+ConnectionTypeByDeviceType = {
+    "ADSL": "adsl",
+    "BLUETOOTH": "bluetooth",
+    "BOND": "bond",
+    "BRIDGE": "bridge",
+    "CDMA": "cdma",
+    "DUMMY": "dummy",
+    "ETHERNET": "802-3-ethernet",
+    "INFINIBAND": "infiniband",
+    "IP_TUNNEL": "ip-tunnel",
+    "MACSEC": "macsec",
+    "MACVLAN": "macvlan",
+    "MODEM": "gsm",
+    "OLPC_MESH": "802-11-olpc-mesh",
+    "OVS_BRIDGE": "ovs-bridge",
+    "OVS_INTERFACE": "ovs-interface",
+    "OVS_PORT": "ovs-port",
+    "PPPOE": "pppoe",
+    "SIXLOWPAN": "6lowpan",
+    "TEAM": "team",
+    "TUN": "tun",
+    "VETH": "veth",
+    "VLAN": "vlan",
+    "VPN": "vpn",
+    "VRF": "vrf",
+    "VXLAN": "vxlan",
+    "WIFI": "802-11-wireless",
+    "WIFI_P2P": "wifi-p2p",
+    "WIREGUARD": "wireguard",
+    "WPAN": "wpan",
+}
+
+
 class DeviceMetered(IntEnum):
     """Device Metered state
 
