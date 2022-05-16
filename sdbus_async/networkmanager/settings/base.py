@@ -56,8 +56,11 @@ class NetworkManagerSettingsMixin:
                 continue
             if not defaults and value == x.default:
                 continue
-            if x.metadata['dbus_type'] == 'aa{sv}':
+            dbus_type = x.metadata['dbus_type']
+            if dbus_type == 'aa{sv}':
                 value = [x.to_settings_dict(defaults) for x in value]
+            elif dbus_type == 'ay' and x.name == "ssid":
+                value = value.decode('utf8')  # Make SSID JSON-serializable
             new_dict[x.metadata['dbus_name']] = value
         return new_dict
 
@@ -91,9 +94,13 @@ class NetworkManagerSettingsMixin:
             dbus_name = dataclass_field.metadata["dbus_name"]
             if dbus_name in plain_dict:
                 value = plain_dict[dbus_name]
-                if dataclass_field.metadata["dbus_type"] == 'aa{sv}':
+                dbus_type = dataclass_field.metadata['dbus_type']
+                if dbus_type == 'aa{sv}':
                     inner_class = cls.setting_name_to_inner_class(dbus_name)
                     value = [inner_class.from_dict(item) for item in value]
+                elif dbus_type == 'ay' and isinstance(value, str):
+                    # If byte array(e.g. ssid) was passed as string encode it:
+                    value = value.encode('utf8')
                 options[dataclass_field.name] = value
         return cls(**options)
 
