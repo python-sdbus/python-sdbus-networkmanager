@@ -10,7 +10,11 @@ from ..types import (
 
 class NetworkManagerSettingsMixin:
     def to_dbus(self) -> NetworkManagerSettingsDomain:
-        """TODO: Add proper docstring"""
+        """Return a dbus dictionary for NetworkManager to add/update profiles
+
+        The key names provided are exactly as documented in these tables:
+        https://networkmanager.dev/docs/api/latest/nm-settings-dbus.html
+        """
         new_dict: NetworkManagerSettingsDomain = {}
 
         for x in fields(self):
@@ -25,6 +29,36 @@ class NetworkManagerSettingsMixin:
 
             new_dict[x.metadata['dbus_name']] = packed_variant
 
+        return new_dict
+
+    def to_settings_dict(self, defaults: bool = False) -> Dict[str, Any]:
+        """Return a simple dictionary using the same key names like the dbus
+        dict from to_dbus(), but without the dbus signatures returned by it.
+
+        The key names provided are exactly as documented in these tables:
+        https://networkmanager.dev/docs/api/latest/nm-settings-dbus.html
+
+        Contrary to dataclasses.asdict(), it provides the orignal dbus keys,
+        e.g. with numerical prefixes like "802-11-", dashes, and "id"/"type".
+
+        In addition, it can be selected if defaults shall be omitted in output,
+        like NetworkConnectionSettings.get_settings() omits default values:
+
+        Because of this, all NetworkManager clients which read profiles have
+        to have hard-coded knowledge of these defaults. By this omission, they
+        are part of the stable API: They can be relied upon to never change.
+        Omitting the defaults makes the typical output really small for review.
+        """
+        new_dict = {}
+        for x in fields(self):
+            value = getattr(self, x.name)
+            if value in [None, {}, []]:
+                continue
+            if not defaults and value == x.default:
+                continue
+            if x.metadata['dbus_type'] == 'aa{sv}':
+                value = [x.to_settings_dict(defaults) for x in value]
+            new_dict[x.metadata['dbus_name']] = value
         return new_dict
 
     @classmethod

@@ -51,7 +51,7 @@ from .wireguard import WireguardSettings
 from .wireless import WirelessSettings
 from .wireless_security import WirelessSecuritySettings
 from .wpan import WpanSettings
-from ..types import NetworkManagerConnectionProperties
+from ..types import NetworkManagerConnectionProperties, SettingsDict
 
 
 @dataclass
@@ -344,6 +344,27 @@ class ConnectionProfile:
 
         return new_dict
 
+    def to_settings_dict(self, defaults: bool = False) -> SettingsDict:
+        """Return a simple dictionary using the same key names like the dbus
+        dict from to_dbus(), but without the dbus signatures returned by it.
+
+        Contrary to dataclasses.asdict(), it provides the orignal dbus keys,
+        e.g. with numerical prefixes like "802-11-", dashes, and "id"/"type".
+
+        The key names provided are exactly as documented in these tables:
+        https://networkmanager.dev/docs/api/latest/nm-settings-dbus.html
+
+        param defaults: Whether properies with default values are returned.
+        """
+        new_dict = {}
+        for x in fields(self):
+            settings_class = getattr(self, x.name)
+            if settings_class:
+                settingsdomain_dict = settings_class.to_settings_dict(defaults)
+                if settingsdomain_dict != {}:
+                    new_dict[x.metadata['dbus_name']] = settingsdomain_dict
+        return new_dict
+
     @property
     def dbus_name_to_settings_class(self) -> Dict[str, str]:
         return {f.metadata['dbus_name']: f.name
@@ -368,7 +389,7 @@ class ConnectionProfile:
 
     @classmethod
     def from_settings_dict(
-        cls, settings_dict: Dict[str, Dict[str, Any]]
+        cls, settings_dict: SettingsDict
     ) -> ConnectionProfile:
         """Return a ConnectionProfile created from a simple settings dict
         A simple settings dict uses the same keys as from_dbus() and to_dbus()
