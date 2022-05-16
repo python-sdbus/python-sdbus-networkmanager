@@ -250,6 +250,7 @@ from .types import (
     NetworkManagerSetting,
     NetworkManagerSettingsDomain,
     NetworkManagerConnectionProperties,
+    SettingsDict,
 )
 
 DEVICE_TYPE_TO_CLASS = {
@@ -479,4 +480,5 @@ __all__ = (
     'NetworkManagerSetting',
     'NetworkManagerSettingsDomain',
     'NetworkManagerConnectionProperties',
+    'SettingsDict',
 )

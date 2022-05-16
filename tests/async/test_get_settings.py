@@ -83,12 +83,34 @@ async def test_autoconnect_true_not_returned_by_networkmanager() -> None:
     assert "autoconnect" not in profile_from_manager["connection"]
 
 
+def test_autoconnect_true_returned_by_settings_dict_when_requested() -> None:
+    """to_settings_dict(defaults=True) returns autoconnect=True (is default)"""
+    profile_from_dbus_dict = profile_with_autoconnect_set_to(True)
+    settings_dict = profile_from_dbus_dict.to_settings_dict(defaults=True)
+    assert settings_dict["connection"]["autoconnect"] is True
+
+
+def test_autoconnect_true_not_returned_by_to_settings_dict() -> None:
+    """to_settings_dict(defaults=False) does not return autoconnect=True"""
+
+    # Like checked by test_autoconnect_true_not_returned_by_networkmanager()
+    # above (which checks that get_settings) does not return autoconnect=True
+    # (because it is the default), test the same for .to_settings_dict():
+    profile_from_dbus_dict = profile_with_autoconnect_set_to(True)
+    settings_dict = profile_from_dbus_dict.to_settings_dict(defaults=False)
+
+    # Assert that networkmanager did not return autoconnect (default is True)
+    assert "autoconnect" not in settings_dict["connection"]
+
+
 async def check_to_settings_dict_profile_eqal_to_from_settings_dict() -> None:
     """Async main function to run all tests when not run by pytest"""
     """The tests can be run by pytest (and from IDEs by running this module)"""
     set_sdbus_default_bus()
     await test_autoconnect_false_returned_by_networkmanager()
     await test_autoconnect_true_not_returned_by_networkmanager()
+    test_autoconnect_true_returned_by_settings_dict_when_requested()
+    test_autoconnect_true_not_returned_by_to_settings_dict()
 
 
 if __name__ == "__main__":
