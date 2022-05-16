@@ -53,7 +53,7 @@ async def print_connection_profile(connection_path: str) -> None:
             print(f'      route-metric: {profile.ipv4.route_metric}')
     if profile.ipv6:
         print("ipv6: method:", profile.ipv6.method)
-    pprint.pprint(profile.to_dbus())
+    pprint.pprint(profile.to_settings_dict(), sort_dicts=False)
 
 
 if __name__ == "__main__":
