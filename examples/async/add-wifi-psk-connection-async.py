@@ -52,7 +52,7 @@ import sdbus
 from uuid import uuid4
 from argparse import ArgumentParser, Namespace
 from sdbus_async.networkmanager import NetworkManagerSettings
-from sdbus_async.networkmanager import NetworkManagerConnectionProperties
+from sdbus_async.networkmanager import ConnectionProfile, SettingsDict
 
 
 async def add_wifi_psk_connection_async(args: Namespace) -> str:
@@ -68,40 +68,35 @@ async def add_wifi_psk_connection_async(args: Namespace) -> str:
         print(f'Run: nmcli connection delete "{args.conn_id}"')
         return ""
 
-    properties: NetworkManagerConnectionProperties = {
+    settings_dict: SettingsDict = {
         "connection": {
-            "id": ("s", args.conn_id),
-            "uuid": ("s", str(args.uuid)),
-            "type": ("s", "802-11-wireless"),
-            "autoconnect": ("b", bool(hasattr(args, "auto") and args.auto)),
+            "id": args.conn_id,
+            "uuid": str(args.uuid),
+            "type": "802-11-wireless",
+            "autoconnect": bool(hasattr(args, "auto") and args.auto),
         },
         "802-11-wireless": {
-            "mode": ("s", "infrastructure"),
-            "security": ("s", "802-11-wireless-security"),
-            "ssid": ("ay", args.ssid.encode("utf-8")),
+            "security": "802-11-wireless-security",
+            "ssid": args.ssid,  # str is automatically encoded to utf-8 bytes
         },
-        "802-11-wireless-security": {
-            "key-mgmt": ("s", "wpa-psk"),
-            "auth-alg": ("s", "open"),
-            "psk": ("s", args.psk),
-        },
-        "ipv4": {"method": ("s", "auto")},
-        "ipv6": {"method": ("s", "auto")},
+        "802-11-wireless-security": {"key-mgmt": "wpa-psk", "psk": args.psk},
+        "ipv4": {"method": "auto"},
+        "ipv6": {"method": "auto"},
     }
+    profile = ConnectionProfile.from_settings_dict(settings_dict)
 
     # To bind the new connection to a specific interface, use this:
     if hasattr(args, "interface_name") and args.interface_name:
-        properties["connection"]["interface-name"] = ("s", args.interface_name)
+        profile.connection.interface_name = args.interface_name
 
     s = NetworkManagerSettings()
-    save = bool(hasattr(args, "save") and args.save)
-    addconnection = s.add_connection if save else s.add_connection_unsaved
-    connection_settings_dbus_path = await addconnection(properties)
-    created = "created and saved" if save else "created"
+    addconnection = s.add_connection if args.save else s.add_connection_unsaved
+    connection_settings_dbus_path = await addconnection(profile.to_dbus())
+    created = "created and saved" if args.save else "created"
     info(f"New unsaved connection profile {created}, show it with:")
     info(f'nmcli connection show "{args.conn_id}"|grep -v -e -- -e default')
     info("Settings used:")
-    info(functools.partial(pprint.pformat, sort_dicts=False)(properties))
+    info(functools.partial(pprint.pformat, sort_dicts=False)(settings_dict))
     return connection_settings_dbus_path
 
 
@@ -112,6 +107,7 @@ if __name__ == "__main__":
     p.add_argument("-c", dest="conn_id", default=conn_id, help="Connection Id")
     p.add_argument("-u", dest="uuid", default=uuid4(), help="Connection UUID")
     p.add_argument("-s", dest="ssid", default="CafeSSID", help="WiFi SSID")
+    p.add_argument("-k", dest="key_mgmt", default="wpa-psk", help="key-mgmt")
     p.add_argument("-p", dest="psk", default="Coffee!!", help="WiFi PSK")
     p.add_argument("-i", dest="interface_name", default="", help="WiFi device")
     p.add_argument("-a", dest="auto", action="store_true", help="autoconnect")

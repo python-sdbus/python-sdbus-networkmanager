@@ -27,3 +27,6 @@ NetworkManagerSettingsDomain = Dict[str, NetworkManagerSetting]
 
 # All settings and properites of a connection, e.g. returned by get_settings()
 NetworkManagerConnectionProperties = Dict[str, NetworkManagerSettingsDomain]
+
+# All settings and properites of a connection, but without dbus signatures
+SettingsDict = Dict[str, Dict[str, Any]]
