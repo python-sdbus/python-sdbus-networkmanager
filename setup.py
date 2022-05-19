@@ -29,7 +29,7 @@ setup(
     description=('NetworkManager binds for sdbus.'),
     long_description=long_description,
     long_description_content_type='text/markdown',
-    version='1.1.0',
+    version='1.2.0',
     url='https://github.com/igo95862/python-sdbus',
     author='igo95862',
     author_email='igo95862@yandex.ru',
@@ -52,6 +52,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     packages=['sdbus_async.networkmanager',
+              'sdbus_async.networkmanager.settings',
               'sdbus_block.networkmanager',
               ],
     package_data={
