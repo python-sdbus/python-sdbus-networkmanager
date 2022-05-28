@@ -495,6 +495,38 @@ class DeviceStateReason(IntEnum):
 
 # From NetworkManager-1.35:
 class ConnectionType(str, Enum):
+    """Connection Types
+
+    * ADSL
+    * BLUETOOTH
+    * BOND
+    * BRIDGE
+    * CDMA
+    * DUMMY
+    * GSM
+    * INFINIBAND
+    * IP_TUNNEL
+    * MACSEC
+    * MACVLAN
+    * OLPC_MESH
+    * OVS_BRIDGE
+    * OVS_INTERFACE
+    * OVS_INTERFACE
+    * PPPOE
+    * SIXLOWPAN
+    * TEAM
+    * TUN
+    * VETH
+    * VLAN
+    * VPN
+    * VRF
+    * VXLAN
+    * WIFI_P2P
+    * WIRED
+    * WIREGUARD
+    * WIFI
+    * WPAN
+    """
     ADSL = "adsl"
     BLUETOOTH = "bluetooth"
     BOND = "bond"
