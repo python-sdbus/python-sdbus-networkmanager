@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 from __future__ import annotations
 
-from enum import IntEnum, IntFlag
+from enum import IntEnum, IntFlag, Enum
 
 
 class AccessPointCapabilities(IntFlag):
@@ -494,7 +494,7 @@ class DeviceStateReason(IntEnum):
 # thus there are more ConnectionTypes than DeviceTypes:
 
 # From NetworkManager-1.35:
-class ConnectionType():
+class ConnectionType(str, Enum):
     ADSL = "adsl"
     BLUETOOTH = "bluetooth"
     BOND = "bond"
@@ -594,39 +594,6 @@ class DeviceType(IntEnum):
     WIREGUARD = 29
     WIFI_P2P = 30
     VRF = 31
-
-
-ConnectionTypeByDeviceType = {
-    "ADSL": "adsl",
-    "BLUETOOTH": "bluetooth",
-    "BOND": "bond",
-    "BRIDGE": "bridge",
-    "CDMA": "cdma",
-    "DUMMY": "dummy",
-    "ETHERNET": "802-3-ethernet",
-    "INFINIBAND": "infiniband",
-    "IP_TUNNEL": "ip-tunnel",
-    "MACSEC": "macsec",
-    "MACVLAN": "macvlan",
-    "MODEM": "gsm",
-    "OLPC_MESH": "802-11-olpc-mesh",
-    "OVS_BRIDGE": "ovs-bridge",
-    "OVS_INTERFACE": "ovs-interface",
-    "OVS_PORT": "ovs-port",
-    "PPPOE": "pppoe",
-    "SIXLOWPAN": "6lowpan",
-    "TEAM": "team",
-    "TUN": "tun",
-    "VETH": "veth",
-    "VLAN": "vlan",
-    "VPN": "vpn",
-    "VRF": "vrf",
-    "VXLAN": "vxlan",
-    "WIFI": "802-11-wireless",
-    "WIFI_P2P": "wifi-p2p",
-    "WIREGUARD": "wireguard",
-    "WPAN": "wpan",
-}
 
 
 class DeviceMetered(IntEnum):
