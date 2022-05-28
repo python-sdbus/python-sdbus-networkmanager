@@ -21,8 +21,12 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Tuple
 
-from sdbus import (DbusInterfaceCommonAsync, dbus_method_async,
-                   dbus_property_async, dbus_signal_async)
+from sdbus import (
+    DbusInterfaceCommonAsync,
+    dbus_method_async,
+    dbus_property_async,
+    dbus_signal_async,
+)
 
 from .types import NetworkManagerConnectionProperties
 

@@ -19,7 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 from __future__ import annotations
 
-from enum import IntEnum, IntFlag
+from enum import Enum, IntEnum, IntFlag
 
 
 class AccessPointCapabilities(IntFlag):
@@ -471,6 +471,91 @@ class DeviceStateReason(IntEnum):
     IP_METHOD_UNSUPPORTED = 65
     SRIOV_CONFIGURATION_FAILED = 66
     PEER_NOT_FOUND = 67
+
+
+# Connection Types, e.g. from connecion_profile.connection.type:
+#
+# There is no central list of all connection types in NM.
+# The best bet is to look for nm_connection_is_type() checks which use
+# NM_SETTING_(TYPE)_SETTING_NAME #defines (which are fined used for
+# settings for this connection-type. One connection_type can have several
+# of such settings groups, so we have to filter those to get the strings:
+#
+# Generated from NetworkManager source using:
+# grep -r nm_connection_is_type src/|
+#     sed -n 's/.*NM_SETTING_/NM_SETTING_/;s/_SETTING_NAME.*/=/p' |
+#     sort -u >.connection_is_type
+# grep -hr define.*_SETTING_NAME src/|
+#     sed 's/#define //;s/_SETTING_NAME//;s/ /=/' >.setting_defines
+# grep -f .connection_is_type .setting_defines |
+#     sed 's/NM_SETTING_/    /;s/6L/SIXL/;/GENERIC/d;s/=/ = /'
+#
+# One src/core/nm-device-*.c can support more than one ConnectionType,
+# thus there are more ConnectionTypes than DeviceTypes:
+
+# From NetworkManager-1.35:
+class ConnectionType(str, Enum):
+    """Connection Types
+
+    * ADSL
+    * BLUETOOTH
+    * BOND
+    * BRIDGE
+    * CDMA
+    * DUMMY
+    * GSM
+    * INFINIBAND
+    * IP_TUNNEL
+    * MACSEC
+    * MACVLAN
+    * OLPC_MESH
+    * OVS_BRIDGE
+    * OVS_INTERFACE
+    * OVS_INTERFACE
+    * PPPOE
+    * SIXLOWPAN
+    * TEAM
+    * TUN
+    * VETH
+    * VLAN
+    * VPN
+    * VRF
+    * VXLAN
+    * WIFI_P2P
+    * WIRED
+    * WIREGUARD
+    * WIFI
+    * WPAN
+    """
+    ADSL = "adsl"
+    BLUETOOTH = "bluetooth"
+    BOND = "bond"
+    BRIDGE = "bridge"
+    CDMA = "cdma"
+    DUMMY = "dummy"
+    GSM = "gsm"
+    INFINIBAND = "infiniband"
+    IP_TUNNEL = "ip-tunnel"
+    MACSEC = "macsec"
+    MACVLAN = "macvlan"
+    OLPC_MESH = "802-11-olpc-mesh"
+    OVS_BRIDGE = "ovs-bridge"
+    OVS_INTERFACE = "ovs-interface"
+    OVS_PORT = "ovs-port"
+    PPPOE = "pppoe"
+    SIXLOWPAN = "6lowpan"
+    TEAM = "team"
+    TUN = "tun"
+    VETH = "veth"
+    VLAN = "vlan"
+    VPN = "vpn"
+    VRF = "vrf"
+    VXLAN = "vxlan"
+    WIFI_P2P = "wifi-p2p"
+    WIRED = "802-3-ethernet"
+    WIREGUARD = "wireguard"
+    WIFI = "802-11-wireless"
+    WPAN = "wpan"
 
 
 class DeviceType(IntEnum):

@@ -25,44 +25,50 @@ from typing import List, Optional
 
 from sdbus.sd_bus_internals import SdBus
 
-from .interfaces_devices import (NetworkManagerDeviceBluetoothInterfaceAsync,
-                                 NetworkManagerDeviceBondInterfaceAsync,
-                                 NetworkManagerDeviceBridgeInterfaceAsync,
-                                 NetworkManagerDeviceGenericInterfaceAsync,
-                                 NetworkManagerDeviceInterfaceAsync,
-                                 NetworkManagerDeviceIPTunnelInterfaceAsync,
-                                 NetworkManagerDeviceMacsecInterfaceAsync,
-                                 NetworkManagerDeviceMacvlanInterfaceAsync,
-                                 NetworkManagerDeviceModemInterfaceAsync,
-                                 NetworkManagerDeviceOlpcMeshInterfaceAsync,
-                                 NetworkManagerDeviceOvsBridgeInterfaceAsync,
-                                 NetworkManagerDeviceOvsPortInterfaceAsync,
-                                 NetworkManagerDeviceStatisticsInterfaceAsync,
-                                 NetworkManagerDeviceTeamInterfaceAsync,
-                                 NetworkManagerDeviceTunInterfaceAsync,
-                                 NetworkManagerDeviceVethInterfaceAsync,
-                                 NetworkManagerDeviceVlanInterfaceAsync,
-                                 NetworkManagerDeviceVrfInterfaceAsync,
-                                 NetworkManagerDeviceVxlanInterfaceAsync,
-                                 NetworkManagerDeviceWifiP2PInterfaceAsync,
-                                 NetworkManagerDeviceWiredInterfaceAsync,
-                                 NetworkManagerDeviceWireGuardInterfaceAsync,
-                                 NetworkManagerDeviceWirelessInterfaceAsync,
-                                 NetworkManagerPPPInterfaceAsync)
-from .interfaces_other import (NetworkManagerAccessPointInterfaceAsync,
-                               NetworkManagerCheckpointInterfaceAsync,
-                               NetworkManagerConnectionActiveInterfaceAsync,
-                               NetworkManagerDHCP4ConfigInterfaceAsync,
-                               NetworkManagerDHCP6ConfigInterfaceAsync,
-                               NetworkManagerDnsManagerInterfaceAsync,
-                               NetworkManagerInterfaceAsync,
-                               NetworkManagerIP4ConfigInterfaceAsync,
-                               NetworkManagerIP6ConfigInterfaceAsync,
-                               NetworkManagerSecretAgentManagerInterfaceAsync,
-                               NetworkManagerSettingsConnectionInterfaceAsync,
-                               NetworkManagerSettingsInterfaceAsync,
-                               NetworkManagerVPNConnectionInterfaceAsync,
-                               NetworkManagerWifiP2PPeerInterfaceAsync)
+from .interfaces_devices import (
+    NetworkManagerDeviceBluetoothInterfaceAsync,
+    NetworkManagerDeviceBondInterfaceAsync,
+    NetworkManagerDeviceBridgeInterfaceAsync,
+    NetworkManagerDeviceGenericInterfaceAsync,
+    NetworkManagerDeviceInterfaceAsync,
+    NetworkManagerDeviceIPTunnelInterfaceAsync,
+    NetworkManagerDeviceMacsecInterfaceAsync,
+    NetworkManagerDeviceMacvlanInterfaceAsync,
+    NetworkManagerDeviceModemInterfaceAsync,
+    NetworkManagerDeviceOlpcMeshInterfaceAsync,
+    NetworkManagerDeviceOvsBridgeInterfaceAsync,
+    NetworkManagerDeviceOvsPortInterfaceAsync,
+    NetworkManagerDeviceStatisticsInterfaceAsync,
+    NetworkManagerDeviceTeamInterfaceAsync,
+    NetworkManagerDeviceTunInterfaceAsync,
+    NetworkManagerDeviceVethInterfaceAsync,
+    NetworkManagerDeviceVlanInterfaceAsync,
+    NetworkManagerDeviceVrfInterfaceAsync,
+    NetworkManagerDeviceVxlanInterfaceAsync,
+    NetworkManagerDeviceWifiP2PInterfaceAsync,
+    NetworkManagerDeviceWiredInterfaceAsync,
+    NetworkManagerDeviceWireGuardInterfaceAsync,
+    NetworkManagerDeviceWirelessInterfaceAsync,
+    NetworkManagerPPPInterfaceAsync,
+)
+from .interfaces_other import (
+    NetworkManagerAccessPointInterfaceAsync,
+    NetworkManagerCheckpointInterfaceAsync,
+    NetworkManagerConnectionActiveInterfaceAsync,
+    NetworkManagerDHCP4ConfigInterfaceAsync,
+    NetworkManagerDHCP6ConfigInterfaceAsync,
+    NetworkManagerDnsManagerInterfaceAsync,
+    NetworkManagerInterfaceAsync,
+    NetworkManagerIP4ConfigInterfaceAsync,
+    NetworkManagerIP6ConfigInterfaceAsync,
+    NetworkManagerSecretAgentManagerInterfaceAsync,
+    NetworkManagerSettingsConnectionInterfaceAsync,
+    NetworkManagerSettingsInterfaceAsync,
+    NetworkManagerVPNConnectionInterfaceAsync,
+    NetworkManagerWifiP2PPeerInterfaceAsync,
+)
+from .settings.profile import ConnectionProfile
+from .types import NetworkManagerConnectionProperties
 
 NETWORK_MANAGER_SERVICE_NAME = 'org.freedesktop.NetworkManager'
 
@@ -159,7 +165,7 @@ class NetworkManagerSettings(NetworkManagerSettingsInterfaceAsync):
         which use the given connection identifier.
 
         :param str connection_id: The connection identifier of the connections,
-        e.g. "Ethernet connection 1"
+                                  e.g. "Wired connection 1"
         :return: List of connection profile paths using the given identifier.
         """
         connection_paths_with_matching_id = []
@@ -171,6 +177,19 @@ class NetworkManagerSettings(NetworkManagerSettingsInterfaceAsync):
             if settings_properites["connection"]["id"][1] == connection_id:
                 connection_paths_with_matching_id.append(connection_path)
         return connection_paths_with_matching_id
+
+    async def get_settings_by_uuid(
+        self, connection_uuid: str
+    ) -> NetworkManagerConnectionProperties:
+        connection = await self.get_connection_by_uuid(connection_uuid)
+        connection_manager = NetworkConnectionSettings(connection)
+        connection_settings = await connection_manager.get_settings()
+        return connection_settings
+
+    async def delete_connection_by_uuid(self, connection_uuid: str) -> None:
+        conn_dbus_path = await self.get_connection_by_uuid(connection_uuid)
+        connection_settings_manager = NetworkConnectionSettings(conn_dbus_path)
+        await connection_settings_manager.delete()
 
 
 class NetworkConnectionSettings(
@@ -195,6 +214,9 @@ class NetworkConnectionSettings(
             NETWORK_MANAGER_SERVICE_NAME,
             settings_path,
             bus)
+
+    async def connection_profile(self) -> ConnectionProfile:
+        return ConnectionProfile.from_dbus(await self.get_settings())
 
 
 class NetworkDeviceGeneric(
