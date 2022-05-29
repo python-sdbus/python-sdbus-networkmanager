@@ -20,16 +20,21 @@
 from __future__ import annotations
 
 from setuptools import setup
+from typing import Dict
 
 with open('./README.md') as f:
     long_description = f.read()
+
+metadata: Dict[str, str] = {}
+with open('sdbus_async/networkmanager/__about__.py') as fp:
+    exec(fp.read(), metadata)
 
 setup(
     name='sdbus-networkmanager',
     description=('NetworkManager binds for sdbus.'),
     long_description=long_description,
     long_description_content_type='text/markdown',
-    version='1.2.0',
+    version=metadata['__version__'],
     url='https://github.com/igo95862/python-sdbus',
     author='igo95862',
     author_email='igo95862@yandex.ru',

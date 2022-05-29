@@ -1,0 +1,1 @@
+../../sdbus_async/networkmanager/__about__.py

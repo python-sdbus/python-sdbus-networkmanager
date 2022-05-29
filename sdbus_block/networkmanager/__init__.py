@@ -19,6 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 from __future__ import annotations
 
+from .__about__ import __version__
 from .enums import (
     AccessPointCapabilities,
     BluetoothCapabilities,
@@ -264,6 +265,8 @@ DEVICE_TYPE_TO_CLASS = {
 
 
 __all__ = (
+    # .__about__
+    '__version__',
     # .enums
     'AccessPointCapabilities',
     'BluetoothCapabilities',
