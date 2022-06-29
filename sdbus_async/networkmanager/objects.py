@@ -181,12 +181,21 @@ class NetworkManagerSettings(NetworkManagerSettingsInterfaceAsync):
     async def get_settings_by_uuid(
         self, connection_uuid: str
     ) -> NetworkManagerConnectionProperties:
+        """Helper to get a nested settings dict of a connection profile by uuid.
+
+        :param str connection_uuid: The connection uuid of the connection profile
+        :return: Nested dictionary of all settings of the given connection profile
+        """
         connection = await self.get_connection_by_uuid(connection_uuid)
         connection_manager = NetworkConnectionSettings(connection)
         connection_settings = await connection_manager.get_settings()
         return connection_settings
 
     async def delete_connection_by_uuid(self, connection_uuid: str) -> None:
+        """Helper to delete a connection profile identified by the connection uuid.
+
+        :param str connection_uuid: The connection uuid of the connection profile
+        """
         conn_dbus_path = await self.get_connection_by_uuid(connection_uuid)
         connection_settings_manager = NetworkConnectionSettings(conn_dbus_path)
         await connection_settings_manager.delete()
@@ -216,6 +225,10 @@ class NetworkConnectionSettings(
             bus)
 
     async def connection_profile(self) -> ConnectionProfile:
+        """Return a ConnectionProfile object containing all profile settings
+
+        :return: Nested dataclass containing all settings of the profile
+        """
         return ConnectionProfile.from_dbus(await self.get_settings())
 
 
