@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 # SPDX-License-Identifier: LGPL-2.1-or-later
 #
-# Update a property of a connection profile, looked up by connection id
-#
-# The IPv4 settings of connections profiles are documented here:
-# https://networkmanager.dev/docs/api/latest/settings-ipv4.html
+# Create and delete a connection profile using the unique connection uuid
 #
 import asyncio
 import logging
@@ -12,18 +9,16 @@ import sdbus
 from uuid import uuid4
 from argparse import Namespace
 from sdbus_async.networkmanager import NetworkManagerSettings
-from sdbus_async.networkmanager import NetworkConnectionSettings
+from sdbus_async.networkmanager import NmSettingsInvalidConnectionError
 
 
 async def delete_connection_by_uuid(uuid: str) -> bool:
     """Find and delete the connection identified by the given UUID"""
-    settings_manager = NetworkManagerSettings()
-    connection_path = await settings_manager.get_connection_by_uuid(uuid)
-    if not connection_path:
+    try:
+        await NetworkManagerSettings().delete_connection_by_uuid(uuid)
+    except NmSettingsInvalidConnectionError:
         logging.getLogger().fatal(f"Connection {uuid} for deletion not found")
         return False
-    connection_settings = NetworkConnectionSettings(connection_path)
-    await connection_settings.delete()
     return True
 
 
