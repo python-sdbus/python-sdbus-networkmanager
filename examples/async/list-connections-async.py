@@ -21,6 +21,7 @@ import asyncio
 import sdbus
 import pprint
 from sdbus_async.networkmanager import (
+    ConnectionType,
     NetworkManagerSettings,
     NetworkConnectionSettings,
 )
@@ -53,6 +54,8 @@ async def print_connection_profile(connection_path: str) -> None:
             print(f'      route-metric: {profile.ipv4.route_metric}')
     if profile.ipv6:
         print("ipv6: method:", profile.ipv6.method)
+    if connection.connection_type == ConnectionType.WIFI.value:
+        print("SSID:", profile.wireless.ssid.decode())
     pprint.pprint(profile.to_settings_dict(), sort_dicts=False)
 
 
