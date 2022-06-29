@@ -557,6 +557,10 @@ class ConnectionType(str, Enum):
     WIFI = "802-11-wireless"
     WPAN = "wpan"
 
+    # https://www.cosmicpython.com/blog/2020-10-27-i-hate-enums.html
+    def __str__(self) -> str:
+        """str method to avoid having to use .value to get the Enum value"""
+        return str.__str__(self)
 
 class DeviceType(IntEnum):
     """Device Type
