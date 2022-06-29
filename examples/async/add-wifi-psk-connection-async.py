@@ -45,14 +45,24 @@
 # -> org.freedesktop.NetworkManager.Settings (Settings Profile Manager)
 
 import asyncio
+import binascii
 import functools
 import logging
-import pprint
 import sdbus
 from uuid import uuid4
 from argparse import ArgumentParser, Namespace
-from sdbus_async.networkmanager import NetworkManagerSettings
-from sdbus_async.networkmanager import NetworkManagerConnectionProperties
+from passlib.utils.pbkdf2 import pbkdf2  # type: ignore
+from pprint import pformat
+from sdbus_async.networkmanager import (
+    NetworkManagerSettings as SettingsManager,
+    ConnectionProfile,
+    ConnectionSettings,
+    ConnectionType,
+    Ipv4Settings,
+    Ipv6Settings,
+    WirelessSettings,
+    WirelessSecuritySettings,
+)
 
 
 async def add_wifi_psk_connection_async(args: Namespace) -> str:
@@ -63,45 +73,44 @@ async def add_wifi_psk_connection_async(args: Namespace) -> str:
     info = logging.getLogger().info
 
     # If we add many connections passing the same id, things get messy. Check:
-    if await NetworkManagerSettings().get_connections_by_id(args.conn_id):
+    if await SettingsManager().get_connections_by_id(args.conn_id):
         print(f'Connection "{args.conn_id}" exists, remove it first')
         print(f'Run: nmcli connection delete "{args.conn_id}"')
         return ""
 
-    properties: NetworkManagerConnectionProperties = {
-        "connection": {
-            "id": ("s", args.conn_id),
-            "uuid": ("s", str(args.uuid)),
-            "type": ("s", "802-11-wireless"),
-            "autoconnect": ("b", bool(hasattr(args, "auto") and args.auto)),
-        },
-        "802-11-wireless": {
-            "mode": ("s", "infrastructure"),
-            "security": ("s", "802-11-wireless-security"),
-            "ssid": ("ay", args.ssid.encode("utf-8")),
-        },
-        "802-11-wireless-security": {
-            "key-mgmt": ("s", "wpa-psk"),
-            "auth-alg": ("s", "open"),
-            "psk": ("s", args.psk),
-        },
-        "ipv4": {"method": ("s", "auto")},
-        "ipv6": {"method": ("s", "auto")},
-    }
+    if args.key_mgmt == "wpa-psk" and len(args.password) < 64:
+        # Hash the password into a psk hash to not store it in clear form:
+        pw = pbkdf2(args.password.encode(), args.ssid.encode(), 4096, 32)
+        args.password = binascii.hexlify(pw).decode("utf-8")
+
+    profile = ConnectionProfile(
+        connection=ConnectionSettings(
+            connection_id=args.conn_id,
+            uuid=str(args.uuid),
+            connection_type=ConnectionType.WIFI.value,
+            autoconnect=bool(hasattr(args, "auto") and args.auto),
+        ),
+        ipv4=Ipv4Settings(method="auto"),
+        ipv6=Ipv6Settings(method="auto"),
+        wireless=WirelessSettings(ssid=args.ssid.encode("utf-8")),
+        wireless_security=WirelessSecuritySettings(
+            key_mgmt=args.key_mgmt, auth_alg="open", psk=args.password
+        ),
+    )
 
     # To bind the new connection to a specific interface, use this:
     if hasattr(args, "interface_name") and args.interface_name:
-        properties["connection"]["interface-name"] = ("s", args.interface_name)
+        profile.connection.interface_name = args.interface_name
 
-    s = NetworkManagerSettings()
+    s = SettingsManager()
     save = bool(hasattr(args, "save") and args.save)
     addconnection = s.add_connection if save else s.add_connection_unsaved
-    connection_settings_dbus_path = await addconnection(properties)
+    connection_settings_dbus_path = await addconnection(profile.to_dbus())
     created = "created and saved" if save else "created"
     info(f"New unsaved connection profile {created}, show it with:")
     info(f'nmcli connection show "{args.conn_id}"|grep -v -e -- -e default')
     info("Settings used:")
-    info(functools.partial(pprint.pformat, sort_dicts=False)(properties))
+    info(functools.partial(pformat, sort_dicts=False)(profile.to_settings_dict()))
     return connection_settings_dbus_path
 
 
@@ -112,7 +121,8 @@ if __name__ == "__main__":
     p.add_argument("-c", dest="conn_id", default=conn_id, help="Connection Id")
     p.add_argument("-u", dest="uuid", default=uuid4(), help="Connection UUID")
     p.add_argument("-s", dest="ssid", default="CafeSSID", help="WiFi SSID")
-    p.add_argument("-p", dest="psk", default="Coffee!!", help="WiFi PSK")
+    p.add_argument("-k", dest="key_mgmt", default="wpa-psk", help="key-mgmt")
+    p.add_argument("-p", dest="password", default="Coffee!!", help="WiFi PSK")
     p.add_argument("-i", dest="interface_name", default="", help="WiFi device")
     p.add_argument("-a", dest="auto", action="store_true", help="autoconnect")
     p.add_argument("--save", dest="save", action="store_true", help="Save")
