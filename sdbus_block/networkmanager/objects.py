@@ -67,6 +67,8 @@ from .interfaces_other import (
     NetworkManagerVPNConnectionInterface,
     NetworkManagerWifiP2PPeerInterface,
 )
+from .settings.profile import ConnectionProfile
+from .types import NetworkManagerConnectionProperties
 
 NETWORK_MANAGER_SERVICE_NAME = 'org.freedesktop.NetworkManager'
 
@@ -158,7 +160,7 @@ class NetworkManagerSettings(NetworkManagerSettingsInterface):
         which use the given connection identifier.
 
         :param str connection_id: The connection identifier of the connections,
-        e.g. "Ethernet connection 1"
+                                  e.g. "Wired connection 1"
         :return: List of connection profile paths using the given identifier.
         """
         connection_paths_with_matching_id = []
@@ -168,6 +170,25 @@ class NetworkManagerSettings(NetworkManagerSettingsInterface):
             if profile.get_settings()["connection"]["id"][1] == connection_id:
                 connection_paths_with_matching_id.append(connection_path)
         return connection_paths_with_matching_id
+
+    def get_settings_by_uuid(
+        self, connection_uuid: str
+    ) -> NetworkManagerConnectionProperties:
+        """Helper to get a nested settings dict of a connection profile by uuid.
+
+        :param str connection_uuid: The connection uuid of the connection profile
+        :return: Nested dictionary of all settings of the given connection profile
+        """
+        connection = self.get_connection_by_uuid(connection_uuid)
+        return NetworkConnectionSettings(connection).get_settings()
+
+    def delete_connection_by_uuid(self, connection_uuid: str) -> None:
+        """Helper to delete a connection profile identified by the connection uuid.
+
+        :param str connection_uuid: The connection uuid of the connection profile
+        """
+        conn_dbus_path = self.get_connection_by_uuid(connection_uuid)
+        NetworkConnectionSettings(conn_dbus_path).delete()
 
 
 class NetworkConnectionSettings(
@@ -191,6 +212,13 @@ class NetworkConnectionSettings(
             NETWORK_MANAGER_SERVICE_NAME,
             settings_path,
             bus)
+
+    def connection_profile(self) -> ConnectionProfile:
+        """Return a ConnectionProfile object containing all profile settings
+
+        :return: Nested dataclass containing all settings of the profile
+        """
+        return ConnectionProfile.from_dbus(self.get_settings())
 
 
 class NetworkDeviceGeneric(
