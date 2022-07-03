@@ -489,6 +489,9 @@ class DeviceStateReason(IntEnum):
 #     sed 's/#define //;s/_SETTING_NAME//;s/ /=/' >.setting_defines
 # grep -f .connection_is_type .setting_defines |
 #     sed 's/NM_SETTING_/    /;s/6L/SIXL/;/GENERIC/d;s/=/ = /'
+# Manual edit: This resulted in WIRED instead of ETHERNET, but 
+# ETHERNET is the name used for DeviceType, so use ETHERNET instead to
+# be able to lookup connection profiles for Ethernet using DeviceType.
 #
 # One src/core/nm-device-*.c can support more than one ConnectionType,
 # thus there are more ConnectionTypes than DeviceTypes:
@@ -503,6 +506,7 @@ class ConnectionType(str, Enum):
     * BRIDGE
     * CDMA
     * DUMMY
+    * ETHERNET
     * GSM
     * INFINIBAND
     * IP_TUNNEL
@@ -522,7 +526,6 @@ class ConnectionType(str, Enum):
     * VRF
     * VXLAN
     * WIFI_P2P
-    * WIRED
     * WIREGUARD
     * WIFI
     * WPAN
@@ -533,6 +536,7 @@ class ConnectionType(str, Enum):
     BRIDGE = "bridge"
     CDMA = "cdma"
     DUMMY = "dummy"
+    ETHERNET = "802-3-ethernet"
     GSM = "gsm"
     INFINIBAND = "infiniband"
     IP_TUNNEL = "ip-tunnel"
@@ -552,7 +556,6 @@ class ConnectionType(str, Enum):
     VRF = "vrf"
     VXLAN = "vxlan"
     WIFI_P2P = "wifi-p2p"
-    WIRED = "802-3-ethernet"
     WIREGUARD = "wireguard"
     WIFI = "802-11-wireless"
     WPAN = "wpan"

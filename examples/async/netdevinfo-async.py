@@ -10,7 +10,10 @@
 import asyncio
 import sdbus
 from sdbus_async.networkmanager import (
+    ConnectionType,
+    NetworkConnectionSettings,
     NetworkManager,
+    NetworkManagerSettings,
     NetworkDeviceGeneric,
     IPv4Config,
     DeviceType,
@@ -18,8 +21,44 @@ from sdbus_async.networkmanager import (
     WiFiOperationMode,
     AccessPoint,
 )
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 NetworkManagerAddressData = List[Dict[str, Tuple[str, Any]]]
+
+
+async def get_most_recent_connection_id(ifname, dev_type) -> Optional[str]:
+    """Return the most-recently used connection_id for this device
+
+    Besides getting the currently active connection, this will succeed
+    in getting the most recent connection when a device is not connected
+    at the moment this function is executed.
+
+    It uses getattr(ConnectionType, dev_type) to get the connection_type
+    used for connection_profiles for this DeviceType.
+
+    With a slight modification, this could return the most recent connections
+    of the given device, ordered by the time of the last use of them.
+    """
+    settings_service = NetworkManagerSettings()
+    connection_paths: List[str] = await settings_service.connections
+    conns = {}
+    for connection_path in connection_paths:
+        connection_manager = NetworkConnectionSettings(connection_path)
+        connection = (await connection_manager.connection_profile()).connection
+        # Filter connection profiles matching the connection type for the device:
+        if connection.connection_type != getattr(ConnectionType, dev_type):
+            continue
+        # If the interface_name of a connection profiles is set, it must match:
+        if connection.interface_name and connection.interface_name != ifname:
+            continue
+        # If connection.timestamp is not set, it was never active. Set it to 0:
+        if not connection.timestamp:
+            connection.timestamp = 0
+        # Record the connection_ids of the matches, and timestamp is the key:
+        conns[connection.timestamp] = connection.connection_id
+    if not len(conns):
+        return None
+    # Returns the connection_id of the highest timestamp which was found:
+    return conns.get(max(conns.keys()))
 
 
 async def list_networkdevice_details_async() -> None:
@@ -31,11 +70,19 @@ async def list_networkdevice_details_async() -> None:
         device_ip4_conf_path: str = await generic_device.ip4_config
         if device_ip4_conf_path == "/":
             continue
+        if not await generic_device.managed:
+            continue
+        dev_type = DeviceType(await generic_device.device_type).name
+        if dev_type == DeviceType.BRIDGE.name:
+            continue
 
+        dev_name = await generic_device.interface
         ip4_conf = IPv4Config(device_ip4_conf_path)
         gateway: str = await ip4_conf.gateway
 
-        print("Device: ", await generic_device.interface)
+        print("Type:   ", dev_type.title())
+        print("Name:   ", dev_name)
+
         if gateway:
             print("Gateway:", gateway)
 
@@ -47,7 +94,7 @@ async def list_networkdevice_details_async() -> None:
         for dns in nameservers:
             print("DNS:    ", dns["address"][1])
 
-        if await generic_device.device_type == DeviceType.WIFI:
+        if dev_type == DeviceType.WIFI.name:
             wifi = NetworkDeviceWireless(device_path)
             print("Wifi:   ", WiFiOperationMode(await wifi.mode).name.title())
             ap = AccessPoint(await wifi.active_access_point)
@@ -56,6 +103,9 @@ async def list_networkdevice_details_async() -> None:
                 print("SSID:   ", ssid.decode("utf-8", "ignore"))
             if await ap.strength:
                 print("Signal: ", await ap.strength)
+        connection_id = await get_most_recent_connection_id(dev_name, dev_type)
+        if connection_id:
+            print("Profile:", connection_id)
 
         print("")
 
