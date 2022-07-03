@@ -19,6 +19,8 @@ class ProxySettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'method', 'dbus_type': 'i'},
         default=None,
     )
+    """Method for proxy configuration, Default is NM_SETTING_PROXY_METHOD_NONE
+    (0)"""
     pac_script: Optional[str] = field(
         metadata={'dbus_name': 'pac-script', 'dbus_type': 's'},
         default=None,

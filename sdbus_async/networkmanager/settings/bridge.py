@@ -24,10 +24,19 @@ class BridgeSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'group-address', 'dbus_type': 'ay'},
         default=None,
     )
+    """If specified, The MAC address of the multicast group this bridge uses for
+    STP. The address must be a link-local address in standard Ethernet MAC address
+    format, ie an address of the form 01:80:C2:00:00:0X, with X in [0, 4..F]. If
+    not specified the default value is 01:80:C2:00:00:00."""
     group_forward_mask: Optional[int] = field(
         metadata={'dbus_name': 'group-forward-mask', 'dbus_type': 'u'},
         default=None,
     )
+    """A mask of group addresses to forward. Usually, group addresses in the range
+    from 01:80:C2:00:00:00 to 01:80:C2:00:00:0F are not forwarded according to
+    standards. This property is a mask of 16 bits, each corresponding to a group
+    address in that range that must be forwarded. The mask can't have bits 0, 1 or
+    2 set because they are used for STP, MAC pause frames and LACP."""
     hello_time: Optional[int] = field(
         metadata={'dbus_name': 'hello-time', 'dbus_type': 'u'},
         default=2,
@@ -36,10 +45,19 @@ class BridgeSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'interface-name', 'dbus_type': 's'},
         default=None,
     )
+    """Deprecated in favor of connection.interface-name, but can be used for
+    backward-compatibility with older daemons, to set the bridge's interface
+    name."""
     mac_address: Optional[bytes] = field(
         metadata={'dbus_name': 'mac-address', 'dbus_type': 'ay'},
         default=None,
     )
+    """If specified, the MAC address of bridge. When creating a new bridge, this
+    MAC address will be set. If this field is left unspecified, the
+    "ethernet.cloned-mac-address" is referred instead to generate the initial MAC
+    address. Note that setting "ethernet.cloned-mac-address" anyway overwrites the
+    MAC address of the bridge later while activating the bridge. Hence, this
+    property is deprecated. Deprecated: 1"""
     max_age: Optional[int] = field(
         metadata={'dbus_name': 'max-age', 'dbus_type': 'u'},
         default=20,
@@ -52,45 +70,68 @@ class BridgeSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'multicast-last-member-count', 'dbus_type': 'u'},
         default=2,
     )
+    """Set the number of queries the bridge will send before stopping forwarding a
+    multicast group after a "leave" message has been received."""
     multicast_last_member_interval: Optional[int] = field(
         metadata={'dbus_name': 'multicast-last-member-interval',
                   'dbus_type': 't'},
         default=100,
     )
+    """Set interval (in deciseconds) between queries to find remaining members of
+    a group, after a "leave" message is received."""
     multicast_membership_interval: Optional[int] = field(
         metadata={'dbus_name': 'multicast-membership-interval',
                   'dbus_type': 't'},
         default=26000,
     )
+    """Set delay (in deciseconds) after which the bridge will leave a group, if no
+    membership reports for this group are received."""
     multicast_querier: Optional[bool] = field(
         metadata={'dbus_name': 'multicast-querier', 'dbus_type': 'b'},
         default=False,
     )
+    """Enable or disable sending of multicast queries by the bridge. If not
+    specified the option is disabled."""
     multicast_querier_interval: Optional[int] = field(
         metadata={'dbus_name': 'multicast-querier-interval', 'dbus_type': 't'},
         default=25500,
     )
+    """If no queries are seen after this delay (in deciseconds) has passed, the
+    bridge will start to send its own queries."""
     multicast_query_interval: Optional[int] = field(
         metadata={'dbus_name': 'multicast-query-interval', 'dbus_type': 't'},
         default=12500,
     )
+    """Interval (in deciseconds) between queries sent by the bridge after the end
+    of the startup phase."""
     multicast_query_response_interval: Optional[int] = field(
         metadata={'dbus_name': 'multicast-query-response-interval',
                   'dbus_type': 't'},
         default=1000,
     )
+    """Set the Max Response Time/Max Response Delay (in deciseconds) for IGMP/MLD
+    queries sent by the bridge."""
     multicast_query_use_ifaddr: Optional[bool] = field(
         metadata={'dbus_name': 'multicast-query-use-ifaddr', 'dbus_type': 'b'},
         default=False,
     )
+    """If enabled the bridge's own IP address is used as the source address for
+    IGMP queries otherwise the default of 0.0.0.0 is used."""
     multicast_router: Optional[str] = field(
         metadata={'dbus_name': 'multicast-router', 'dbus_type': 's'},
         default=None,
     )
+    """Sets bridge's multicast router. Multicast-snooping must be enabled for this
+    option to work. Supported values are: 'auto', 'disabled', 'enabled' to which
+    kernel assigns the numbers 1, 0, and 2, respectively. If not specified the
+    default value is 'auto' (1)."""
     multicast_snooping: Optional[bool] = field(
         metadata={'dbus_name': 'multicast-snooping', 'dbus_type': 'b'},
         default=True,
     )
+    """Controls whether IGMP snooping is enabled for this bridge. Note that if
+    snooping was automatically disabled due to hash collisions, the system may
+    refuse to enable the feature until the collisions are resolved."""
     multicast_startup_query_count: Optional[int] = field(
         metadata={'dbus_name': 'multicast-startup-query-count',
                   'dbus_type': 'u'},
@@ -101,18 +142,27 @@ class BridgeSettings(NetworkManagerSettingsMixin):
                   'dbus_type': 't'},
         default=3125,
     )
+    """Sets the time (in deciseconds) between queries sent out at startup to
+    determine membership information."""
     priority: Optional[int] = field(
         metadata={'dbus_name': 'priority', 'dbus_type': 'u'},
         default=32768,
     )
+    """Sets the Spanning Tree Protocol (STP) priority for this bridge.  Lower
+    values are "better"; the lowest priority bridge will be elected the root
+    bridge."""
     stp: Optional[bool] = field(
         metadata={'dbus_name': 'stp', 'dbus_type': 'b'},
         default=True,
     )
+    """Controls whether Spanning Tree Protocol (STP) is enabled for this
+    bridge."""
     vlan_default_pvid: Optional[int] = field(
         metadata={'dbus_name': 'vlan-default-pvid', 'dbus_type': 'u'},
         default=1,
     )
+    """The default PVID for the ports of the bridge, that is the VLAN id assigned
+    to incoming untagged frames."""
     vlan_filtering: Optional[bool] = field(
         metadata={'dbus_name': 'vlan-filtering', 'dbus_type': 'b'},
         default=False,
@@ -121,6 +171,8 @@ class BridgeSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'vlan-protocol', 'dbus_type': 's'},
         default=None,
     )
+    """If specified, the protocol used for VLAN filtering. Supported values are:
+    '802.1Q', '802.1ad'. If not specified the default value is '802.1Q'."""
     vlan_stats_enabled: Optional[bool] = field(
         metadata={'dbus_name': 'vlan-stats-enabled', 'dbus_type': 'b'},
         default=False,

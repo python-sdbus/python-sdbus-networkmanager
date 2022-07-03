@@ -15,3 +15,5 @@ class OvsPatchSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'peer', 'dbus_type': 's'},
         default=None,
     )
+    """Specifies the name of the interface for the other side of the patch. The
+    patch on the other side must also set this interface as peer."""

@@ -15,14 +15,20 @@ class WpanSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'channel', 'dbus_type': 'i'},
         default=None,
     )
+    """IEEE 802.15.4 channel. A positive integer or -1, meaning "do not set, use
+    whatever the device is already set to"."""
     mac_address: Optional[str] = field(
         metadata={'dbus_name': 'mac-address', 'dbus_type': 's'},
         default=None,
     )
+    """If specified, this connection will only apply to the IEEE 802.15.4 (WPAN)
+    MAC layer device whose permanent MAC address matches."""
     page: Optional[int] = field(
         metadata={'dbus_name': 'page', 'dbus_type': 'i'},
         default=None,
     )
+    """IEEE 802.15.4 channel page. A positive integer or -1, meaning "do not set,
+    use whatever the device is already set to"."""
     pan_id: Optional[int] = field(
         metadata={'dbus_name': 'pan-id', 'dbus_type': 'u'},
         default=65535,

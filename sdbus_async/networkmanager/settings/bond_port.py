@@ -15,3 +15,5 @@ class BondPortSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'queue-id', 'dbus_type': 'u'},
         default=None,
     )
+    """The queue ID of this bond port. The maximum value of queue ID is the number
+    of TX queues currently active in device."""

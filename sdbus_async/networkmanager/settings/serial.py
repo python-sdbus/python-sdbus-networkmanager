@@ -15,6 +15,9 @@ class SerialSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'baud', 'dbus_type': 'u'},
         default=57600,
     )
+    """Speed to use for communication over the serial port.  Note that this value
+    usually has no effect for mobile broadband modems as they generally ignore
+    speed settings and use the highest available speed."""
     bits: Optional[int] = field(
         metadata={'dbus_name': 'bits', 'dbus_type': 'u'},
         default=8,
@@ -23,6 +26,8 @@ class SerialSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'parity', 'dbus_type': 'y'},
         default=None,
     )
+    """The connection parity: 69 (ASCII 'E') for even parity, 111 (ASCII 'o') for
+    odd, 110 (ASCII 'n') for none."""
     send_delay: Optional[int] = field(
         metadata={'dbus_name': 'send-delay', 'dbus_type': 't'},
         default=None,
@@ -31,3 +36,5 @@ class SerialSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'stopbits', 'dbus_type': 'u'},
         default=1,
     )
+    """Number of stop bits for communication on the serial port.  Either 1 or 2.
+    The 1 in "8n1" for example."""

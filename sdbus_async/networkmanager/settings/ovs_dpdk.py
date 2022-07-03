@@ -19,3 +19,6 @@ class OvsDpdkSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'n-rxq', 'dbus_type': 'u'},
         default=None,
     )
+    """Open vSwitch DPDK number of rx queues. Defaults to zero which means to
+    leave the parameter in OVS unspecified and effectively configures one
+    queue."""

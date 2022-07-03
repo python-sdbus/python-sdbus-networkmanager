@@ -16,6 +16,10 @@ class TeamPortSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'config', 'dbus_type': 's'},
         default=None,
     )
+    """The JSON configuration for the team port. The property should contain raw
+    JSON configuration data suitable for teamd, because the value is passed
+    directly to teamd. If not specified, the default configuration is used. See
+    man teamd.conf for the format details."""
     lacp_key: Optional[int] = field(
         metadata={'dbus_name': 'lacp-key', 'dbus_type': 'i'},
         default=None,
@@ -38,6 +42,8 @@ class TeamPortSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'queue-id', 'dbus_type': 'i'},
         default=None,
     )
+    """Corresponds to the teamd ports.PORTIFNAME.queue_id. When set to -1 means
+    the parameter is skipped from the json config."""
     sticky: Optional[bool] = field(
         metadata={'dbus_name': 'sticky', 'dbus_type': 'b'},
         default=False,

@@ -16,10 +16,17 @@ class TeamSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'config', 'dbus_type': 's'},
         default=None,
     )
+    """The JSON configuration for the team network interface.  The property should
+    contain raw JSON configuration data suitable for teamd, because the value is
+    passed directly to teamd. If not specified, the default configuration is used.
+    See man teamd.conf for the format details."""
     interface_name: Optional[str] = field(
         metadata={'dbus_name': 'interface-name', 'dbus_type': 's'},
         default=None,
     )
+    """Deprecated in favor of connection.interface-name, but can be used for
+    backward-compatibility with older daemons, to set the team's interface
+    name."""
     link_watchers: Optional[List[LinkWatchers]] = field(
         metadata={'dbus_name': 'link-watchers',
                   'dbus_type': 'aa{sv}',
@@ -46,6 +53,8 @@ class TeamSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'runner', 'dbus_type': 's'},
         default=None,
     )
+    """Corresponds to the teamd runner.name. Permitted values are: "roundrobin",
+    "broadcast", "activebackup", "loadbalance", "lacp", "random"."""
     runner_active: Optional[bool] = field(
         metadata={'dbus_name': 'runner-active', 'dbus_type': 'b'},
         default=True,

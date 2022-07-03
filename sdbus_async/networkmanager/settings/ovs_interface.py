@@ -15,3 +15,5 @@ class OvsInterfaceSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'type', 'dbus_type': 's'},
         default=None,
     )
+    """The interface type. Either "internal", "system", "patch", "dpdk", or
+    empty."""

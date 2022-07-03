@@ -19,3 +19,5 @@ class BluetoothSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'type', 'dbus_type': 's'},
         default=None,
     )
+    """Either "dun" for Dial-Up Networking connections or "panu" for Personal Area
+    Networking connections to devices supporting the NAP profile."""

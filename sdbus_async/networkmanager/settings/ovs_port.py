@@ -35,3 +35,5 @@ class OvsPortSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'vlan-mode', 'dbus_type': 's'},
         default=None,
     )
+    """The VLAN mode. One of "access", "native-tagged", "native-untagged", "trunk"
+    or unset."""

@@ -15,7 +15,13 @@ class BondSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'interface-name', 'dbus_type': 's'},
         default=None,
     )
+    """Deprecated in favor of connection.interface-name, but can be used for
+    backward-compatibility with older daemons, to set the bond's interface
+    name."""
     options: Optional[Dict[str, str]] = field(
         metadata={'dbus_name': 'options', 'dbus_type': 'a{ss}'},
         default={'Mode': 'Balance-Rr'},
     )
+    """Dictionary of key/value pairs of bonding options.  Both keys and values
+    must be strings. Option names must contain only alphanumeric characters (ie,
+    [a-zA-Z0-9])."""

@@ -15,6 +15,10 @@ class PppoeSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'parent', 'dbus_type': 's'},
         default=None,
     )
+    """If given, specifies the parent interface name on which this PPPoE
+    connection should be created.  If this property is not specified, the
+    connection is activated on the interface specified in "interface-name" of
+    NMSettingConnection."""
     password: Optional[str] = field(
         metadata={'dbus_name': 'password', 'dbus_type': 's'},
         default=None,
@@ -27,6 +31,10 @@ class PppoeSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'service', 'dbus_type': 's'},
         default=None,
     )
+    """If specified, instruct PPPoE to only initiate sessions with access
+    concentrators that provide the specified service.  For most providers, this
+    should be left blank.  It is only required if there are multiple access
+    concentrators or a specific service is known to be required."""
     username: Optional[str] = field(
         metadata={'dbus_name': 'username', 'dbus_type': 's'},
         default=None,
