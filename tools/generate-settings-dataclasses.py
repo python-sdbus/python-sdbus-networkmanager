@@ -379,7 +379,7 @@ def main(settings_xml_path: Path) -> None:
                 # Generate docstrings for attributes: Not stored by python,
                 # but is parsed for generating documentation and be red by
                 # developers when they lookup the attribute declaration:
-                generate_descriptions_for_attributes = False
+                generate_descriptions_for_attributes = True
                 if generate_descriptions_for_attributes:
                     desc = node_get_attr(properties_attrs, "description")
                     wrapper = textwrap.TextWrapper(
