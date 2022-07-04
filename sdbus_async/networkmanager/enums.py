@@ -507,7 +507,7 @@ class ConnectionType(str, Enum):
     * CDMA
     * DUMMY
     * ETHERNET
-    * GSM
+    * MODEM
     * INFINIBAND
     * IP_TUNNEL
     * MACSEC
@@ -537,7 +537,7 @@ class ConnectionType(str, Enum):
     CDMA = "cdma"
     DUMMY = "dummy"
     ETHERNET = "802-3-ethernet"
-    GSM = "gsm"
+    MODEM = "gsm"
     INFINIBAND = "infiniband"
     IP_TUNNEL = "ip-tunnel"
     MACSEC = "macsec"
