@@ -15,3 +15,7 @@ class UserSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'data', 'dbus_type': 'a{ss}'},
         default=None,
     )
+    """A dictionary of key/value pairs with user data. This data is ignored by
+    NetworkManager and can be used at the users discretion. The keys only support
+    a strict ascii format, but the values can be arbitrary UTF8 strings up to a
+    certain length."""

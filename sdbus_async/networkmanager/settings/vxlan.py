@@ -19,10 +19,14 @@ class VxlanSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'destination-port', 'dbus_type': 'u'},
         default=8472,
     )
+    """Specifies the UDP destination port to communicate to the remote VXLAN
+    tunnel endpoint."""
     vxlan_id: Optional[int] = field(
         metadata={'dbus_name': 'id', 'dbus_type': 'u'},
         default=None,
     )
+    """Specifies the VXLAN Network Identifier (or VXLAN Segment Identifier) to
+    use."""
     l2_miss: Optional[bool] = field(
         metadata={'dbus_name': 'l2-miss', 'dbus_type': 'b'},
         default=False,
@@ -35,10 +39,14 @@ class VxlanSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'learning', 'dbus_type': 'b'},
         default=True,
     )
+    """Specifies whether unknown source link layer addresses and IP addresses are
+    entered into the VXLAN device forwarding database."""
     limit: Optional[int] = field(
         metadata={'dbus_name': 'limit', 'dbus_type': 'u'},
         default=None,
     )
+    """Specifies the maximum number of FDB entries. A value of zero means that the
+    kernel will store unlimited entries."""
     local: Optional[str] = field(
         metadata={'dbus_name': 'local', 'dbus_type': 's'},
         default=None,
@@ -55,6 +63,9 @@ class VxlanSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'remote', 'dbus_type': 's'},
         default=None,
     )
+    """Specifies the unicast destination IP address to use in outgoing packets
+    when the destination link layer address is not known in the VXLAN device
+    forwarding database, or the multicast IP address to join."""
     rsc: Optional[bool] = field(
         metadata={'dbus_name': 'rsc', 'dbus_type': 'b'},
         default=False,
@@ -63,10 +74,14 @@ class VxlanSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'source-port-max', 'dbus_type': 'u'},
         default=None,
     )
+    """Specifies the maximum UDP source port to communicate to the remote VXLAN
+    tunnel endpoint."""
     source_port_min: Optional[int] = field(
         metadata={'dbus_name': 'source-port-min', 'dbus_type': 'u'},
         default=None,
     )
+    """Specifies the minimum UDP source port to communicate to the remote VXLAN
+    tunnel endpoint."""
     tos: Optional[int] = field(
         metadata={'dbus_name': 'tos', 'dbus_type': 'u'},
         default=None,

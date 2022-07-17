@@ -15,18 +15,29 @@ class InfinibandSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'mac-address', 'dbus_type': 'ay'},
         default=None,
     )
+    """If specified, this connection will only apply to the IPoIB device whose
+    permanent MAC address matches. This property does not change the MAC address
+    of the device (i.e. MAC spoofing)."""
     mtu: Optional[int] = field(
         metadata={'dbus_name': 'mtu', 'dbus_type': 'u'},
         default=None,
     )
+    """If non-zero, only transmit packets of the specified size or smaller,
+    breaking larger packets up into multiple frames."""
     p_key: Optional[int] = field(
         metadata={'dbus_name': 'p-key', 'dbus_type': 'i'},
         default=None,
     )
+    """The InfiniBand P_Key to use for this device. A value of -1 means to use the
+    default P_Key (aka "the P_Key at index 0"). Otherwise, it is a 16-bit unsigned
+    integer, whose high bit is set if it is a "full membership" P_Key."""
     parent: Optional[str] = field(
         metadata={'dbus_name': 'parent', 'dbus_type': 's'},
         default=None,
     )
+    """The interface name of the parent device of this device. Normally NULL, but
+    if the "p_key" property is set, then you must specify the base device by
+    setting either this property or "mac-address"."""
     transport_mode: Optional[str] = field(
         metadata={'dbus_name': 'transport-mode', 'dbus_type': 's'},
         default=None,

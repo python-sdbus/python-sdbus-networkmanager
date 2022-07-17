@@ -19,6 +19,9 @@ class OlpcMeshSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'dhcp-anycast-address', 'dbus_type': 'ay'},
         default=None,
     )
+    """Anycast DHCP MAC address used when requesting an IP address via DHCP. The
+    specific anycast address used determines which DHCP server class answers the
+    request. This is currently only implemented by dhclient DHCP plugin."""
     ssid: Optional[bytes] = field(
         metadata={'dbus_name': 'ssid', 'dbus_type': 'ay'},
         default=None,

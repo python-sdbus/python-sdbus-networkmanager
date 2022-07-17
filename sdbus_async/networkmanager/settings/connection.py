@@ -14,44 +14,108 @@ class ConnectionSettings(NetworkManagerSettingsMixin):
     connection_id: str = field(
         metadata={'dbus_name': 'id', 'dbus_type': 's'},
     )
+    """A human readable unique identifier for the connection, like "Work Wi-Fi" or
+    "T-Mobile 3G"."""
     connection_type: str = field(
         metadata={'dbus_name': 'type', 'dbus_type': 's'},
     )
+    """Base type of the connection. For hardware-dependent connections, should
+    contain the setting name of the hardware-type specific setting (ie,
+    "802-3-ethernet" or "802-11-wireless" or "bluetooth", etc), and for non-
+    hardware dependent connections like VPN or otherwise, should contain the
+    setting name of that setting type (ie, "vpn" or "bridge", etc)."""
     uuid: str = field(
         metadata={'dbus_name': 'uuid', 'dbus_type': 's'},
     )
+    """A universally unique identifier for the connection, for example generated
+    with libuuid.  It should be assigned when the connection is created, and never
+    changed as long as the connection still applies to the same network.  For
+    example, it should not be changed when the "id" property or NMSettingIP4Config
+    changes, but might need to be re-created when the Wi-Fi SSID, mobile broadband
+    network provider, or "type" property changes. The UUID must be in the format
+    "2815492f-7e56-435e-b2e9-246bd7cdc664" (ie, contains only hexadecimal
+    characters and "-")."""
     auth_retries: Optional[int] = field(
         metadata={'dbus_name': 'auth-retries', 'dbus_type': 'i'},
         default=None,
     )
+    """The number of retries for the authentication. Zero means to try
+    indefinitely; -1 means to use a global default. If the global default is not
+    set, the authentication retries for 3 times before failing the connection.
+    Currently, this only applies to 802-1x authentication."""
     autoconnect: Optional[bool] = field(
         metadata={'dbus_name': 'autoconnect', 'dbus_type': 'b'},
         default=True,
     )
+    """Whether or not the connection should be automatically connected by
+    NetworkManager when the resources for the connection are available. TRUE to
+    automatically activate the connection, FALSE to require manual intervention to
+    activate the connection. Autoconnect happens when the circumstances are
+    suitable. That means for example that the device is currently managed and not
+    active. Autoconnect thus never replaces or competes with an already active
+    profile. Note that autoconnect is not implemented for VPN profiles. See
+    "secondaries" as an alternative to automatically connect VPN profiles."""
     autoconnect_priority: Optional[int] = field(
         metadata={'dbus_name': 'autoconnect-priority', 'dbus_type': 'i'},
         default=None,
     )
+    """The autoconnect priority in range -999 to 999. If the connection is set to
+    autoconnect, connections with higher priority will be preferred. The higher
+    number means higher priority. Defaults to 0. Note that this property only
+    matters if there are more than one candidate profile to select for
+    autoconnect. In case of equal priority, the profile used most recently is
+    chosen."""
     autoconnect_retries: Optional[int] = field(
         metadata={'dbus_name': 'autoconnect-retries', 'dbus_type': 'i'},
         default=None,
     )
+    """The number of times a connection should be tried when autoactivating before
+    giving up. Zero means forever, -1 means the global default (4 times if not
+    overridden). Setting this to 1 means to try activation only once before
+    blocking autoconnect. Note that after a timeout, NetworkManager will try to
+    autoconnect again."""
     autoconnect_slaves: Optional[int] = field(
         metadata={'dbus_name': 'autoconnect-slaves', 'dbus_type': 'i'},
         default=None,
     )
+    """Whether or not slaves of this connection should be automatically brought up
+    when NetworkManager activates this connection. This only has a real effect for
+    master connections. The properties "autoconnect", "autoconnect-priority" and
+    "autoconnect-retries" are unrelated to this setting. The permitted values are:
+    0: leave slave connections untouched, 1: activate all the slave connections
+    with this connection, -1: default. If -1 (default) is set, global
+    connection.autoconnect-slaves is read to determine the real value. If it is
+    default as well, this fallbacks to 0."""
     dns_over_tls: Optional[int] = field(
         metadata={'dbus_name': 'dns-over-tls', 'dbus_type': 'i'},
         default=None,
     )
+    """Whether DNSOverTls (dns-over-tls) is enabled for the connection. DNSOverTls
+    is a technology which uses TLS to encrypt dns traffic. The permitted values
+    are: "yes" (2) use DNSOverTls and disabled fallback, "opportunistic" (1) use
+    DNSOverTls but allow fallback to unencrypted resolution, "no" (0) don't ever
+    use DNSOverTls. If unspecified "default" depends on the plugin used. Systemd-
+    resolved uses global setting. This feature requires a plugin which supports
+    DNSOverTls. Otherwise, the setting has no effect. One such plugin is dns-
+    systemd-resolved."""
     gateway_ping_timeout: Optional[int] = field(
         metadata={'dbus_name': 'gateway-ping-timeout', 'dbus_type': 'u'},
         default=None,
     )
+    """If greater than zero, delay success of IP addressing until either the
+    timeout is reached, or an IP gateway replies to a ping."""
     interface_name: Optional[str] = field(
         metadata={'dbus_name': 'interface-name', 'dbus_type': 's'},
         default=None,
     )
+    """The name of the network interface this connection is bound to. If not set,
+    then the connection can be attached to any interface of the appropriate type
+    (subject to restrictions imposed by other settings). For software devices this
+    specifies the name of the created device. For connection types where interface
+    names cannot easily be made persistent (e.g. mobile broadband or USB
+    Ethernet), this property should not be used. Setting this property restricts
+    the interfaces a connection can be used with, and if interface names change or
+    are reordered the connection may be applied to the wrong interface."""
     lldp: Optional[int] = field(
         metadata={'dbus_name': 'lldp', 'dbus_type': 'i'},
         default=None,
@@ -60,6 +124,16 @@ class ConnectionSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'llmnr', 'dbus_type': 'i'},
         default=None,
     )
+    """Whether Link-Local Multicast Name Resolution (LLMNR) is enabled for the
+    connection. LLMNR is a protocol based on the Domain Name System (DNS) packet
+    format that allows both IPv4 and IPv6 hosts to perform name resolution for
+    hosts on the same local link. The permitted values are: "yes" (2) register
+    hostname and resolving for the connection, "no" (0) disable LLMNR for the
+    interface, "resolve" (1) do not register hostname but allow resolving of LLMNR
+    host names If unspecified, "default" ultimately depends on the DNS plugin
+    (which for systemd-resolved currently means "yes"). This feature requires a
+    plugin which supports LLMNR. Otherwise, the setting has no effect. One such
+    plugin is dns-systemd-resolved."""
     master: Optional[str] = field(
         metadata={'dbus_name': 'master', 'dbus_type': 's'},
         default=None,
@@ -68,47 +142,129 @@ class ConnectionSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'mdns', 'dbus_type': 'i'},
         default=None,
     )
+    """Whether mDNS is enabled for the connection. The permitted values are: "yes"
+    (2) register hostname and resolving for the connection, "no" (0) disable mDNS
+    for the interface, "resolve" (1) do not register hostname but allow resolving
+    of mDNS host names and "default" (-1) to allow lookup of a global default in
+    NetworkManager.conf. If unspecified, "default" ultimately depends on the DNS
+    plugin (which for systemd-resolved currently means "no"). This feature
+    requires a plugin which supports mDNS. Otherwise, the setting has no effect.
+    One such plugin is dns-systemd-resolved."""
     metered: Optional[int] = field(
         metadata={'dbus_name': 'metered', 'dbus_type': 'i'},
         default=None,
     )
+    """Whether the connection is metered. When updating this property on a
+    currently activated connection, the change takes effect immediately."""
     mud_url: Optional[str] = field(
         metadata={'dbus_name': 'mud-url', 'dbus_type': 's'},
         default=None,
     )
+    """If configured, set to a Manufacturer Usage Description (MUD) URL that
+    points to manufacturer-recommended network policies for IoT devices. It is
+    transmitted as a DHCPv4 or DHCPv6 option. The value must be a valid URL
+    starting with "https://". The special value "none" is allowed to indicate that
+    no MUD URL is used. If the per-profile value is unspecified (the default), a
+    global connection default gets consulted. If still unspecified, the ultimate
+    default is "none"."""
     multi_connect: Optional[int] = field(
         metadata={'dbus_name': 'multi-connect', 'dbus_type': 'i'},
         default=None,
     )
+    """Specifies whether the profile can be active multiple times at a particular
+    moment. The value is of type NMConnectionMultiConnect."""
     permissions: Optional[List[str]] = field(
         metadata={'dbus_name': 'permissions', 'dbus_type': 'as'},
         default=None,
     )
+    """An array of strings defining what access a given user has to this
+    connection.  If this is NULL or empty, all users are allowed to access this
+    connection; otherwise users are allowed if and only if they are in this list.
+    When this is not empty, the connection can be active only when one of the
+    specified users is logged into an active session.  Each entry is of the form
+    "[type]:[id]:[reserved]"; for example, "user:dcbw:blah". At this time only the
+    "user" [type] is allowed.  Any other values are ignored and reserved for
+    future use.  [id] is the username that this permission refers to, which may
+    not contain the ":" character. Any [reserved] information present must be
+    ignored and is reserved for future use.  All of [type], [id], and [reserved]
+    must be valid UTF-8."""
     read_only: Optional[bool] = field(
         metadata={'dbus_name': 'read-only', 'dbus_type': 'b'},
         default=False,
     )
+    """FALSE if the connection can be modified using the provided settings
+    service's D-Bus interface with the right privileges, or TRUE if the connection
+    is read-only and cannot be modified."""
     secondaries: Optional[List[str]] = field(
         metadata={'dbus_name': 'secondaries', 'dbus_type': 'as'},
         default=None,
     )
+    """List of connection UUIDs that should be activated when the base connection
+    itself is activated. Currently, only VPN connections are supported."""
     slave_type: Optional[str] = field(
         metadata={'dbus_name': 'slave-type', 'dbus_type': 's'},
         default=None,
     )
+    """Setting name of the device type of this slave's master connection (eg,
+    "bond"), or NULL if this connection is not a slave."""
     stable_id: Optional[str] = field(
         metadata={'dbus_name': 'stable-id', 'dbus_type': 's'},
         default=None,
     )
+    """This represents the identity of the connection used for various purposes.
+    It allows to configure multiple profiles to share the identity. Also, the
+    stable-id can contain placeholders that are substituted dynamically and
+    deterministically depending on the context. The stable-id is used for
+    generating IPv6 stable private addresses with ipv6.addr-gen-mode=stable-
+    privacy. It is also used to seed the generated cloned MAC address for
+    ethernet.cloned-mac-address=stable and wifi.cloned-mac-address=stable. It is
+    also used as DHCP client identifier with ipv4.dhcp-client-id=stable and to
+    derive the DHCP DUID with ipv6.dhcp-duid=stable-[llt,ll,uuid]. Note that
+    depending on the context where it is used, other parameters are also seeded
+    into the generation algorithm. For example, a per-host key is commonly also
+    included, so that different systems end up generating different IDs. Or with
+    ipv6.addr-gen-mode=stable-privacy, also the device's name is included, so that
+    different interfaces yield different addresses. The per-host key is the
+    identity of your machine and stored in /var/lib/NetworkManager/secret-key. The
+    '$' character is treated special to perform dynamic substitutions at runtime.
+    Currently, supported are "${CONNECTION}", "${DEVICE}", "${MAC}", "${BOOT}",
+    "${RANDOM}". These effectively create unique IDs per-connection, per-device,
+    per-boot, or every time. Note that "${DEVICE}" corresponds to the interface
+    name of the device and "${MAC}" is the permanent MAC address of the device.
+    Any unrecognized patterns following '$' are treated verbatim, however are
+    reserved for future use. You are thus advised to avoid '$' or escape it as
+    "$$". For example, set it to "${CONNECTION}-${BOOT}-${DEVICE}" to create a
+    unique id for this connection that changes with every reboot and differs
+    depending on the interface where the profile activates. If the value is unset,
+    a global connection default is consulted. If the value is still unset, the
+    default is similar to "${CONNECTION}" and uses a unique, fixed ID for the
+    connection."""
     timestamp: Optional[int] = field(
         metadata={'dbus_name': 'timestamp', 'dbus_type': 't'},
         default=None,
     )
+    """The time, in seconds since the Unix Epoch, that the connection was last
+    _successfully_ fully activated. NetworkManager updates the connection
+    timestamp periodically when the connection is active to ensure that an active
+    connection has the latest timestamp. The property is only meant for reading
+    (changes to this property will not be preserved)."""
     wait_device_timeout: Optional[int] = field(
         metadata={'dbus_name': 'wait-device-timeout', 'dbus_type': 'i'},
         default=None,
     )
+    """Timeout in milliseconds to wait for device at startup. During boot, devices
+    may take a while to be detected by the driver. This property will cause to
+    delay NetworkManager-wait-online.service and nm-online to give the device a
+    chance to appear. This works by waiting for the given timeout until a
+    compatible device for the profile is available and managed. The value 0 means
+    no wait time. The default value is -1, which currently has the same meaning as
+    no wait time."""
     zone: Optional[str] = field(
         metadata={'dbus_name': 'zone', 'dbus_type': 's'},
         default=None,
     )
+    """The trust level of a the connection.  Free form case-insensitive string
+    (for example "Home", "Work", "Public").  NULL or unspecified zone means the
+    connection will be placed in the default zone as defined by the firewall. When
+    updating this property on a currently activated connection, the change takes
+    effect immediately."""

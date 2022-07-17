@@ -15,3 +15,5 @@ class VethSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'peer', 'dbus_type': 's'},
         default=None,
     )
+    """This property specifies the peer interface name of the veth. This property
+    is mandatory."""

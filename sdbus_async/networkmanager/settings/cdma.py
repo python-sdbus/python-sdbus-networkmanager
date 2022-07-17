@@ -15,14 +15,22 @@ class CdmaSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'mtu', 'dbus_type': 'u'},
         default=None,
     )
+    """If non-zero, only transmit packets of the specified size or smaller,
+    breaking larger packets up into multiple frames."""
     number: Optional[str] = field(
         metadata={'dbus_name': 'number', 'dbus_type': 's'},
         default=None,
     )
+    """The number to dial to establish the connection to the CDMA-based mobile
+    broadband network, if any.  If not specified, the default number (#777) is
+    used when required."""
     password: Optional[str] = field(
         metadata={'dbus_name': 'password', 'dbus_type': 's'},
         default=None,
     )
+    """The password used to authenticate with the network, if required.  Many
+    providers do not require a password, or accept any password.  But if a
+    password is required, it is specified here."""
     password_flags: Optional[int] = field(
         metadata={'dbus_name': 'password-flags', 'dbus_type': 'i'},
         default=None,
@@ -31,3 +39,6 @@ class CdmaSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'username', 'dbus_type': 's'},
         default=None,
     )
+    """The username used to authenticate with the network, if required.  Many
+    providers do not require a username, or accept any username.  But if a
+    username is required, it is specified here."""

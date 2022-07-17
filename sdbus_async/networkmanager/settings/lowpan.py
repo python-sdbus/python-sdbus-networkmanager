@@ -15,3 +15,5 @@ class LowpanSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'parent', 'dbus_type': 's'},
         default=None,
     )
+    """If given, specifies the parent interface name or parent connection UUID
+    from which this 6LowPAN interface should be created."""

@@ -15,10 +15,16 @@ class MacvlanSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'mode', 'dbus_type': 'u'},
         default=None,
     )
+    """The macvlan mode, which specifies the communication mechanism between
+    multiple macvlans on the same lower device."""
     parent: Optional[str] = field(
         metadata={'dbus_name': 'parent', 'dbus_type': 's'},
         default=None,
     )
+    """If given, specifies the parent interface name or parent connection UUID
+    from which this MAC-VLAN interface should be created.  If this property is not
+    specified, the connection must contain an "802-3-ethernet" setting with a
+    "mac-address" property."""
     promiscuous: Optional[bool] = field(
         metadata={'dbus_name': 'promiscuous', 'dbus_type': 'b'},
         default=True,

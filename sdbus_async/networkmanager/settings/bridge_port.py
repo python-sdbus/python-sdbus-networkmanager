@@ -16,10 +16,14 @@ class BridgePortSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'hairpin-mode', 'dbus_type': 'b'},
         default=False,
     )
+    """Enables or disables "hairpin mode" for the port, which allows frames to be
+    sent back out through the port the frame was received on."""
     path_cost: Optional[int] = field(
         metadata={'dbus_name': 'path-cost', 'dbus_type': 'u'},
         default=100,
     )
+    """The Spanning Tree Protocol (STP) port cost for destinations via this
+    port."""
     priority: Optional[int] = field(
         metadata={'dbus_name': 'priority', 'dbus_type': 'u'},
         default=32,

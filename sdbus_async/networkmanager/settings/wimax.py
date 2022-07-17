@@ -15,7 +15,12 @@ class WimaxSettings(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'mac-address', 'dbus_type': 'ay'},
         default=None,
     )
+    """If specified, this connection will only apply to the WiMAX device whose MAC
+    address matches. This property does not change the MAC address of the device
+    (known as MAC spoofing). Deprecated: 1"""
     network_name: Optional[str] = field(
         metadata={'dbus_name': 'network-name', 'dbus_type': 's'},
         default=None,
     )
+    """Network Service Provider (NSP) name of the WiMAX network this connection
+    should use. Deprecated: 1"""
