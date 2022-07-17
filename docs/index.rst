@@ -12,6 +12,7 @@ of `NetworkManager <https://wiki.gnome.org/Projects/NetworkManager>`_.
     examples
     device_interfaces
     other_interfaces
+    options
     enums
     exceptions
 
