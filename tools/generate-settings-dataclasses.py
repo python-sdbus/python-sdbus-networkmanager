@@ -219,21 +219,22 @@ def find_first_not_none(itr: List[Any]) -> Optional[Any]:
 
 # Generate docs/options.rst, see:
 # https://github.com/python-sdbus/python-sdbus-networkmanager/pull/39#issuecomment-1186522147
-def open_options_rst() -> io.TextIOWrapper:
-    options_rst = open("docs/options.rst", "w")
-    options_rst.write("Network Manager settings\n========================\n")
-    return options_rst
+def open_profile_settings_rst() -> io.TextIOWrapper:
+    profile_settings_rst = open("docs/profile_settings.rst", "w")
+    profile_settings_rst.write("Connection Profile Settings Helpers\n")
+    profile_settings_rst.write("===================================\n\n")
+    return profile_settings_rst
 
 
-def append_sphinx_autoclass(options_rst: io.TextIOWrapper, classname: str) -> None:
+def append_sphinx_autoclass(profile_settings: io.TextIOWrapper, classname: str) -> None:
     classpath = f"sdbus_async.networkmanager.settings.{classname}"
-    options_rst.write(f"\n.. autoclass:: {classpath}\n    :members:\n")
+    profile_settings.write(f"\n.. autoclass:: {classpath}\n    :members:\n")
 
 
 # The code quality of this function is poor(Sourcery says 5%), needs refactoring,
 # also see the rework in tools/generate-settings-dataclasses-jinja.py
 def main(settings_xml_path: Path) -> None:
-    options_rst = open_options_rst()
+    profile_settings_rst = open_profile_settings_rst()
     gl_input_files = [settings_xml_path]
 
     xml_roots = [ElementTree.parse(f).getroot() for f in gl_input_files]
@@ -315,7 +316,7 @@ def main(settings_xml_path: Path) -> None:
             p.write("    )\n")
         f.write("@dataclass\n")
         f.write(f"class {classname}(NetworkManagerSettingsMixin):\n")
-        append_sphinx_autoclass(options_rst, classname)
+        append_sphinx_autoclass(profile_settings_rst, classname)
 
         # generate the docstring of the new settings_class
         desc = node_get_attr(settings, "description")
