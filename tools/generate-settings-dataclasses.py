@@ -10,15 +10,6 @@ from argparse import ArgumentParser
 from pathlib import Path
 from typing import Any, Dict, List, Optional, OrderedDict, Tuple
 
-
-def dbg(msg: Any) -> None:
-    print(f"{msg}")
-
-
-def write(msg: Any) -> None:
-    print(f"{msg}")
-
-
 dbus_type_name_map = {
     "b": "bool",
     "s": "str",
@@ -391,13 +382,16 @@ def main(settings_xml_path: Path) -> None:
                 # developers when they lookup the attribute declaration:
                 generate_descriptions_for_attributes = True
                 if generate_descriptions_for_attributes:
-                    desc = node_get_attr(properties_attrs, "description")
+                    attr_description = node_get_attr(properties_attrs, "description")
+                    # Fix warning from sphinx: WARNING:
+                    # Inline substitution_reference start-string without end-string
+                    attr_docstring = attr_description.replace("|", "\|")
                     wrapper = textwrap.TextWrapper(
                         width=82,
                         initial_indent="    ",
                         subsequent_indent="    ",
                     )
-                    lines = wrapper.wrap(text=f'"""{desc}"""')
+                    lines = wrapper.wrap(text=f'"""{attr_docstring}"""')
                     if len(lines) == 1:
                         print(lines[0] + '"""')
                     else:

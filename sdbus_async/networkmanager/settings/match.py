@@ -16,20 +16,21 @@ class MatchSettings(NetworkManagerSettingsMixin):
         default=None,
     )
     """A list of driver names to match. Each element is a shell wildcard pattern.
-    See NMSettingMatch:interface-name for how special characters '|', '&', '!' and
-    '\\' are used for optional and mandatory matches and inverting the pattern."""
+    See NMSettingMatch:interface-name for how special characters '\|', '&', '!'
+    and '\\' are used for optional and mandatory matches and inverting the
+    pattern."""
     interface_name: Optional[List[str]] = field(
         metadata={'dbus_name': 'interface-name', 'dbus_type': 'as'},
         default=None,
     )
     """A list of interface names to match. Each element is a shell wildcard
-    pattern. An element can be prefixed with a pipe symbol (|) or an ampersand
+    pattern. An element can be prefixed with a pipe symbol (\|) or an ampersand
     (&). The former means that the element is optional and the latter means that
     it is mandatory. If there are any optional elements, than the match evaluates
     to true if at least one of the optional element matches (logical OR). If there
     are any mandatory elements, then they all must match (logical AND). By
     default, an element is optional. This means that an element "foo" behaves the
-    same as "|foo". An element can also be inverted with exclamation mark (!)
+    same as "\|foo". An element can also be inverted with exclamation mark (!)
     between the pipe symbol (or the ampersand) and before the pattern. Note that
     "!foo" is a shortcut for the mandatory match "&!foo". Finally, a backslash can
     be used at the beginning of the element (after the optional special
@@ -46,7 +47,7 @@ class MatchSettings(NetworkManagerSettingsMixin):
     command line is searched for the word appearing as is, or as left hand side of
     an assignment. In the latter case, the exact assignment is looked for with
     right and left hand side matching. Wildcard patterns are not supported. See
-    NMSettingMatch:interface-name for how special characters '|', '&', '!' and
+    NMSettingMatch:interface-name for how special characters '\|', '&', '!' and
     '\\' are used for optional and mandatory matches and inverting the match."""
     path: Optional[List[str]] = field(
         metadata={'dbus_name': 'path', 'dbus_type': 'as'},
@@ -58,8 +59,8 @@ class MatchSettings(NetworkManagerSettingsMixin):
     specific identifier. For PCI devices the path has the form
     "pci-$domain:$bus:$device.$function", where each variable is an hexadecimal
     value; for example "pci-0000:0a:00.0". The path of a device can be obtained
-    with "udevadm info /sys/class/net/$dev | grep ID_PATH=" or by looking at the
+    with "udevadm info /sys/class/net/$dev \| grep ID_PATH=" or by looking at the
     "path" property exported by NetworkManager ("nmcli -f general.path device show
     $dev"). Each element of the list is a shell wildcard pattern. See
-    NMSettingMatch:interface-name for how special characters '|', '&', '!' and
+    NMSettingMatch:interface-name for how special characters '\|', '&', '!' and
     '\\' are used for optional and mandatory matches and inverting the pattern."""
