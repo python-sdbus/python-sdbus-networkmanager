@@ -146,6 +146,7 @@ _property_name_order = [
     "connection.uuid",
 ]
 
+
 def _property_name_order_idx(name: str) -> int:
     """Return the sort index for the given connection setting property"""
     try:
@@ -206,9 +207,7 @@ def node_get_attr(nodes: List[Optional[Any]], name: str) -> Any:
     return None
 
 
-def node_set_attr(
-    dst_node: Any, name: str, nodes: List[Optional[Any]]
-) -> None:
+def node_set_attr(dst_node: Any, name: str, nodes: List[Optional[Any]]) -> None:
     x = node_get_attr(nodes, name)
     if x:
         dst_node.set(name, x)
@@ -239,8 +238,7 @@ def main(settings_xml_path: Path) -> None:
 
     xml_roots = [ElementTree.parse(f).getroot() for f in gl_input_files]
     assert all(root.tag == "nm-setting-docs" for root in xml_roots)
-    settings_roots = [node_to_dict(root, "setting", "name")
-                      for root in xml_roots]
+    settings_roots = [node_to_dict(root, "setting", "name") for root in xml_roots]
 
     # Generate the file header
     license = "SPDX-License-Identifier: LGPL-2.1-or-later"
@@ -265,8 +263,7 @@ def main(settings_xml_path: Path) -> None:
     classes = []
 
     # generate the connection type settings classes:
-    for settingname in iter_keys_of_dicts(settings_roots,
-                                          key_fcn_setting_name):
+    for settingname in iter_keys_of_dicts(settings_roots, key_fcn_setting_name):
         settings = [d.get(settingname) for d in settings_roots]
         properties = [node_to_dict(s, "property", "name") for s in settings]
         if properties == [OrderedDict()]:
@@ -326,8 +323,10 @@ def main(settings_xml_path: Path) -> None:
 
         # Generate the attributes of the settings_class for this profile type:
 
-        for property in iter_keys_of_dicts(properties, key_fcn_property_name, f'{settingname}.'):
-            property_name = property[len(settingname)+1:]
+        for property in iter_keys_of_dicts(
+            properties, key_fcn_property_name, f'{settingname}.'
+        ):
+            property_name = property[len(settingname) + 1 :]
             properties_attrs = [p.get(property_name) for p in properties]
             t = node_get_attr(properties_attrs, "type")
             attribute = property_name.replace('-', '_')
@@ -350,16 +349,12 @@ def main(settings_xml_path: Path) -> None:
             if dbustype == "aa{sv}":
                 default = node_get_attr(properties_attrs, "default")
                 inner_cls = (
-                    property_name.title(
-                    ).replace("-", "").replace("data", "Data")
+                    property_name.title().replace("-", "").replace("data", "Data")
                 )
-                f.write(
-                    f"    {attribute}: Optional[List[{inner_cls}]] = field(\n")
-                f.write(
-                    f"        metadata={{'dbus_name': '{property_name}',\n")
+                f.write(f"    {attribute}: Optional[List[{inner_cls}]] = field(\n")
+                f.write(f"        metadata={{'dbus_name': '{property_name}',\n")
                 f.write(f"                  'dbus_type': '{dbustype}',\n")
-                f.write(
-                    f"                  'dbus_inner_class': {inner_cls}}},\n")
+                f.write(f"                  'dbus_inner_class': {inner_cls}}},\n")
                 f.write(f"        default={str(default).title()},\n    )\n")
             else:
                 attribute_type = dbus_type_name_map[dbustype]
@@ -369,8 +364,7 @@ def main(settings_xml_path: Path) -> None:
                 else:
                     f.write(f"    {attribute}: {attribute_type}")
                 f.write(" = field(\n")
-                meta = (f"'dbus_name': '{property_name}', "
-                        f"'dbus_type':@'{dbustype}'")
+                meta = f"'dbus_name': '{property_name}', " f"'dbus_type':@'{dbustype}'"
                 line = "metadata={" + meta + "},"
                 wrapper = textwrap.TextWrapper(
                     width=80,
