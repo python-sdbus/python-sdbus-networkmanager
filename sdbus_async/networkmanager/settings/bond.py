@@ -20,7 +20,7 @@ class BondSettings(NetworkManagerSettingsMixin):
     name."""
     options: Optional[Dict[str, str]] = field(
         metadata={'dbus_name': 'options', 'dbus_type': 'a{ss}'},
-        default={'Mode': 'Balance-Rr'},
+        default=field(default_factory = lambda: {'mode': 'balance-rr'}),
     )
     """Dictionary of key/value pairs of bonding options.  Both keys and values
     must be strings. Option names must contain only alphanumeric characters (ie,
