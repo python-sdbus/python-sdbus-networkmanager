@@ -320,7 +320,7 @@ class NetworkManagerDHCP6ConfigInterfaceAsync(
 
     @dbus_property_async('a{sv}')
     def options(self) -> Dict[str, Tuple[str, Any]]:
-        """Options and configurations returned by DHCPv4 server"""
+        """Options and configurations returned by DHCPv6 server"""
         raise NotImplementedError
 
 
