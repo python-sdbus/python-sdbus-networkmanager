@@ -1,5 +1,6 @@
-Network Manager settings
-========================
+Connection Profile Settings Helpers
+===================================
+
 
 .. autoclass:: sdbus_async.networkmanager.settings.ConnectionSettings
     :members:
