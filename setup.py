@@ -54,6 +54,7 @@ setup(
     packages=['sdbus_async.networkmanager',
               'sdbus_async.networkmanager.settings',
               'sdbus_block.networkmanager',
+              'sdbus_block.networkmanager.settings',
               ],
     package_data={
         'sdbus_async.networkmanager': [
