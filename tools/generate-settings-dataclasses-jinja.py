@@ -1,14 +1,28 @@
 #!/usr/bin/env python
 # SPDX-License-Identifier: LGPL-2.1-or-later
+
+# Gerating nm-settings-docs-dbus.xml from NetworkManager source code
+# 1. meson setup \
+#       -Dselinux=false \
+#       -Dqt=false \
+#       -Dintrospection=true \
+#       -Ddocs=true \
+#       build
+# 2. cd build
+# 3. ninja man/nm-settings-docs-dbus.xml
 from __future__ import annotations
 from argparse import ArgumentParser
 from pathlib import Path
 from xml.etree.ElementTree import parse, Element
 
 from typing import List, Optional
+from re import compile as regex_compile
+from re import Pattern
 from jinja2 import Environment
 import builtins
 import keyword
+from textwrap import fill
+
 
 dbus_to_python_extra_typing_imports = {
     "as": ("List", ),
@@ -43,8 +57,11 @@ dbus_name_type_map = {
     'array of array of uint32': 'aau',
     'array of byte array': 'aay',
     'array of legacy IPv6 address struct': 'a(ayuay)',
+    'array of legacy IPv6 address struct (a(ayuay))': 'a(ayuay)',
     'array of legacy IPv6 route struct': 'a(ayuayu)',
+    'array of legacy IPv6 route struct (a(ayuayu))': 'a(ayuayu)',
     'array of string': 'as',
+    'array of strings': 'as',
     'array of uint32': 'au',
     'array of vardict': 'aa{sv}',
     "array of 'a{sv}'": 'aa{sv}',  # wireguard.peers uses this, fix NM upstream
@@ -110,12 +127,24 @@ class NmSettingsIntrospection:
         self.properties: List[NmSettingPropertyIntrospection] = []
 
 
+def extract_and_format_option_description(node: Element) -> str:
+    paragraphs: list[str] = []
+    for para in node.iter('para'):
+        paragraphs.append(fill(para.text, width=72))
+
+    return '\n\n'.join(paragraphs)
+
+
 def convert_property(node: Element,
                      parent: NmSettingsIntrospection
-                     ) -> NmSettingPropertyIntrospection:
-    options = node.attrib
+                     ) -> Optional[NmSettingPropertyIntrospection]:
+    options = node.attrib.copy()
 
-    unconverted_type = options.pop('type')
+    try:
+        unconverted_type = options.pop('type')
+    except KeyError:
+        return None
+
     try:
         dbus_type = dbus_name_type_map[unconverted_type]
     except KeyError:
@@ -123,6 +152,7 @@ def convert_property(node: Element,
 
     options['dbus_type'] = dbus_type
     options['python_type'] = dbus_to_python_type_map[dbus_type]
+    options['description'] = extract_and_format_option_description(node)
 
     return NmSettingPropertyIntrospection(**options, parent=parent)
 
@@ -131,9 +161,11 @@ def generate_introspection(root: Element) -> List[NmSettingsIntrospection]:
     settings_introspection: List[NmSettingsIntrospection] = []
     for setting_node in root:
         setting = NmSettingsIntrospection(**setting_node.attrib)
-        setting.properties.extend(
-          (convert_property(x, setting) for x in setting_node)
-        )
+
+        for x in setting_node:
+            new_property = convert_property(x, setting)
+            if new_property is not None:
+                setting.properties.append(new_property)
 
         settings_introspection.append(setting)
 
@@ -167,13 +199,22 @@ jinja_env = Environment()
 settings_template = jinja_env.from_string(setttngs_template_str)
 
 
-def main(settings_xml_path: Path) -> None:
+def main(
+        settings_xml_path: Path,
+        regex_filter: Optional[Pattern] = None,
+        ) -> None:
     tree = parse(settings_xml_path)
     introspection = generate_introspection(tree.getroot())
 
     settings_dir = Path('sdbus_async/networkmanager/settings/')
     for setting in introspection:
-        setting_py_file = settings_dir / (setting.name_upper.lower() + '.py')
+        setting_sake_name = setting.name_upper.lower()
+
+        if regex_filter is not None:
+            if not regex_filter.match(setting_sake_name):
+                continue
+
+        setting_py_file = settings_dir / (setting_sake_name + '.py')
         with open(setting_py_file, mode='w') as f:
             f.write(settings_template.render(setting=setting))
 
@@ -181,10 +222,15 @@ def main(settings_xml_path: Path) -> None:
 if __name__ == '__main__':
     arg_parser = ArgumentParser()
     arg_parser.add_argument(
-        'nm_settings_xml',
+        'settings_xml_path',
         type=Path,
-        default=Path('man/nm-settings-docs-dbus.xml'),
+        default=Path('./nm-settings-docs-dbus.xml'),
     )
+    arg_parser.add_argument(
+        '--regex-filter',
+        type=regex_compile,
+    )
+
     args = arg_parser.parse_args()
 
-    main(args.nm_settings_xml)
+    main(**vars(args))
