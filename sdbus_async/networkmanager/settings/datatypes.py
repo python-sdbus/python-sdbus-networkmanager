@@ -121,3 +121,108 @@ class WireguardPeers(NetworkManagerSettingsMixin):
     allowed_ips: List[str] = field(
         metadata={'dbus_name': 'allowed-ips', 'dbus_type': 'as'},
     )
+
+
+@dataclass
+class RoutingRules(NetworkManagerSettingsMixin):
+    action: Optional[int] = field(
+        metadata={'dbus_name': 'action', 'dbus_type': 'y'},
+    )
+    dport_end: Optional[int] = field(
+        metadata={'dbus_name': 'dport-end', 'dbus_type': 'q'},
+    )
+    dport_start: Optional[int] = field(
+        metadata={'dbus_name': 'dport-start', 'dbus_type': 'q'},
+    )
+    family: Optional[int] = field(
+        metadata={'dbus_name': 'family', 'dbus_type': 'i'},
+    )
+    from_prefix: Optional[str] = field(
+        metadata={'dbus_name': 'from', 'dbus_type': 's'},
+    )
+    from_len: Optional[int] = field(
+        metadata={'dbus_name': 'from-len', 'dbus_type': 'y'},
+    )
+    fwmark: Optional[int] = field(
+        metadata={'dbus_name': 'fwmark', 'dbus_type': 'u'},
+    )
+    fwmask: Optional[int] = field(
+        metadata={'dbus_name': 'fwmask', 'dbus_type': 'u'},
+    )
+    iifname: Optional[str] = field(
+        metadata={'dbus_name': 'iifname', 'dbus_type': 's'},
+    )
+    invert: Optional[bool] = field(
+        metadata={'dbus_name': 'invert', 'dbus_type': 'b'},
+    )
+    ipproto: Optional[str] = field(
+        metadata={'dbus_name': 'ipproto', 'dbus_type': 's'},
+    )
+    oifname: Optional[str] = field(
+        metadata={'dbus_name': 'oifname', 'dbus_type': 's'},
+    )
+    priority: Optional[int] = field(
+        metadata={'dbus_name': 'priority', 'dbus_type': 'u'},
+    )
+    sport_end: Optional[int] = field(
+        metadata={'dbus_name': 'sport-end', 'dbus_type': 'q'},
+    )
+    sport_start: Optional[int] = field(
+        metadata={'dbus_name': 'sport-start', 'dbus_type': 'q'},
+    )
+    supress_prefixlength: Optional[int] = field(
+        metadata={'dbus_name': 'supress-prefixlength', 'dbus_type': 'i'},
+    )
+    table: Optional[int] = field(
+        metadata={'dbus_name': 'table', 'dbus_type': 'u'},
+    )
+    to: Optional[str] = field(
+        metadata={'dbus_name': 'to', 'dbus_type': 's'},
+    )
+    tos: Optional[int] = field(
+        metadata={'dbus_name': 'tos', 'dbus_type': 'y'},
+    )
+    to_len: Optional[int] = field(
+        metadata={'dbus_name': 'to-len', 'dbus_type': 'y'},
+    )
+    range_end: Optional[int] = field(
+        metadata={'dbus_name': 'range-end', 'dbus_type': 'u'},
+    )
+    range_start: Optional[int] = field(
+        metadata={'dbus_name': 'range-start', 'dbus_type': 'u'},
+    )
+
+
+@dataclass
+class Vfs(NetworkManagerSettingsMixin):
+    index: str = field(
+        metadata={'dbus_name': 'index', 'dbus_type': 's'},
+    )
+    mac: Optional[str] = field(
+        metadata={'dbus_name': 'mac', 'dbus_type': 's'},
+    )
+    spoof_check: Optional[str] = field(
+        metadata={'dbus_name': 'spoof-check', 'dbus_type': 's'},
+    )
+    trust: Optional[str] = field(
+        metadata={'dbus_name': 'trust', 'dbus_type': 's'},
+    )
+    min_tx_rate: Optional[str] = field(
+        metadata={'dbus_name': 'min-tx-rate', 'dbus_type': 's'},
+    )
+    max_tx_rate: Optional[str] = field(
+        metadata={'dbus_name': 'max-tx-rate', 'dbus_type': 's'},
+    )
+    vlans: Optional[str] = field(
+        metadata={'dbus_name': 'vlans', 'dbus_type': 's'},
+    )
+
+
+@dataclass
+class Qdiscs(NetworkManagerSettingsMixin):
+    ...
+
+
+@dataclass
+class Tfilters(NetworkManagerSettingsMixin):
+    ...

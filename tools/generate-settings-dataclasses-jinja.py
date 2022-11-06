@@ -82,12 +82,17 @@ python_name_replacements = {
     'id': 'pretty_id',
 }
 
-datatypes_extra_imports: dict[str, list[str]] = {
-    'wireguard': ['WireguardPeers'],
-    'bridge': ['Vlans'],
-    'team': ['LinkWatchers'],
-    'ip4_config': ['AddressData', 'RouteData'],
-    'ip6_config': ['AddressData', 'RouteData'],
+
+array_of_vardicts_python_classes: dict[str, str] = {
+    'peers': 'WireguardPeers',
+    'vlans': 'Vlans',
+    'address-data': 'AddressData',
+    'route-data': 'RouteData',
+    'routing-rules': 'RoutingRules',
+    'vfs': 'Vfs',
+    'qdiscs': 'Qdiscs',
+    'tfilters': 'Tfilters',
+    'link-watchers': 'LinkWatchers',
 }
 
 
@@ -102,7 +107,6 @@ class NmSettingPropertyIntrospection:
                  description: str,
                  name_upper: str,
                  dbus_type: str,
-                 python_type: str,
                  parent: NmSettingsIntrospection,
                  default: Optional[str] = None,
                  ) -> None:
@@ -111,7 +115,6 @@ class NmSettingPropertyIntrospection:
         self.name_upper = name_upper
         self.python_name = name_upper.lower()
         self.dbus_type = dbus_type
-        self.python_type = python_type
         self.default = default
 
         if must_replace_name(self.python_name):
@@ -121,6 +124,17 @@ class NmSettingPropertyIntrospection:
         extra_typing = dbus_to_python_extra_typing_imports.get(dbus_type)
         if extra_typing is not None:
             parent.typing_imports.update(extra_typing)
+
+    @cached_property
+    def python_type(self) -> str:
+        if self.dbus_type == 'aa{sv}':
+            return f"List[{array_of_vardicts_python_classes[self.name]}]"
+
+        return dbus_to_python_type_map[self.dbus_type]
+
+    @cached_property
+    def python_inner_class(self) -> Optional[str]:
+        return array_of_vardicts_python_classes.get(self.name)
 
 
 class NmSettingsIntrospection:
@@ -141,10 +155,12 @@ class NmSettingsIntrospection:
 
     @cached_property
     def datatypes_imports(self) -> list[str]:
-        try:
-            return datatypes_extra_imports[self.snake_name]
-        except KeyError:
-            return []
+        datatypes_found: list[str] = []
+        for x in self.properties:
+            if (datatype := x.python_inner_class) is not None:
+                datatypes_found.append(datatype)
+
+        return datatypes_found
 
 
 def extract_and_format_option_description(node: Element) -> str:
@@ -171,7 +187,6 @@ def convert_property(node: Element,
         dbus_type = dbus_name_type_map[unconverted_type.split('(')[1][:-1]]
 
     options['dbus_type'] = dbus_type
-    options['python_type'] = dbus_to_python_type_map[dbus_type]
     options['description'] = extract_and_format_option_description(node)
 
     return NmSettingPropertyIntrospection(**options, parent=parent)
@@ -211,6 +226,9 @@ class {{ setting.python_class_name }}(NetworkManagerSettingsMixin):
         metadata={
             'dbus_name': '{{ property.name }}',
             'dbus_type': '{{ property.dbus_type }}',
+{%- if property.python_inner_class %}
+            'dbus_inner_class': {{ property.python_inner_class }},
+{%- endif %}
         },
         default=None,
     ){% endfor %}
@@ -224,7 +242,7 @@ settings_template = jinja_env.from_string(setttngs_template_str)
 def main(
         settings_xml_path: Path,
         regex_filter: Optional[Pattern] = None,
-        ) -> None:
+) -> None:
     tree = parse(settings_xml_path)
     introspection = generate_introspection(tree.getroot())
 
