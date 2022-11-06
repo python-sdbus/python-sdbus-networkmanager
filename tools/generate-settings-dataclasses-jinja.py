@@ -11,18 +11,19 @@
 # 2. cd build
 # 3. ninja man/nm-settings-docs-dbus.xml
 from __future__ import annotations
-from argparse import ArgumentParser
-from pathlib import Path
-from xml.etree.ElementTree import parse, Element
 
-from typing import List, Optional
-from re import compile as regex_compile
-from re import Pattern
-from jinja2 import Environment
 import builtins
 import keyword
+from argparse import ArgumentParser
+from functools import cached_property
+from pathlib import Path
+from re import Pattern
+from re import compile as regex_compile
 from textwrap import fill
+from typing import List, Optional
+from xml.etree.ElementTree import Element, parse
 
+from jinja2 import Environment
 
 dbus_to_python_extra_typing_imports = {
     "as": ("List", ),
@@ -81,6 +82,14 @@ python_name_replacements = {
     'id': 'pretty_id',
 }
 
+datatypes_extra_imports: dict[str, list[str]] = {
+    'wireguard': ['WireguardPeers'],
+    'bridge': ['Vlans'],
+    'team': ['LinkWatchers'],
+    'ip4_config': ['AddressData', 'RouteData'],
+    'ip6_config': ['AddressData', 'RouteData'],
+}
+
 
 def must_replace_name(name: str) -> bool:
     return (keyword.iskeyword(name)
@@ -125,6 +134,17 @@ class NmSettingsIntrospection:
         self.typing_imports = {'Optional'}
 
         self.properties: List[NmSettingPropertyIntrospection] = []
+
+    @cached_property
+    def snake_name(self) -> str:
+        return self.name_upper.lower()
+
+    @cached_property
+    def datatypes_imports(self) -> list[str]:
+        try:
+            return datatypes_extra_imports[self.snake_name]
+        except KeyError:
+            return []
 
 
 def extract_and_format_option_description(node: Element) -> str:
@@ -179,7 +199,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import {{ setting.typing_imports|sort|join(', ') }}
 from .base import NetworkManagerSettingsMixin
-
+{% if setting.datatypes_imports -%}
+from .datatypes import {{ setting.datatypes_imports|sort|join(', ') }}
+{% endif %}
 
 @dataclass
 class {{ setting.python_class_name }}(NetworkManagerSettingsMixin):
@@ -206,15 +228,14 @@ def main(
     tree = parse(settings_xml_path)
     introspection = generate_introspection(tree.getroot())
 
-    settings_dir = Path('sdbus_async/networkmanager/settings/')
+    settings_dir = Path('./sdbus_async/networkmanager/settings/')
     for setting in introspection:
-        setting_sake_name = setting.name_upper.lower()
 
         if regex_filter is not None:
-            if not regex_filter.match(setting_sake_name):
+            if not regex_filter.match(setting.snake_name):
                 continue
 
-        setting_py_file = settings_dir / (setting_sake_name + '.py')
+        setting_py_file = settings_dir / (setting.snake_name + '.py')
         with open(setting_py_file, mode='w') as f:
             f.write(settings_template.render(setting=setting))
 
