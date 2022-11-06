@@ -16,6 +16,7 @@ import builtins
 import keyword
 from argparse import ArgumentParser
 from functools import cached_property
+from itertools import dropwhile
 from pathlib import Path
 from re import Pattern
 from re import compile as regex_compile
@@ -95,6 +96,10 @@ array_of_vardicts_python_classes: dict[str, str] = {
     'link-watchers': 'LinkWatchers',
 }
 
+setting_name_replacement: dict[str, str] = {
+    'x': 'eapol',
+}
+
 
 def must_replace_name(name: str) -> bool:
     return (keyword.iskeyword(name)
@@ -143,15 +148,32 @@ class NmSettingsIntrospection:
         self.name = name
         self.description = description
         self.name_upper = name_upper
-        self.python_class_name = name.capitalize() + 'Settings'
 
         self.typing_imports = {'Optional'}
 
         self.properties: List[NmSettingPropertyIntrospection] = []
 
     @cached_property
+    def python_class_name(self) -> str:
+
+        camel_case = ''.join(
+            map(str.title, self.snake_name.split('_'))
+        )
+
+        return camel_case + 'Settings'
+
+    @cached_property
     def snake_name(self) -> str:
-        return self.name_upper.lower()
+        underscore_name = self.name.replace('-', '_')
+
+        no_first_digits_name = ''.join(
+                dropwhile(
+                    lambda s: not str.isalpha(s), underscore_name))
+
+        return setting_name_replacement.get(
+            no_first_digits_name,
+            no_first_digits_name,
+        )
 
     @cached_property
     def datatypes_imports(self) -> list[str]:
