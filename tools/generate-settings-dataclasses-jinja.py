@@ -167,8 +167,8 @@ class NmSettingsIntrospection:
         underscore_name = self.name.replace('-', '_')
 
         no_first_digits_name = ''.join(
-                dropwhile(
-                    lambda s: not str.isalpha(s), underscore_name))
+            dropwhile(
+                lambda s: not str.isalpha(s), underscore_name))
 
         return setting_name_replacement.get(
             no_first_digits_name,
@@ -185,12 +185,54 @@ class NmSettingsIntrospection:
         return datatypes_found
 
 
-def extract_and_format_option_description(node: Element) -> str:
-    paragraphs: list[str] = []
-    for para in node.iter('para'):
-        paragraphs.append(fill(para.text, width=72))
+def extract_docbook_paragraphs(docbook_node: Element) -> List[str]:
+    return [x.text for x in docbook_node]
 
-    return '\n\n'.join(paragraphs)
+
+def extract_description_paragraph(description_node: Element) -> str:
+    return description_node.text
+
+
+def extract_and_format_option_description(node: Element) -> str:
+    formatted_paragraphs: list[str] = []
+    paragraphs: list[str] = []
+    description = 'Not documented'
+
+    for doc_node in node:
+        if doc_node.tag == 'description-docbook':
+            paragraphs.extend(extract_docbook_paragraphs(doc_node))
+        elif doc_node.tag == 'description':
+            description = extract_description_paragraph(doc_node)
+        elif doc_node.tag == 'deprecated':
+            ...
+        elif doc_node.tag == 'deprecated-docbook':
+            ...
+        else:
+            raise ValueError("Unknown doc node", doc_node.tag)
+
+    if paragraphs:
+        first_para = paragraphs.pop(0)
+    else:
+        first_para = description
+
+    formatted_paragraphs.append(
+        fill(
+            first_para,
+            width=72,
+            subsequent_indent='    ',
+        )
+    )
+    for para in paragraphs:
+        formatted_paragraphs.append(
+            fill(
+                para,
+                width=72,
+                initial_indent='    ',
+                subsequent_indent='    ',
+            )
+        )
+
+    return '\n\n'.join(formatted_paragraphs)
 
 
 def convert_property(node: Element,
@@ -253,7 +295,8 @@ class {{ setting.python_class_name }}(NetworkManagerSettingsMixin):
 {%- endif %}
         },
         default=None,
-    ){% endfor %}
+    )
+    ""\"{{property.description}}""\"{% endfor %}
 
 """
 
