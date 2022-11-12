@@ -50,9 +50,6 @@ dbus_to_python_type_map = {
     "aa{sv}": "List[Tuple[str, Any]]",
     "aau": "List[List[int]]",
     "aay": "List[bytes]",
-    # Legacy types:
-    "a(ayuay)": "array of legacy IPv6 address struct",
-    "a(ayuayu)": "array of legacy IPv6 route struct",
 }
 
 dbus_name_type_map = {
@@ -253,7 +250,14 @@ def convert_property(node: Element,
     options['dbus_type'] = dbus_type
     options['description'] = extract_and_format_option_description(node)
 
-    return NmSettingPropertyIntrospection(**options, parent=parent)
+    new_property = NmSettingPropertyIntrospection(**options, parent=parent)
+
+    try:
+        new_property.python_type
+    except KeyError:
+        return None
+
+    return new_property
 
 
 def generate_introspection(root: Element) -> List[NmSettingsIntrospection]:
