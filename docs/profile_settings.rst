@@ -1,16 +1,6 @@
 Connection Profile Settings Helpers
 ===================================
 
-
-.. autoclass:: sdbus_async.networkmanager.settings.ConnectionSettings
-    :members:
-
-.. autoclass:: sdbus_async.networkmanager.settings.Ipv4Settings
-    :members:
-
-.. autoclass:: sdbus_async.networkmanager.settings.Ipv6Settings
-    :members:
-
 .. autoclass:: sdbus_async.networkmanager.settings.AdslSettings
     :members:
 
@@ -32,10 +22,25 @@ Connection Profile Settings Helpers
 .. autoclass:: sdbus_async.networkmanager.settings.CdmaSettings
     :members:
 
+.. autoclass:: sdbus_async.networkmanager.settings.ConnectionSettings
+    :members:
+
 .. autoclass:: sdbus_async.networkmanager.settings.DcbSettings
     :members:
 
+.. autoclass:: sdbus_async.networkmanager.settings.DummySettings
+    :members:
+
+.. autoclass:: sdbus_async.networkmanager.settings.EapolSettings
+    :members:
+
 .. autoclass:: sdbus_async.networkmanager.settings.EthernetSettings
+    :members:
+
+.. autoclass:: sdbus_async.networkmanager.settings.EthtoolSettings
+    :members:
+
+.. autoclass:: sdbus_async.networkmanager.settings.GenericSettings
     :members:
 
 .. autoclass:: sdbus_async.networkmanager.settings.GsmSettings
@@ -44,13 +49,16 @@ Connection Profile Settings Helpers
 .. autoclass:: sdbus_async.networkmanager.settings.HostnameSettings
     :members:
 
-.. autoclass:: sdbus_async.networkmanager.settings.Ieee8021XSettings
-    :members:
-
 .. autoclass:: sdbus_async.networkmanager.settings.InfinibandSettings
     :members:
 
 .. autoclass:: sdbus_async.networkmanager.settings.IpTunnelSettings
+    :members:
+
+.. autoclass:: sdbus_async.networkmanager.settings.Ipv4Settings
+    :members:
+
+.. autoclass:: sdbus_async.networkmanager.settings.Ipv6Settings
     :members:
 
 .. autoclass:: sdbus_async.networkmanager.settings.LowpanSettings
@@ -98,6 +106,12 @@ Connection Profile Settings Helpers
 .. autoclass:: sdbus_async.networkmanager.settings.SerialSettings
     :members:
 
+.. autoclass:: sdbus_async.networkmanager.settings.SriovSettings
+    :members:
+
+.. autoclass:: sdbus_async.networkmanager.settings.TcSettings
+    :members:
+
 .. autoclass:: sdbus_async.networkmanager.settings.TeamSettings
     :members:
 
@@ -142,3 +156,4 @@ Connection Profile Settings Helpers
 
 .. autoclass:: sdbus_async.networkmanager.settings.WpanSettings
     :members:
+
