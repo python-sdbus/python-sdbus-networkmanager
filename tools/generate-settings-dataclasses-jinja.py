@@ -273,7 +273,7 @@ def generate_introspection(root: Element) -> List[NmSettingsIntrospection]:
 
 def main(
         settings_xml_path: Path,
-        regex_filter: Optional[Pattern] = None,
+        settings_regex_filter: Optional[Pattern] = None,
 ) -> None:
     jinja_env = Environment(
         loader=FileSystemLoader(Path('./tools/jinja_templates/')),
@@ -281,18 +281,24 @@ def main(
     settings_template = jinja_env.get_template('setting.py.jinja2')
 
     tree = parse(settings_xml_path)
-    introspection = generate_introspection(tree.getroot())
+    all_settings = generate_introspection(tree.getroot())
 
     settings_dir = Path('./sdbus_async/networkmanager/settings/')
-    for setting in introspection:
+    for setting in all_settings:
 
-        if regex_filter is not None:
-            if not regex_filter.match(setting.snake_name):
+        if settings_regex_filter is not None:
+            if not settings_regex_filter.match(setting.snake_name):
                 continue
 
         setting_py_file = settings_dir / (setting.snake_name + '.py')
         with open(setting_py_file, mode='w') as f:
             f.write(settings_template.render(setting=setting))
+
+    profile_template = jinja_env.get_template('profile.py.jinja2')
+    with open(settings_dir / 'profile.py', mode='w') as f:
+        f.write(profile_template.render(
+            all_settings=sorted(all_settings, key=lambda x: x.snake_name))
+        )
 
 
 if __name__ == '__main__':
@@ -303,7 +309,7 @@ if __name__ == '__main__':
         default=Path('./nm-settings-docs-dbus.xml'),
     )
     arg_parser.add_argument(
-        '--regex-filter',
+        '--settings-regex-filter',
         type=regex_compile,
     )
 
