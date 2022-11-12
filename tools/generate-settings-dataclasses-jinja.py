@@ -281,7 +281,10 @@ def main(
     settings_template = jinja_env.get_template('setting.py.jinja2')
 
     tree = parse(settings_xml_path)
-    all_settings = generate_introspection(tree.getroot())
+    all_settings = sorted(
+        generate_introspection(tree.getroot()),
+        key=lambda x: x.snake_name,
+    )
 
     settings_dir = Path('./sdbus_async/networkmanager/settings/')
     for setting in all_settings:
@@ -296,9 +299,11 @@ def main(
 
     profile_template = jinja_env.get_template('profile.py.jinja2')
     with open(settings_dir / 'profile.py', mode='w') as f:
-        f.write(profile_template.render(
-            all_settings=sorted(all_settings, key=lambda x: x.snake_name))
-        )
+        f.write(profile_template.render(all_settings=all_settings))
+
+    init_template = jinja_env.get_template('__init__.py.jinja2')
+    with open(settings_dir / '__init__.py', mode='w') as f:
+        f.write(init_template.render(all_settings=all_settings))
 
 
 if __name__ == '__main__':
