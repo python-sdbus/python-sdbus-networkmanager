@@ -8,14 +8,6 @@ from .base import NetworkManagerSettingsMixin
 
 
 @dataclass
-class VrfSettings(NetworkManagerSettingsMixin):
-    """VRF settings"""
+class EthtoolSettings(NetworkManagerSettingsMixin):
+    """Ethtool Ethernet Settings"""
 
-    table: Optional[int] = field(
-        metadata={
-            'dbus_name': 'table',
-            'dbus_type': 'u',
-        },
-        default=None,
-    )
-    """The routing table for this VRF."""
