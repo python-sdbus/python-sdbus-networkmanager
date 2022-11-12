@@ -1,0 +1,8 @@
+Connection Profile Settings Helpers
+===================================
+
+{% for setting in all_settings -%}
+.. autoclass:: sdbus_async.networkmanager.settings.{{ setting.python_class_name }}
+    :members:
+
+{% endfor %}

@@ -309,6 +309,10 @@ def main(
     with open(settings_dir / '__init__.py', mode='w') as f:
         f.write(init_template.render(all_settings=all_settings))
 
+    docs_template = jinja_env.get_template('profile_settings.rst.jinja2')
+    with open('./docs/profile_settings.rst', mode='w') as f:
+        f.write(docs_template.render(all_settings=all_settings))
+
 
 if __name__ == '__main__':
     arg_parser = ArgumentParser()
