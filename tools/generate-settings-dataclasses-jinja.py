@@ -181,6 +181,13 @@ class NmSettingsIntrospection:
 
         return datatypes_found
 
+    @cached_property
+    def is_optional_setting(self) -> bool:
+        if self.name == 'connection':
+            return False
+
+        return True
+
 
 def extract_docbook_paragraphs(docbook_node: Element) -> List[str]:
     return [x.text for x in docbook_node]
