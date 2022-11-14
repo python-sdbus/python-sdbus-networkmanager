@@ -3,11 +3,13 @@
 # if possible, please make changes by also updating the script.
 from __future__ import annotations
 
+from .profile import ConnectionProfile
 {% for setting in all_settings -%}
 from .{{ setting.snake_name }} import {{ setting.python_class_name }}
 {% endfor %}
 
 __all__ = (
+    'ConnectionProfile',
 {%- for setting in all_settings %}
     '{{ setting.python_class_name }}',
 {%- endfor %}

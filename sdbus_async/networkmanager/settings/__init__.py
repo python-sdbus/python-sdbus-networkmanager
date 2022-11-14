@@ -3,6 +3,7 @@
 # if possible, please make changes by also updating the script.
 from __future__ import annotations
 
+from .profile import ConnectionProfile
 from .adsl import AdslSettings
 from .bluetooth import BluetoothSettings
 from .bond import BondSettings
@@ -58,6 +59,7 @@ from .wpan import WpanSettings
 
 
 __all__ = (
+    'ConnectionProfile',
     'AdslSettings',
     'BluetoothSettings',
     'BondSettings',
