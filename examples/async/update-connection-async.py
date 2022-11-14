@@ -17,9 +17,9 @@
 import asyncio
 import sdbus
 from functools import partial
-from sdbus_async.networkmanager import ConnectionProfile
 from sdbus_async.networkmanager import NetworkManagerSettings
 from sdbus_async.networkmanager import NetworkConnectionSettings
+from sdbus_async.networkmanager.settings import ConnectionProfile
 from pprint import pprint
 from typing import Any, Dict
 

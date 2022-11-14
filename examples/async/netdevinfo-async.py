@@ -25,7 +25,7 @@ from typing import Any, Dict, List, Optional, Tuple
 NetworkManagerAddressData = List[Dict[str, Tuple[str, Any]]]
 
 
-async def get_most_recent_connection_id(ifname, dev_type) -> Optional[str]:
+async def get_most_recent_connection_id(ifname: str, dev_type: str) -> Optional[str]:
     """Return the most-recently used connection_id for this device
 
     Besides getting the currently active connection, this will succeed

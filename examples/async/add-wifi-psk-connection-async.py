@@ -55,9 +55,11 @@ from passlib.utils.pbkdf2 import pbkdf2  # type: ignore
 from pprint import pformat
 from sdbus_async.networkmanager import (
     NetworkManagerSettings as SettingsManager,
+    ConnectionType,
+)
+from sdbus_async.networkmanager.settings import (
     ConnectionProfile,
     ConnectionSettings,
-    ConnectionType,
     Ipv4Settings,
     Ipv6Settings,
     WirelessSettings,
