@@ -435,6 +435,34 @@ class ConnectionProfile:
             for k, v in settings_dict.items()}
         return cls(**unvarianted_options)
 
+    def update(self, other: ConnectionProfile) -> None:
+        """Update this connection profile with the settings from the other.
+
+        Similar to dict.update method.
+        """
+        for f in fields(other):
+            settings_field_name = f.name
+            other_settings = getattr(other, settings_field_name)
+
+            if other_settings is None:
+                continue
+
+            my_settings = getattr(self, settings_field_name)
+
+            if my_settings is None:
+                setattr(self, settings_field_name, other_settings)
+                continue
+
+            for setting_field in fields(other_settings):
+                setting_field_name = setting_field.name
+
+                other_setting = getattr(other_settings, setting_field_name)
+
+                if other_setting is None:
+                    continue
+
+                setattr(my_settings, setting_field_name, other_setting)
+
 
 SETTING_DBUS_NAME_TO_NAME: Dict[str, str] = {
     f.metadata['dbus_name']: f.name
