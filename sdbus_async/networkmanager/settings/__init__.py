@@ -57,6 +57,15 @@ from .wireless import WirelessSettings
 from .wireless_security import WirelessSecuritySettings
 from .wpan import WpanSettings
 
+from .datatypes import (
+    AddressData,
+    RouteData,
+    LinkWatchers,
+    Vlans,
+    WireguardPeers,
+    RoutingRules,
+    Vfs,
+)
 
 __all__ = (
     'ConnectionProfile',
@@ -112,4 +121,12 @@ __all__ = (
     'WirelessSettings',
     'WirelessSecuritySettings',
     'WpanSettings',
+
+    'AddressData',
+    'RouteData',
+    'LinkWatchers',
+    'Vlans',
+    'WireguardPeers',
+    'RoutingRules',
+    'Vfs',
 )

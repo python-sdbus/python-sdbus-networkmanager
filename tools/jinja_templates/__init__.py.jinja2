@@ -7,11 +7,28 @@ from .profile import ConnectionProfile
 {% for setting in all_settings -%}
 from .{{ setting.snake_name }} import {{ setting.python_class_name }}
 {% endfor %}
+from .datatypes import (
+    AddressData,
+    RouteData,
+    LinkWatchers,
+    Vlans,
+    WireguardPeers,
+    RoutingRules,
+    Vfs,
+)
 
 __all__ = (
     'ConnectionProfile',
 {%- for setting in all_settings %}
     '{{ setting.python_class_name }}',
 {%- endfor %}
+
+    'AddressData',
+    'RouteData',
+    'LinkWatchers',
+    'Vlans',
+    'WireguardPeers',
+    'RoutingRules',
+    'Vfs',
 )
 
