@@ -49,43 +49,43 @@ class LinkWatchers(NetworkManagerSettingsMixin):
     )
     delay_up: Optional[int] = field(
         metadata={'dbus_delay-up': 'delay-up', 'dbus_type': 'u'},
-        default=None
+        default=None,
     )
     delay_down: Optional[int] = field(
         metadata={'dbus_name': 'delay-down', 'dbus_type': 'u'},
-        default=None
+        default=None,
     )
     init_wait: Optional[int] = field(
         metadata={'dbus_name': 'init-wait', 'dbus_type': 'u'},
-        default=None
+        default=None,
     )
     interval: Optional[int] = field(
         metadata={'dbus_name': 'interval', 'dbus_type': 'u'},
-        default=None
+        default=None,
     )
     missed_max: Optional[int] = field(
         metadata={'dbus_name': 'missed-max', 'dbus_type': 'u'},
-        default=None
+        default=None,
     )
     source_host: Optional[str] = field(
         metadata={'dbus_name': 'source-host', 'dbus_type': 's'},
-        default=None
+        default=None,
     )
     target_host: Optional[str] = field(
         metadata={'dbus_name': 'target-host', 'dbus_type': 's'},
-        default=None
+        default=None,
     )
     validate_active: Optional[bool] = field(
         metadata={'dbus_name': 'validate-active', 'dbus_type': 'b'},
-        default=None
+        default=None,
     )
     validate_inactive: Optional[bool] = field(
         metadata={'dbus_name': 'validate-inactive', 'dbus_type': 'b'},
-        default=None
+        default=None,
     )
     send_alway: Optional[bool] = field(
         metadata={'dbus_name': 'send-alway', 'dbus_type': 'b'},
-        default=None
+        default=None,
     )
 
 
@@ -102,24 +102,29 @@ class Vlans(NetworkManagerSettingsMixin):
     vid_end: int = field(
         metadata={'dbus_name': 'vid-end', 'dbus_type': 'u'},
     )
-    pvid: bool = field(
+    pvid: Optional[bool] = field(
         metadata={'dbus_name': 'pvid', 'dbus_type': 'b'},
+        default=None,
     )
-    untagged: bool = field(
+    untagged: Optional[bool] = field(
         metadata={'dbus_name': 'untagged', 'dbus_type': 'b'},
+        default=None
     )
 
 
 @dataclass
 class WireguardPeers(NetworkManagerSettingsMixin):
-    public_key: str = field(
+    public_key: Optional[str] = field(
         metadata={'dbus_name': 'public-key', 'dbus_type': 's'},
+        default=None,
     )
-    endpoint: int = field(
+    endpoint: Optional[int] = field(
         metadata={'dbus_name': 'endpoint', 'dbus_type': 's'},
+        default=None,
     )
-    allowed_ips: List[str] = field(
+    allowed_ips: Optional[List[str]] = field(
         metadata={'dbus_name': 'allowed-ips', 'dbus_type': 'as'},
+        default=None,
     )
 
 
@@ -127,69 +132,91 @@ class WireguardPeers(NetworkManagerSettingsMixin):
 class RoutingRules(NetworkManagerSettingsMixin):
     action: Optional[int] = field(
         metadata={'dbus_name': 'action', 'dbus_type': 'y'},
+        default=None,
     )
     dport_end: Optional[int] = field(
         metadata={'dbus_name': 'dport-end', 'dbus_type': 'q'},
+        default=None,
     )
     dport_start: Optional[int] = field(
         metadata={'dbus_name': 'dport-start', 'dbus_type': 'q'},
+        default=None,
     )
     family: Optional[int] = field(
         metadata={'dbus_name': 'family', 'dbus_type': 'i'},
+        default=None,
     )
     from_prefix: Optional[str] = field(
         metadata={'dbus_name': 'from', 'dbus_type': 's'},
+        default=None,
     )
     from_len: Optional[int] = field(
         metadata={'dbus_name': 'from-len', 'dbus_type': 'y'},
+        default=None,
     )
     fwmark: Optional[int] = field(
         metadata={'dbus_name': 'fwmark', 'dbus_type': 'u'},
+        default=None,
     )
     fwmask: Optional[int] = field(
         metadata={'dbus_name': 'fwmask', 'dbus_type': 'u'},
+        default=None,
     )
     iifname: Optional[str] = field(
         metadata={'dbus_name': 'iifname', 'dbus_type': 's'},
+        default=None,
     )
     invert: Optional[bool] = field(
         metadata={'dbus_name': 'invert', 'dbus_type': 'b'},
+        default=None,
     )
     ipproto: Optional[str] = field(
         metadata={'dbus_name': 'ipproto', 'dbus_type': 's'},
+        default=None,
     )
     oifname: Optional[str] = field(
         metadata={'dbus_name': 'oifname', 'dbus_type': 's'},
+        default=None,
     )
     priority: Optional[int] = field(
         metadata={'dbus_name': 'priority', 'dbus_type': 'u'},
+        default=None,
     )
     sport_end: Optional[int] = field(
         metadata={'dbus_name': 'sport-end', 'dbus_type': 'q'},
+        default=None,
     )
     sport_start: Optional[int] = field(
         metadata={'dbus_name': 'sport-start', 'dbus_type': 'q'},
+        default=None,
     )
     supress_prefixlength: Optional[int] = field(
         metadata={'dbus_name': 'supress-prefixlength', 'dbus_type': 'i'},
+        default=None,
     )
     table: Optional[int] = field(
         metadata={'dbus_name': 'table', 'dbus_type': 'u'},
+        default=None,
     )
     to: Optional[str] = field(
         metadata={'dbus_name': 'to', 'dbus_type': 's'},
+        default=None,
     )
     tos: Optional[int] = field(
         metadata={'dbus_name': 'tos', 'dbus_type': 'y'},
+        default=None,
     )
     to_len: Optional[int] = field(
         metadata={'dbus_name': 'to-len', 'dbus_type': 'y'},
+        default=None,
     )
     range_end: Optional[int] = field(
         metadata={'dbus_name': 'range-end', 'dbus_type': 'u'},
+        default=None,
     )
     range_start: Optional[int] = field(
         metadata={'dbus_name': 'range-start', 'dbus_type': 'u'},
+        default=None,
     )
 
 
@@ -200,21 +227,27 @@ class Vfs(NetworkManagerSettingsMixin):
     )
     mac: Optional[str] = field(
         metadata={'dbus_name': 'mac', 'dbus_type': 's'},
+        default=None,
     )
     spoof_check: Optional[str] = field(
         metadata={'dbus_name': 'spoof-check', 'dbus_type': 's'},
+        default=None,
     )
     trust: Optional[str] = field(
         metadata={'dbus_name': 'trust', 'dbus_type': 's'},
+        default=None,
     )
     min_tx_rate: Optional[str] = field(
         metadata={'dbus_name': 'min-tx-rate', 'dbus_type': 's'},
+        default=None,
     )
     max_tx_rate: Optional[str] = field(
         metadata={'dbus_name': 'max-tx-rate', 'dbus_type': 's'},
+        default=None,
     )
     vlans: Optional[str] = field(
         metadata={'dbus_name': 'vlans', 'dbus_type': 's'},
+        default=None,
     )
 
 
