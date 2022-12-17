@@ -3,13 +3,14 @@
 # if possible, please make changes by also updating the script.
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import ClassVar, List, Optional
 from .base import NetworkManagerSettingsMixin
 
 
 @dataclass
 class CdmaSettings(NetworkManagerSettingsMixin):
     """CDMA-based Mobile Broadband Settings"""
+    secret_fields_names: ClassVar[List[str]] = ['password']
 
     mtu: Optional[int] = field(
         metadata={

@@ -3,7 +3,7 @@
 # if possible, please make changes by also updating the script.
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Any, List, Optional, Tuple
+from typing import Any, ClassVar, List, Optional, Tuple
 from .base import NetworkManagerSettingsMixin
 from .datatypes import AddressData, RouteData, RoutingRules
 
@@ -11,6 +11,7 @@ from .datatypes import AddressData, RouteData, RoutingRules
 @dataclass
 class Ipv6Settings(NetworkManagerSettingsMixin):
     """IPv6 Settings"""
+    secret_fields_names: ClassVar[List[str]] = ['dhcp_hostname']
 
     addr_gen_mode: Optional[int] = field(
         metadata={

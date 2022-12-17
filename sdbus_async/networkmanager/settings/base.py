@@ -1,14 +1,16 @@
+# SPDX-License-Identifier: LGPL-2.1-or-later
 from __future__ import annotations
+
 from dataclasses import fields
 from functools import lru_cache
-from typing import Any, Dict, Type, cast
+from typing import Any, ClassVar, Dict, List, Type, cast
 
-from ..types import (
-    NetworkManagerSettingsDomain,
-)
+from ..types import NetworkManagerSettingsDomain
 
 
 class NetworkManagerSettingsMixin:
+    secret_fields_names: ClassVar[List[str]] = []
+
     def to_dbus(self) -> NetworkManagerSettingsDomain:
         """Return a dbus dictionary for NetworkManager to add/update profiles
 

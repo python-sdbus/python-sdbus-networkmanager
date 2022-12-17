@@ -3,13 +3,14 @@
 # if possible, please make changes by also updating the script.
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import ClassVar, List, Optional
 from .base import NetworkManagerSettingsMixin
 
 
 @dataclass
 class DcbSettings(NetworkManagerSettingsMixin):
     """Data Center Bridging Settings"""
+    secret_fields_names: ClassVar[List[str]] = ['app_fcoe', 'app_fip', 'app_iscsi', 'priority_flow_control', 'priority_group']
 
     app_fcoe_flags: Optional[int] = field(
         metadata={

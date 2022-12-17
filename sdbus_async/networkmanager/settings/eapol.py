@@ -3,13 +3,14 @@
 # if possible, please make changes by also updating the script.
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import ClassVar, List, Optional
 from .base import NetworkManagerSettingsMixin
 
 
 @dataclass
 class EapolSettings(NetworkManagerSettingsMixin):
     """IEEE 802.1x Authentication Settings"""
+    secret_fields_names: ClassVar[List[str]] = ['ca_cert_password', 'client_cert_password', 'password', 'password_raw', 'phase1_auth', 'phase2_ca_cert_password', 'phase2_client_cert_password', 'phase2_private_key_password', 'pin', 'private_key_password']
 
     altsubject_matches: Optional[List[str]] = field(
         metadata={

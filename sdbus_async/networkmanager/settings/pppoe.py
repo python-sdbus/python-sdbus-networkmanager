@@ -3,13 +3,14 @@
 # if possible, please make changes by also updating the script.
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import ClassVar, List, Optional
 from .base import NetworkManagerSettingsMixin
 
 
 @dataclass
 class PppoeSettings(NetworkManagerSettingsMixin):
     """PPP-over-Ethernet Settings"""
+    secret_fields_names: ClassVar[List[str]] = ['password']
 
     parent: Optional[str] = field(
         metadata={

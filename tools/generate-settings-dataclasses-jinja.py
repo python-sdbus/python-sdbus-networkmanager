@@ -21,7 +21,7 @@ from pathlib import Path
 from re import Pattern
 from re import compile as regex_compile
 from textwrap import fill
-from typing import List, Optional
+from typing import List, Optional, Set
 from xml.etree.ElementTree import Element, parse
 
 from jinja2 import Environment, FileSystemLoader
@@ -125,7 +125,7 @@ class NmSettingPropertyIntrospection:
 
         extra_typing = dbus_to_python_extra_typing_imports.get(dbus_type)
         if extra_typing is not None:
-            parent.typing_imports.update(extra_typing)
+            parent.properties_want_imports.update(extra_typing)
 
     @cached_property
     def python_type(self) -> str:
@@ -146,9 +146,18 @@ class NmSettingsIntrospection:
         self.description = description
         self.name_upper = name_upper
 
-        self.typing_imports = {'Optional'}
-
+        self.properties_want_imports = {'Optional'}
         self.properties: List[NmSettingPropertyIntrospection] = []
+
+    @cached_property
+    def typing_imports(self) -> List[str]:
+        typing_imports: Set[str] = self.properties_want_imports.copy()
+
+        if self.secret_fields:
+            typing_imports.add('ClassVar')
+            typing_imports.add('List')
+
+        return typing_imports
 
     @cached_property
     def python_class_name(self) -> str:
@@ -187,6 +196,16 @@ class NmSettingsIntrospection:
             return False
 
         return True
+
+    @cached_property
+    def secret_fields(self) -> List[str]:
+        secret_fields: List[str] = []
+
+        for x in self.properties:
+            if x.python_name.endswith('_flags') and x.python_type == 'int':
+                secret_fields.append(x.python_name.removesuffix('_flags'))
+
+        return secret_fields
 
 
 def extract_docbook_paragraphs(docbook_node: Element) -> List[str]:
