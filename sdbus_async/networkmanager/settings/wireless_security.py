@@ -10,7 +10,7 @@ from .base import NetworkManagerSettingsMixin
 @dataclass
 class WirelessSecuritySettings(NetworkManagerSettingsMixin):
     """Wi-Fi Security Settings"""
-    secret_fields_names: ClassVar[List[str]] = ['leap_password', 'psk', 'wep_key']
+    secret_fields_names: ClassVar[List[str]] = ['leap_password', 'psk']
     secret_name = '802-11-wireless-security'
 
     auth_alg: Optional[str] = field(

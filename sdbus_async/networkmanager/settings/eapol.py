@@ -10,7 +10,7 @@ from .base import NetworkManagerSettingsMixin
 @dataclass
 class EapolSettings(NetworkManagerSettingsMixin):
     """IEEE 802.1x Authentication Settings"""
-    secret_fields_names: ClassVar[List[str]] = ['ca_cert_password', 'client_cert_password', 'password', 'password_raw', 'phase1_auth', 'phase2_ca_cert_password', 'phase2_client_cert_password', 'phase2_private_key_password', 'pin', 'private_key_password']
+    secret_fields_names: ClassVar[List[str]] = ['ca_cert_password', 'client_cert_password', 'password', 'password_raw', 'phase2_ca_cert_password', 'phase2_client_cert_password', 'phase2_private_key_password', 'pin', 'private_key_password']
     secret_name = '802-1x'
 
     altsubject_matches: Optional[List[str]] = field(

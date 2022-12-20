@@ -24,7 +24,7 @@ from textwrap import fill
 from typing import List, Optional, Set
 from xml.etree.ElementTree import Element, parse
 
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 dbus_to_python_extra_typing_imports = {
     "as": ("List", ),
@@ -150,7 +150,7 @@ class NmSettingsIntrospection:
         self.properties: List[NmSettingPropertyIntrospection] = []
 
     @cached_property
-    def typing_imports(self) -> List[str]:
+    def typing_imports(self) -> Set[str]:
         typing_imports: Set[str] = self.properties_want_imports.copy()
 
         if self.secret_fields:
@@ -198,14 +198,19 @@ class NmSettingsIntrospection:
         return True
 
     @cached_property
-    def secret_fields(self) -> List[str]:
-        secret_fields: List[str] = []
+    def secret_fields(self) -> Set[str]:
+        all_fields: Set[str] = set()
+        possible_secret_fields: Set[str] = set()
 
         for x in self.properties:
-            if x.python_name.endswith('_flags') and x.python_type == 'int':
-                secret_fields.append(x.python_name.removesuffix('_flags'))
 
-        return secret_fields
+            if x.python_name.endswith('_flags') and x.python_type == 'int':
+                possible_secret_fields.add(
+                    x.python_name.removesuffix('_flags'))
+            else:
+                all_fields.add(x.python_name)
+
+        return all_fields.intersection(possible_secret_fields)
 
 
 def extract_docbook_paragraphs(docbook_node: Element) -> List[str]:
@@ -307,6 +312,7 @@ def main(
 ) -> None:
     jinja_env = Environment(
         loader=FileSystemLoader(Path('./tools/jinja_templates/')),
+        undefined=StrictUndefined,
     )
     settings_template = jinja_env.get_template('setting.py.jinja2')
 

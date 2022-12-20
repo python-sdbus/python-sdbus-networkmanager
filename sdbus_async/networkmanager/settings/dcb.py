@@ -10,7 +10,7 @@ from .base import NetworkManagerSettingsMixin
 @dataclass
 class DcbSettings(NetworkManagerSettingsMixin):
     """Data Center Bridging Settings"""
-    secret_fields_names: ClassVar[List[str]] = ['app_fcoe', 'app_fip', 'app_iscsi', 'priority_flow_control', 'priority_group']
+    secret_fields_names: ClassVar[List[str]] = ['priority_flow_control']
     secret_name = 'dcb'
 
     app_fcoe_flags: Optional[int] = field(
