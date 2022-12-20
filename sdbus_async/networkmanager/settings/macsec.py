@@ -11,6 +11,7 @@ from .base import NetworkManagerSettingsMixin
 class MacsecSettings(NetworkManagerSettingsMixin):
     """MACSec Settings"""
     secret_fields_names: ClassVar[List[str]] = ['mka_cak']
+    secret_name = 'macsec'
 
     encrypt: Optional[bool] = field(
         metadata={

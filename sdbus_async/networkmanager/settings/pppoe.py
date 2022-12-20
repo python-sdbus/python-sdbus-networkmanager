@@ -11,6 +11,7 @@ from .base import NetworkManagerSettingsMixin
 class PppoeSettings(NetworkManagerSettingsMixin):
     """PPP-over-Ethernet Settings"""
     secret_fields_names: ClassVar[List[str]] = ['password']
+    secret_name = 'pppoe'
 
     parent: Optional[str] = field(
         metadata={

@@ -10,6 +10,7 @@ from ..types import NetworkManagerSettingsDomain
 
 class NetworkManagerSettingsMixin:
     secret_fields_names: ClassVar[List[str]] = []
+    secret_name: ClassVar[str] = ''
 
     def to_dbus(self) -> NetworkManagerSettingsDomain:
         """Return a dbus dictionary for NetworkManager to add/update profiles

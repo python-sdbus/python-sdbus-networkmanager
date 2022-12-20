@@ -11,6 +11,7 @@ from .base import NetworkManagerSettingsMixin
 class GsmSettings(NetworkManagerSettingsMixin):
     """GSM-based Mobile Broadband Settings"""
     secret_fields_names: ClassVar[List[str]] = ['password', 'pin']
+    secret_name = 'gsm'
 
     apn: Optional[str] = field(
         metadata={

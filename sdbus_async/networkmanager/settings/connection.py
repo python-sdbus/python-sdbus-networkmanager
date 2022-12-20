@@ -11,6 +11,7 @@ from .base import NetworkManagerSettingsMixin
 class ConnectionSettings(NetworkManagerSettingsMixin):
     """General Connection Profile Settings"""
     secret_fields_names: ClassVar[List[str]] = ['mptcp']
+    secret_name = 'connection'
 
     auth_retries: Optional[int] = field(
         metadata={

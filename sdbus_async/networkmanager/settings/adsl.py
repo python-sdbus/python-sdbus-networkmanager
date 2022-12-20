@@ -11,6 +11,7 @@ from .base import NetworkManagerSettingsMixin
 class AdslSettings(NetworkManagerSettingsMixin):
     """ADSL Settings"""
     secret_fields_names: ClassVar[List[str]] = ['password']
+    secret_name = 'adsl'
 
     encapsulation: Optional[str] = field(
         metadata={

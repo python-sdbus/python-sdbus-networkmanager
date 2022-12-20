@@ -14,6 +14,7 @@ class {{ setting.python_class_name }}(NetworkManagerSettingsMixin):
     """{{ setting.description }}"""
 {%- if setting.secret_fields %}
     secret_fields_names: ClassVar[List[str]] = ['{{ setting.secret_fields|sort|join("', '") }}']
+    secret_name = '{{ setting.name }}'
 {%- endif %}
 {% for property in setting.properties %}
     {{ property.python_name }}: Optional[{{ property.python_type }}] = field(

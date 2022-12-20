@@ -12,6 +12,7 @@ from .datatypes import WireguardPeers
 class WireguardSettings(NetworkManagerSettingsMixin):
     """WireGuard Settings"""
     secret_fields_names: ClassVar[List[str]] = ['private_key']
+    secret_name = 'wireguard'
 
     fwmark: Optional[int] = field(
         metadata={

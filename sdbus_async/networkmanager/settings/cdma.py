@@ -11,6 +11,7 @@ from .base import NetworkManagerSettingsMixin
 class CdmaSettings(NetworkManagerSettingsMixin):
     """CDMA-based Mobile Broadband Settings"""
     secret_fields_names: ClassVar[List[str]] = ['password']
+    secret_name = 'cdma'
 
     mtu: Optional[int] = field(
         metadata={

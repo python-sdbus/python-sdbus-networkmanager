@@ -12,6 +12,7 @@ from .datatypes import AddressData, RouteData, RoutingRules
 class Ipv6Settings(NetworkManagerSettingsMixin):
     """IPv6 Settings"""
     secret_fields_names: ClassVar[List[str]] = ['dhcp_hostname']
+    secret_name = 'ipv6'
 
     addr_gen_mode: Optional[int] = field(
         metadata={

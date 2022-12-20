@@ -12,6 +12,7 @@ from .datatypes import AddressData, RouteData, RoutingRules
 class Ipv4Settings(NetworkManagerSettingsMixin):
     """IPv4 Settings"""
     secret_fields_names: ClassVar[List[str]] = ['dhcp_hostname']
+    secret_name = 'ipv4'
 
     address_data: Optional[List[AddressData]] = field(
         metadata={
