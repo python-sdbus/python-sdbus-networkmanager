@@ -3,7 +3,7 @@
 # if possible, please make changes by also updating the script.
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import Any, ClassVar, List, Optional, Tuple
+from typing import Any, List, Optional, Tuple
 from .base import NetworkManagerSettingsMixin
 from .datatypes import WireguardPeers
 
@@ -11,7 +11,7 @@ from .datatypes import WireguardPeers
 @dataclass
 class WireguardSettings(NetworkManagerSettingsMixin):
     """WireGuard Settings"""
-    secret_fields_names: ClassVar[List[str]] = ['private_key']
+    secret_fields_names = ['private_key']
     secret_name = 'wireguard'
 
     fwmark: Optional[int] = field(

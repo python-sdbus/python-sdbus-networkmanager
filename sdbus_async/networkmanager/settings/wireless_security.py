@@ -3,14 +3,14 @@
 # if possible, please make changes by also updating the script.
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import ClassVar, List, Optional
+from typing import List, Optional
 from .base import NetworkManagerSettingsMixin
 
 
 @dataclass
 class WirelessSecuritySettings(NetworkManagerSettingsMixin):
     """Wi-Fi Security Settings"""
-    secret_fields_names: ClassVar[List[str]] = ['leap_password', 'psk']
+    secret_fields_names = ['leap_password', 'psk']
     secret_name = '802-11-wireless-security'
 
     auth_alg: Optional[str] = field(

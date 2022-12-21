@@ -153,10 +153,6 @@ class NmSettingsIntrospection:
     def typing_imports(self) -> Set[str]:
         typing_imports: Set[str] = self.properties_want_imports.copy()
 
-        if self.secret_fields:
-            typing_imports.add('ClassVar')
-            typing_imports.add('List')
-
         return typing_imports
 
     @cached_property

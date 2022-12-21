@@ -3,14 +3,14 @@
 # if possible, please make changes by also updating the script.
 from __future__ import annotations
 from dataclasses import dataclass, field
-from typing import ClassVar, List, Optional
+from typing import Optional
 from .base import NetworkManagerSettingsMixin
 
 
 @dataclass
 class GsmSettings(NetworkManagerSettingsMixin):
     """GSM-based Mobile Broadband Settings"""
-    secret_fields_names: ClassVar[List[str]] = ['password', 'pin']
+    secret_fields_names = ['password', 'pin']
     secret_name = 'gsm'
 
     apn: Optional[str] = field(

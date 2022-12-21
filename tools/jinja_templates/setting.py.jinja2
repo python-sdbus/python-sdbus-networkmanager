@@ -13,7 +13,7 @@ from .datatypes import {{ setting.datatypes_imports|sort|join(', ') }}
 class {{ setting.python_class_name }}(NetworkManagerSettingsMixin):
     """{{ setting.description }}"""
 {%- if setting.secret_fields %}
-    secret_fields_names: ClassVar[List[str]] = ['{{ setting.secret_fields|sort|join("', '") }}']
+    secret_fields_names = ['{{ setting.secret_fields|sort|join("', '") }}']
     secret_name = '{{ setting.name }}'
 {%- endif %}
 {% for property in setting.properties %}
