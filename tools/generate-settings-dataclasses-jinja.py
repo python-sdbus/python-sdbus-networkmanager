@@ -204,7 +204,9 @@ class NmSettingsIntrospection:
 
         for x in self.properties:
 
-            if x.python_name.endswith('_flags') and x.python_type == 'int':
+            if (x.python_name.endswith('_flags')
+               and x.python_type == 'int'
+               and x.description.startswith('Flags indicating')):
                 possible_secret_fields.add(
                     x.python_name.removesuffix('_flags'))
             else:
