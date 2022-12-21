@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field, fields
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Generator, Optional
 
 from .base import NetworkManagerSettingsMixin
 {% for setting in all_settings -%}
@@ -164,6 +164,33 @@ class ConnectionProfile:
                     continue
 
                 setattr(my_settings, setting_field_name, other_setting)
+
+    def update_secrets_generator(
+            self) -> Generator[str, ConnectionProfile, None]:
+        for attr_name, value in vars(self).items():
+            if value is None:
+                continue
+
+            if not isinstance(value, NetworkManagerSettingsMixin):
+                continue
+
+            secret_setting_name = value.secret_name
+
+            if not secret_setting_name:
+                continue
+
+            secret_profile = yield secret_setting_name
+            current_setting_secrets = getattr(secret_profile, attr_name)
+
+            for secret_attribute in value.secret_fields_names:
+                setattr(
+                    value,
+                    secret_attribute,
+                    getattr(
+                        current_setting_secrets,
+                        secret_attribute,
+                    ),
+                )
 
 
 SETTING_DBUS_NAME_TO_NAME: Dict[str, str] = {

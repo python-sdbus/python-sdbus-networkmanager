@@ -62,3 +62,19 @@ class TestSettingsProfile(TestCase):
         connection.update(secrets)
 
         self.assertEqual(connection.wireguard.private_key, 'secret_key')
+
+    def test_update_secrets(self) -> None:
+        connection = ConnectionProfile.from_settings_dict(connection_dict)
+        secrets = ConnectionProfile.from_settings_dict(secret_dict)
+
+        connection_secret_update_generator = (
+            connection.update_secrets_generator()
+        )
+
+        setting_name = next(connection_secret_update_generator)
+        self.assertEqual(setting_name, 'wireguard')
+
+        with self.assertRaises(StopIteration):
+            connection_secret_update_generator.send(secrets)
+
+        self.assertEqual(connection.wireguard.private_key, 'secret_key')
