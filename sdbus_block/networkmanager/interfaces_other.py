@@ -23,6 +23,7 @@ from typing import Any, Dict, List, Tuple
 
 from sdbus import DbusInterfaceCommon, dbus_method, dbus_property
 
+from .settings import ConnectionProfile
 from .types import NetworkManagerConnectionProperties
 
 
@@ -580,6 +581,50 @@ class NetworkManagerSettingsConnectionInterface(
     def filename(self) -> str:
         """File that stores connection settings"""
         raise NotImplementedError
+
+    def update_profile(self,
+                       profile: ConnectionProfile,
+                       save_to_disk: bool = True) -> None:
+        """Update connection using the profile dataclass.
+
+        :param ConnectionProfile profile: Connection profile to update
+            with.
+
+        :param bool save_to_disk: Make changes permanent by saving
+            updated values to disk.
+
+            By default changes are temporary. (saved only to RAM)
+        """
+        flags = 0
+
+        if save_to_disk:
+            flags |= 0x1
+        else:
+            flags |= 0x2
+
+        self.update2(profile.to_dbus(), flags, {})
+
+    def get_profile(self, fetch_secrets: bool = True) -> ConnectionProfile:
+        """Get the connection settings as the profile object.
+
+        :param bool fetch_secrets: Retrieve secret values. (like VPN passwords)
+            Makes additional calls to NetworkManager.
+        """
+        profile = ConnectionProfile.from_dbus(self.get_settings())
+
+        if fetch_secrets:
+            secrets_name_generator = profile.update_secrets_generator()
+            try:
+                secrets_name = next(secrets_name_generator)
+                while True:
+                    secret_profile = ConnectionProfile.from_dbus(
+                        self.get_secrets(secrets_name))
+
+                    secrets_name = secrets_name_generator.send(secret_profile)
+            except StopIteration:
+                ...
+
+        return profile
 
 
 class NetworkManagerSettingsInterface(

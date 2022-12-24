@@ -194,7 +194,6 @@ from .objects import (
     NetworkManagerSettings,
     WiFiP2PPeer,
 )
-
 from .types import (
     NetworkManagerConnectionProperties,
     NetworkManagerSetting,
