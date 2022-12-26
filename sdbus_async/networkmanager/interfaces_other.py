@@ -1378,3 +1378,33 @@ class NetworkManagerInterfaceAsync(
     def device_removed(self) -> str:
         """Signal when device had been removed with path"""
         raise NotImplementedError
+
+    async def add_and_activate_connection_profile(
+            self,
+            profile: ConnectionProfile,
+            device_path: str = '/',
+            specific_object: str = '/',
+    ) -> Tuple[str, str]:
+        """Adds new connection using the profile object as template.
+
+         :param ConnectionProfile profile: Connection profile to update
+            with.
+
+        :param str device_path: Object path of device to be activated
+            using the given connection
+
+        :param str specific_object: The path of a connection-type-specific
+            object this activation should use.
+
+            This parameter is currently ignored for wired and mobile broadband
+            connections, and the value of "/" should be used.
+
+        :return: Object path of new connection and path of active connection.
+        :rtype: Tuple[str, str]
+        """
+
+        return await self.add_and_activate_connection(
+            profile.to_dbus(),
+            device_path,
+            specific_object,
+        )
