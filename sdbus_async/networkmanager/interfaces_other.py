@@ -614,9 +614,11 @@ class NetworkManagerSettingsConnectionInterfaceAsync(
         """Signal when connection is removed"""
         raise NotImplementedError
 
-    async def update_profile(self,
-                             profile: ConnectionProfile,
-                             save_to_disk: bool = True) -> None:
+    async def update_profile(
+            self,
+            profile: ConnectionProfile,
+            save_to_disk: bool = False,
+    ) -> None:
         """Update connection using the profile dataclass.
 
         :param ConnectionProfile profile: Connection profile to update

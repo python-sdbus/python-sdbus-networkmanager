@@ -582,9 +582,11 @@ class NetworkManagerSettingsConnectionInterface(
         """File that stores connection settings"""
         raise NotImplementedError
 
-    def update_profile(self,
-                       profile: ConnectionProfile,
-                       save_to_disk: bool = True) -> None:
+    def update_profile(
+            self,
+            profile: ConnectionProfile,
+            save_to_disk: bool = False,
+    ) -> None:
         """Update connection using the profile dataclass.
 
         :param ConnectionProfile profile: Connection profile to update
