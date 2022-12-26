@@ -23,6 +23,8 @@ from typing import Any, Dict, List, Tuple
 
 from sdbus import DbusInterfaceCommon, dbus_method, dbus_property
 
+from .settings import ConnectionProfile
+
 
 class NetworkManagerDeviceBluetoothInterface(
         DbusInterfaceCommon,
@@ -984,6 +986,25 @@ class NetworkManagerDeviceInterface(
     def hw_address(self) -> str:
         """Hardware address"""
         raise NotImplementedError
+
+    def get_applied_connection_profile(
+            self
+    ) -> Tuple[ConnectionProfile, int]:
+        """Get the currently applied connection on the device.
+
+        .. note::
+
+            This method cannot fetch secrets. Use
+            :py:meth:`NetworkManagerSettingsConnectionInterfaceAsync.get_profile`
+            to acquire profile with secrets.
+
+        :returns: Tuple of profile and version id.
+        :rtype: Tuple[ConnectionProfile, int]
+        """
+
+        connection_vardict, version_id = self.get_applied_connection(0)
+
+        return ConnectionProfile.from_dbus(connection_vardict), version_id
 
 
 class NetworkManagerPPPInterface(

@@ -28,6 +28,8 @@ from sdbus import (
     dbus_signal_async,
 )
 
+from .settings import ConnectionProfile
+
 
 class NetworkManagerDeviceBluetoothInterfaceAsync(
         DbusInterfaceCommonAsync,
@@ -1019,6 +1021,25 @@ class NetworkManagerDeviceInterfaceAsync(
         See :py:class:`DeviceState` and :py:class:`DeviceStateReason`
         """
         raise NotImplementedError
+
+    async def get_applied_connection_profile(
+            self
+    ) -> Tuple[ConnectionProfile, int]:
+        """Get the currently applied connection on the device.
+
+        .. note::
+
+            This method cannot fetch secrets. Use
+            :py:meth:`NetworkManagerSettingsConnectionInterfaceAsync.get_profile`
+            to acquire profile with secrets.
+
+        :returns: Tuple of profile and version id.
+        :rtype: Tuple[ConnectionProfile, int]
+        """
+
+        connection_vardict, version_id = await self.get_applied_connection(0)
+
+        return ConnectionProfile.from_dbus(connection_vardict), version_id
 
 
 class NetworkManagerPPPInterfaceAsync(
