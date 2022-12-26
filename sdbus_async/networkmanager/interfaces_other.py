@@ -779,6 +779,36 @@ class NetworkManagerSettingsInterfaceAsync(
         """Signal when connection was removed with the path"""
         raise NotImplementedError
 
+    async def add_connection_profile(
+            self,
+            profile: ConnectionProfile,
+            save_to_disk: bool = False,
+    ) -> Tuple[str, None]:
+        """Add new connection using the profile object.
+
+         :param ConnectionProfile profile: Connection profile to update
+            with.
+
+        :param bool save_to_disk: Make changes permanent by saving
+            updated values to disk.
+
+            By default changes are temporary. (saved only to RAM)
+
+        :return: Object path of new connection and None
+        :rtype: Tuple[str, None]
+        """
+        flags = 0
+
+        if save_to_disk:
+            flags |= 0x1
+        else:
+            flags |= 0x2
+
+        return (
+            (await self.add_connection2(profile.to_dbus(), flags, {}))[0],
+            None,
+        )
+
 
 class NetworkManagerVPNPluginInterfaceAsync(
         DbusInterfaceCommonAsync,
