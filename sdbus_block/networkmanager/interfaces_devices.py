@@ -1006,6 +1006,22 @@ class NetworkManagerDeviceInterface(
 
         return ConnectionProfile.from_dbus(connection_vardict), version_id
 
+    def reapply_profile(
+            self,
+            profile: ConnectionProfile,
+            version_id: int = 0,
+    ) -> None:
+        """Attempts to update the configuration of a device
+        without deactivating it.
+
+        :param ConnectionProfile profile: Connection profile to update
+            with.
+        :param int version_id: If non-zero, the current version id of
+            the applied-connection must match. The current version id can be
+            retrieved via :py:meth:`get_applied_connection_profile`.
+        """
+        self.reapply(profile.to_dbus(), version_id, 0)
+
 
 class NetworkManagerPPPInterface(
         DbusInterfaceCommon,
