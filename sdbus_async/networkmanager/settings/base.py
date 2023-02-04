@@ -82,10 +82,15 @@ class NetworkManagerSettingsMixin:
     ) -> NetworkManagerSettingsMixin:
         """TODO: Add proper docstring"""
         reverse_mapping = cls.setting_name_reverse_mapping()
-        unvarianted_options = {
-            reverse_mapping[k]: cls._unpack_variant(k, *v)
-            for k, v in dbus_dict.items()
-        }
+        unvarianted_options = {}
+        for k, v in dbus_dict.items():
+            try:
+                reverse_name = reverse_mapping[k]
+            except KeyError:
+                continue
+
+            unvarianted_options[reverse_name] = cls._unpack_variant(k, *v)
+
         return cls(**unvarianted_options)
 
     @classmethod
