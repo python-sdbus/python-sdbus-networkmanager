@@ -31,8 +31,8 @@ def list_connection_profiles_blocking() -> None:
 
 
 def print_connection_profile_blocking(connection_path: str) -> None:
-    """Show the use of NetworkConnectionSettings(path).connection_profile()"""
-    profile = NetworkConnectionSettings(connection_path).connection_profile()
+    """Show the use of NetworkConnectionSettings(path).get_profile()"""
+    profile = NetworkConnectionSettings(connection_path).get_profile()
     print("-------------------------------------------------------------")
     print("name:", profile.connection.connection_id)
     print("uuid:", profile.connection.uuid)

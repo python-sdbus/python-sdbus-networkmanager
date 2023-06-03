@@ -43,7 +43,7 @@ async def get_most_recent_connection_id(ifname: str, dev_type: str) -> Optional[
     conns = {}
     for connection_path in connection_paths:
         connection_manager = NetworkConnectionSettings(connection_path)
-        connection = (await connection_manager.connection_profile()).connection
+        connection = (await connection_manager.get_profile()).connection
         # Filter connection profiles matching the connection type for the device:
         if connection.connection_type != getattr(ConnectionType, dev_type):
             continue

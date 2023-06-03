@@ -36,7 +36,7 @@ async def list_connection_profiles_async() -> None:
 
 async def print_connection_profile(connection_path: str) -> None:
     connectionsettings_service = NetworkConnectionSettings(connection_path)
-    profile = await connectionsettings_service.connection_profile()
+    profile = await connectionsettings_service.get_profile()
     connection = profile.connection
     print("-------------------------------------------------------------")
     print("name:", connection.connection_id)

@@ -3,7 +3,7 @@
 #
 # Update a property of a connection profile, looked up by connection id
 #
-# This version uses connection_manager.connection_profile().to_settings_dict()
+# This version uses connection_manager.get_profile().to_settings_dict()
 # to retrieve the connection profile from NetworkManager as a settings dict.
 #
 # It then updates it dynamically using the given arguments:
@@ -34,9 +34,9 @@ async def update_connection_async(args: Dict[str, Any]) -> None:
         print(f"No connection {id}, create with add-wifi-psk-connection-async")
         return
 
-    # Get the profile settings of the first connecttion with given id
+    # Get the profile settings of the first connection with given id
     connection_manager = NetworkConnectionSettings(connection_paths[0])
-    existing_connection_profile = await connection_manager.connection_profile()
+    existing_connection_profile = await connection_manager.get_profile()
     settings = existing_connection_profile.to_settings_dict()
 
     # Update the given setting's property using the given value

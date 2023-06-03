@@ -67,7 +67,6 @@ from .interfaces_other import (
     NetworkManagerVPNConnectionInterface,
     NetworkManagerWifiP2PPeerInterface,
 )
-from .settings.profile import ConnectionProfile
 from .types import NetworkManagerConnectionProperties
 
 NETWORK_MANAGER_SERVICE_NAME = 'org.freedesktop.NetworkManager'
@@ -212,13 +211,6 @@ class NetworkConnectionSettings(
             NETWORK_MANAGER_SERVICE_NAME,
             settings_path,
             bus)
-
-    def connection_profile(self) -> ConnectionProfile:
-        """Return a ConnectionProfile object containing all profile settings
-
-        :return: Nested dataclass containing all settings of the profile
-        """
-        return ConnectionProfile.from_dbus(self.get_settings())
 
 
 class NetworkDeviceGeneric(
