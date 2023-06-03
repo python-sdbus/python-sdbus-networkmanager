@@ -170,7 +170,7 @@ def iter_keys_of_dicts(
 ) -> List[str]:
     """Return a sorted list of settings_classes or connection properties
 
-    To support sorting the required properites of settings_classes first,
+    To support sorting the required properties of settings_classes first,
     the settingsname can be passed ad prefix argument to let the key function
     return the correct sort index for the given settingsname property.
     """

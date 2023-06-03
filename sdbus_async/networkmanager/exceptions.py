@@ -72,7 +72,7 @@ class NmAgentManagerUserCanceledError(
     )
 
 
-# Errors returned by Connetion objects.
+# Errors returned by Connection objects.
 class NmConnectionFailedError(
         DbusFailedError, NetworkManagerBaseError):
     """Unknown or unspecified error."""

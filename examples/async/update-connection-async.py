@@ -27,7 +27,7 @@ from typing import Any, Dict
 async def update_connection_async(args: Dict[str, Any]) -> None:
     """Update the settings for [key][entry] of the 1st matching connection"""
 
-    # Get the connection path of the connection(s) with the recieved id
+    # Get the connection path of the connection(s) with the received id
     fn = NetworkManagerSettings().get_connections_by_id(args["connection_id"])
     connection_paths = await fn
     if not connection_paths:

@@ -73,7 +73,7 @@ NETWORK_MANAGER_SERVICE_NAME = 'org.freedesktop.NetworkManager'
 
 
 class NetworkManager(NetworkManagerInterface):
-    """Network Manger main object
+    """Network Manager main object
 
     Implements :py:class:`NetworkManagerInterface`
 

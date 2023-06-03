@@ -42,7 +42,7 @@ class NetworkManagerSettingsMixin:
         The key names provided are exactly as documented in these tables:
         https://networkmanager.dev/docs/api/latest/nm-settings-dbus.html
 
-        Contrary to dataclasses.asdict(), it provides the orignal dbus keys,
+        Contrary to dataclasses.asdict(), it provides the original dbus keys,
         e.g. with numerical prefixes like "802-11-", dashes, and "id"/"type".
 
         In addition, it can be selected if defaults shall be omitted in output,

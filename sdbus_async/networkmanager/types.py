@@ -25,8 +25,8 @@ NetworkManagerSetting = Tuple[str, Any]
 # A settings domain, e.g. ipv4.*, ipv6.*, 802-11-wireless-security.*, etc:
 NetworkManagerSettingsDomain = Dict[str, NetworkManagerSetting]
 
-# All settings and properites of a connection, e.g. returned by get_settings()
+# All settings and properties of a connection, e.g. returned by get_settings()
 NetworkManagerConnectionProperties = Dict[str, NetworkManagerSettingsDomain]
 
-# All settings and properites of a connection, but without dbus signatures
+# All settings and properties of a connection, but without dbus signatures
 SettingsDict = Dict[str, Dict[str, Any]]
