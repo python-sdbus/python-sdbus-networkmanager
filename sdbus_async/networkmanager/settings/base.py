@@ -1,13 +1,14 @@
 # SPDX-License-Identifier: LGPL-2.1-or-later
 from __future__ import annotations
 
-from dataclasses import fields
+from dataclasses import dataclass, fields
 from functools import lru_cache
 from typing import Any, ClassVar, Dict, List, Type, cast
 
 from ..types import NetworkManagerSettingsDomain
 
 
+@dataclass
 class NetworkManagerSettingsMixin:
     secret_fields_names: ClassVar[List[str]] = []
     secret_name: ClassVar[str] = ''
