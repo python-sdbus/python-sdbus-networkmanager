@@ -410,13 +410,16 @@ class ConnectionProfile:
             if group:
                 for key in ("addresses", "routes"):
                     group.pop(key, None)
-        try:
-            unvarianted_options: Dict[str, Any] = {
-                SETTING_DBUS_NAME_TO_NAME[k]: SETTING_TO_CLASS[k].from_dbus(v)
-                for k, v in dbus_dict.items()}
-        except KeyError as e:
-            print(dbus_dict)
-            raise e
+
+        unvarianted_options: Dict[str, Any] = {}
+        for k, v in dbus_dict.items():
+            try:
+                unvarianted_options[SETTING_DBUS_NAME_TO_NAME[k]] = (
+                    SETTING_TO_CLASS[k].from_dbus(v)
+                )
+            except KeyError:
+                ...
+
         return cls(**unvarianted_options)
 
     @classmethod
