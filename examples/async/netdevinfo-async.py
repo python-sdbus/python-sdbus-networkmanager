@@ -97,12 +97,16 @@ async def list_networkdevice_details_async() -> None:
         if dev_type == DeviceType.WIFI.name:
             wifi = NetworkDeviceWireless(device_path)
             print("Wifi:   ", WiFiOperationMode(await wifi.mode).name.title())
-            ap = AccessPoint(await wifi.active_access_point)
-            ssid: bytes = await ap.ssid
-            if ssid:
-                print("SSID:   ", ssid.decode("utf-8", "ignore"))
-            if await ap.strength:
-                print("Signal: ", await ap.strength)
+            ap_path = await wifi.active_access_point
+            if ap_path == "/":
+                print("No active access point")
+            else:
+                ap = AccessPoint(ap_path)
+                ssid: bytes = await ap.ssid
+                if ssid:
+                    print("SSID:   ", ssid.decode("utf-8", "ignore"))
+                if await ap.strength:
+                    print("Signal: ", await ap.strength)
         connection_id = await get_most_recent_connection_id(dev_name, dev_type)
         if connection_id:
             print("Profile:", connection_id)
