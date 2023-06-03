@@ -136,6 +136,7 @@ from .interfaces_devices import (
     NetworkManagerDeviceWiredInterface,
     NetworkManagerDeviceWireGuardInterface,
     NetworkManagerDeviceWirelessInterface,
+    NetworkManagerLoopbackInterface,
     NetworkManagerPPPInterface,
 )
 from .interfaces_other import (
@@ -171,6 +172,7 @@ from .objects import (
     NetworkDeviceBridge,
     NetworkDeviceGeneric,
     NetworkDeviceIpTunnel,
+    NetworkDeviceLoopback,
     NetworkDeviceMacsec,
     NetworkDeviceMacvlan,
     NetworkDeviceModem,
@@ -330,6 +332,7 @@ __all__ = (
     'NetworkManagerDeviceWiredInterface',
     'NetworkManagerDeviceWireGuardInterface',
     'NetworkManagerDeviceWirelessInterface',
+    'NetworkManagerLoopbackInterface',
     'NetworkManagerPPPInterface',
     # .interfaces_other
     'NetworkManagerAccessPointInterface',
@@ -363,6 +366,7 @@ __all__ = (
     'NetworkDeviceBridge',
     'NetworkDeviceGeneric',
     'NetworkDeviceIpTunnel',
+    'NetworkDeviceLoopback',
     'NetworkDeviceMacsec',
     'NetworkDeviceMacvlan',
     'NetworkDeviceModem',

@@ -49,6 +49,7 @@ from .interfaces_devices import (
     NetworkManagerDeviceWiredInterfaceAsync,
     NetworkManagerDeviceWireGuardInterfaceAsync,
     NetworkManagerDeviceWirelessInterfaceAsync,
+    NetworkManagerLoopbackInterfaceAsync,
     NetworkManagerPPPInterfaceAsync,
 )
 from .interfaces_other import (
@@ -842,6 +843,36 @@ class NetworkDevicePPP(
     Implements :py:class:`NetworkManagerDeviceInterfaceAsync`, \
     :py:class:`NetworkManagerDeviceStatisticsInterfaceAsync` and \
     :py:class:`NetworkManagerPPPInterfaceAsync`
+    """
+
+    def __init__(self, device_path: str, bus: Optional[SdBus] = None) -> None:
+        """
+
+        :param device_path: D-Bus path to device object. \
+            Obtained from \
+            :py:meth:`NetworkManagerInterface.get_devices` or \
+            :py:meth:`NetworkManagerInterface.get_device_by_ip_iface`.
+
+        :param bus: You probably want to set default bus to system bus \
+            or pass system bus directly.
+        """
+        super().__init__()
+        self._connect(
+            NETWORK_MANAGER_SERVICE_NAME,
+            device_path,
+            bus)
+
+
+class NetworkDeviceLoopback(
+    NetworkManagerDeviceInterfaceAsync,
+    NetworkManagerDeviceStatisticsInterfaceAsync,
+    NetworkManagerLoopbackInterfaceAsync,
+):
+    """Loopback device
+
+    Implements :py:class:`NetworkManagerDeviceInterfaceAsync`, \
+    :py:class:`NetworkManagerDeviceStatisticsInterfaceAsync` and \
+    :py:class:`NetworkManagerLoopbackInterfaceAsync`
     """
 
     def __init__(self, device_path: str, bus: Optional[SdBus] = None) -> None:

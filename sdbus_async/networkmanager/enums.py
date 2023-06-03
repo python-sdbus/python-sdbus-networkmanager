@@ -529,6 +529,7 @@ class ConnectionType(str, Enum):
     * WIREGUARD
     * WIFI
     * WPAN
+    * LOOPBACK
     """
     ADSL = "adsl"
     BLUETOOTH = "bluetooth"
@@ -559,6 +560,7 @@ class ConnectionType(str, Enum):
     WIREGUARD = "wireguard"
     WIFI = "802-11-wireless"
     WPAN = "wpan"
+    LOOPBACK = "loopback"
 
 
 class DeviceType(IntEnum):
@@ -596,6 +598,7 @@ class DeviceType(IntEnum):
     * WIREGUARD
     * WIFI_P2P
     * VRF
+    * LOOPBACK
     """
     UNKNOWN = 0
     ETHERNET = 1
@@ -629,6 +632,7 @@ class DeviceType(IntEnum):
     WIREGUARD = 29
     WIFI_P2P = 30
     VRF = 31
+    LOOPBACK = 32
 
 
 class DeviceMetered(IntEnum):

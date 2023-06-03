@@ -97,6 +97,9 @@ Device objects
 .. autoclass:: sdbus_async.networkmanager.NetworkDevicePPP
     :members:
 
+.. autoclass:: sdbus_async.networkmanager.NetworkDeviceLoopback
+    :members:
+
 Connection configuration objects
 --------------------------------
 

@@ -1112,3 +1112,10 @@ class NetworkManagerPPPInterfaceAsync(
         Not documented upstream.
         """
         raise NotImplementedError
+
+
+class NetworkManagerLoopbackInterfaceAsync(
+    DbusInterfaceCommonAsync,
+    interface_name='org.freedesktop.NetworkManager.Device.Loopback',
+):
+    ...

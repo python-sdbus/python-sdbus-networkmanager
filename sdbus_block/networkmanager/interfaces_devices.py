@@ -1077,3 +1077,10 @@ class NetworkManagerPPPInterface(
         Not documented upstream.
         """
         raise NotImplementedError
+
+
+class NetworkManagerLoopbackInterface(
+    DbusInterfaceCommon,
+    interface_name='org.freedesktop.NetworkManager.Device.Loopback',
+):
+    ...

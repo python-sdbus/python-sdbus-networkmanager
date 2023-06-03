@@ -77,3 +77,6 @@ Contains interfaces for most types of devices.
 
 .. autoclass:: sdbus_async.networkmanager.NetworkManagerPPPInterfaceAsync
     :members:
+
+.. autoclass:: sdbus_async.networkmanager.NetworkManagerLoopbackInterfaceAsync
+    :members:
