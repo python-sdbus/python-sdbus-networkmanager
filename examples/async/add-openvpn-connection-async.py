@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # SPDX-License-Identifier: LGPL-2.1-or-later
 #
-# Example to create a new VPN network connection profile:
+# Example to create a new VPN network connection profile. Currently supported only with tls-auth
 #
 # $ examples/async/add-openvpn-connection-async.py --help
 # usage: add-openvpn-connection.py [-h] [-c CONN_ID] [-d DEV] [--remote REMOTE] [--remote-cert-tls] [-a] [--save]
@@ -53,7 +53,7 @@ from sdbus_async.networkmanager.settings import (
 )
 
 
-async def add_wifi_psk_connection_async(args: Namespace) -> str:
+async def add_vpn_connection_async(args) -> str:
     #Add a temporary (not yet saved) network connection profile
     #param Namespace args: dev, remote, remote_cert_tls, ca_path, cert_path, key_path, ta_path
     #return: dbus connection path of the created connection profile
@@ -112,17 +112,17 @@ if __name__ == "__main__":
     p.add_argument("-c", dest="conn_id", default=conn_id, help="Connection Id")
     p.add_argument("-u", dest="uuid", default=uuid4(), help="Connection UUID")
     p.add_argument("--dev", dest="dev", default="tun", help="VPN Dev")
-    p.add_argument("--remote", dest="remote", default="domain.com:443:tcp", help="VPN Remote")
+    p.add_argument("--remote", dest="remote", default="example.com:443:tcp", help="VPN Remote")
     p.add_argument("--remote-cert-tls", dest="remote_cert_tls", default="server", help="VPN Remote cert tls")
-    p.add_argument("--ca", dest="ca", default="/home/user/.cert/nm-openvpn/MyConnectionExample-ca.pem", help="VPN CA file path")
-    p.add_argument("--cert", dest="cert", default="/home/user/.cert/nm-openvpn/MyConnectionExample-cert.pem", help="VPN cert file path")
-    p.add_argument("--key", dest="key", default="/home/user/.cert/nm-openvpn/MyConnectionExample-key.pem", help="VPN key file path")
-    p.add_argument("--ta", dest="ta", default="/home/user/.cert/nm-openvpn/MyConnectionExample-ta.pem", help="VPN TA file path")
+    p.add_argument("--ca", dest="ca", required=True, help="VPN CA file path")
+    p.add_argument("--cert", dest="cert", required=True, help="VPN cert file path")
+    p.add_argument("--key", dest="key", required=True, help="VPN key file path")
+    p.add_argument("--ta", dest="ta", required=True, help="VPN TA file path")
     p.add_argument("-a", dest="auto", action="store_true", help="autoconnect")
     p.add_argument("--save", dest="save", action="store_true", help="Save")
     args = p.parse_args()
     sdbus.set_default_bus(sdbus.sd_bus_open_system())
-    if connection_dpath := asyncio.run(add_wifi_psk_connection_async(args)):
+    if connection_dpath := asyncio.run(add_vpn_connection_async(args)):
         print(f"Path of the new connection: {connection_dpath}")
         print(f"UUID of the new connection: {args.uuid}")
     else:
