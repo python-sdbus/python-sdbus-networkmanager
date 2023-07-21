@@ -38,7 +38,7 @@ import functools
 import logging
 import sdbus
 from uuid import uuid4
-from argparse import ArgumentParser, Namespace
+from argparse import ArgumentParser
 from pprint import pformat
 from sdbus_async.networkmanager import (
     NetworkManagerSettings as SettingsManager,
@@ -53,53 +53,59 @@ from sdbus_async.networkmanager.settings import (
 )
 
 
-async def add_vpn_connection_async(args) -> str:
-    #Add a temporary (not yet saved) network connection profile
-    #param Namespace args: dev, remote, remote_cert_tls, ca_path, cert_path, key_path, ta_path
-    #return: dbus connection path of the created connection profile
-    
+async def add_vpn_connection_async(conn_id: str,
+                                   dev: str,
+                                   remote: str,
+                                   remote_cert_tls: str,
+                                   uuid,
+                                   auto: bool,
+                                   save: bool,
+                                   ca: str,
+                                   cert: str,
+                                   key: str,
+                                   ta: str) -> str:
+    # Add a temporary (not yet saved) network connection profile
+    # param Namespace args: dev, remote, remote_cert_tls, ca_path, cert_path, key_path, ta_path
+    # return: dbus connection path of the created connection profile
+
     info = logging.getLogger().info
 
     # If we add many connections passing the same id, things get messy. Check:
-    if await SettingsManager().get_connections_by_id(args.conn_id):
-        print(f'Connection "{args.conn_id}" exists, remove it first')
-        print(f'Run: nmcli connection delete "{args.conn_id}"')
+    if await SettingsManager().get_connections_by_id(conn_id):
+        print(f'Connection "{conn_id}" exists, remove it first')
+        print(f'Run: nmcli connection delete "{conn_id}"')
         return ""
 
     profile = ConnectionProfile(
         connection=ConnectionSettings(
-            connection_id=args.conn_id,
-            uuid=str(args.uuid),
+            connection_id=conn_id,
+            uuid=str(uuid),
             connection_type=ConnectionType.VPN.value,
-            autoconnect=bool(hasattr(args, "auto") and args.auto),
+            autoconnect=bool(auto),
         ),
         ipv4=Ipv4Settings(method="auto"),
         ipv6=Ipv6Settings(method="auto"),
         vpn=VpnSettings(data={
-            'ca': args.ca,
-            'cert': args.cert,
+            'ca': ca,
+            'cert': cert,
             'cert-pass-flags': '0',
             'connection-type': 'tls',
-            'dev': args.dev,
-            'key': args.key,
-            'remote': args.remote,
-            'remote-cert-tls': args.remote_cert_tls,
-            'ta': args.ta,
+            'dev': dev,
+            'key': key,
+            'remote': remote,
+            'remote-cert-tls': remote_cert_tls,
+            'ta': ta,
             'ta-dir': '1'
         }, service_type='org.freedesktop.NetworkManager.openvpn')
     )
 
-    # To bind the new connection to a specific interface, use this:
-    if hasattr(args, "interface_name") and args.interface_name:
-        profile.connection.interface_name = args.interface_name
-
     s = SettingsManager()
-    save = bool(hasattr(args, "save") and args.save)
+    save = bool(save)
     addconnection = s.add_connection if save else s.add_connection_unsaved
     connection_settings_dbus_path = await addconnection(profile.to_dbus())
     created = "created and saved" if save else "created"
     info(f"New unsaved connection profile {created}, show it with:")
-    info(f'nmcli connection show "{args.conn_id}"|grep -v -e -- -e default')
+    info(f'nmcli connection show "{conn_id}"|grep -v -e -- -e default')
     info("Settings used:")
     info(functools.partial(pformat, sort_dicts=False)(profile.to_settings_dict()))
     return connection_settings_dbus_path
@@ -122,7 +128,7 @@ if __name__ == "__main__":
     p.add_argument("--save", dest="save", action="store_true", help="Save")
     args = p.parse_args()
     sdbus.set_default_bus(sdbus.sd_bus_open_system())
-    if connection_dpath := asyncio.run(add_vpn_connection_async(args)):
+    if connection_dpath := asyncio.run(add_vpn_connection_async(**vars(args))):
         print(f"Path of the new connection: {connection_dpath}")
         print(f"UUID of the new connection: {args.uuid}")
     else:
