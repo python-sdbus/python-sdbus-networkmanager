@@ -41,7 +41,8 @@ class NetworkManagerAccessPointInterfaceAsync(
     def flags(self) -> int:
         """Flags describing capabilities of the point
 
-        See :py:class:`AccessPointCapabilities`
+        See :py:class:`WifiAccessPointCapabilitiesFlags
+        <sdbus_async.networkmanager.enums.WifiAccessPointCapabilitiesFlags>`.
         """
         raise NotImplementedError
 
@@ -49,7 +50,8 @@ class NetworkManagerAccessPointInterfaceAsync(
     def wpa_flags(self) -> int:
         """Flags WPA authentication and encryption
 
-        See :py:class:`WpaSecurityFlags`
+        See :py:class:`WifiAccessPointSecurityFlags
+        <sdbus_async.networkmanager.enums.WifiAccessPointSecurityFlags>`.
         """
         raise NotImplementedError
 
@@ -57,7 +59,8 @@ class NetworkManagerAccessPointInterfaceAsync(
     def rsn_flags(self) -> int:
         """Flags describing RSN (Robust Secure Network) capabilities
 
-        See :py:class:`WpaSecurityFlags`
+        See :py:class:`WifiAccessPointSecurityFlags
+        <sdbus_async.networkmanager.enums.WifiAccessPointSecurityFlags>`.
         """
         raise NotImplementedError
 
@@ -80,7 +83,8 @@ class NetworkManagerAccessPointInterfaceAsync(
     def mode(self) -> int:
         """Mode of operation of access point
 
-        See :py:class:`WiFiOperationMode`
+        See :py:class:`WiFiOperationMode
+        <sdbus_async.networkmanager.enums.WiFiOperationMode>`.
         """
         raise NotImplementedError
 
@@ -127,7 +131,8 @@ class NetworkManagerSecretAgentManagerInterfaceAsync(
     ) -> None:
         """Same as register() but with agent capabilities
 
-        See :py:class:`SecretAgentCapabilities`
+        See :py:class:`SecretAgentCapabilitiesFlags
+        <sdbus_async.networkmanager.enums.SecretAgentCapabilitiesFlags>`.
         """
         raise NotImplementedError
 
@@ -202,7 +207,8 @@ class NetworkManagerConnectionActiveInterfaceAsync(
     def state(self) -> int:
         """Connection state
 
-        See :py:class:`ConnectionState`
+        See :py:class:`ActiveConnectionState
+        <sdbus_async.networkmanager.enums.ActiveConnectionState>`.
         """
         raise NotImplementedError
 
@@ -210,7 +216,8 @@ class NetworkManagerConnectionActiveInterfaceAsync(
     def state_flags(self) -> int:
         """Connection state flags
 
-        See :py:class:`ConnectionStateFlags`
+        See :py:class:`ActivationStateFlags
+        <sdbus_async.networkmanager.enums.ActivationStateFlags>`.
         """
         raise NotImplementedError
 
@@ -270,7 +277,10 @@ class NetworkManagerConnectionActiveInterfaceAsync(
     def state_changed(self) -> Tuple[int, int]:
         """Signal of the new state and the reason
 
-        See :py:class:`ConnectionState` and :py:class:`ConnectionStateReason`
+        See :py:class:`ActiveConnectionState
+        <sdbus_async.networkmanager.enums.ActiveConnectionState>`
+        and :py:class:`ActiveConnectionStateReason
+        <sdbus_async.networkmanager.enums.ActiveConnectionStateReason>`.
         """
         raise NotImplementedError
 
@@ -284,7 +294,8 @@ class NetworkManagerVPNConnectionInterfaceAsync(
     def vpn_state(self) -> int:
         """VPN connection state
 
-        See :py:class:`ConnectionState`
+        See :py:class:`VpnConnectionState
+        <sdbus_async.networkmanager.enums.VpnConnectionState>`.
         """
         raise NotImplementedError
 
@@ -298,7 +309,10 @@ class NetworkManagerVPNConnectionInterfaceAsync(
         """Signal when VPN state changed
 
         Tuple of new state and reason.
-        See :py:class:`ConnectionState` and :py:class:`ConnectionStateReason`
+        See :py:class:`VpnConnectionState
+        <sdbus_async.networkmanager.enums.VpnConnectionState>`
+        and :py:class:`VpnConnectionStateReason
+        <sdbus_async.networkmanager.enums.VpnConnectionStateReason>`.
         """
         raise NotImplementedError
 
@@ -595,7 +609,8 @@ class NetworkManagerSettingsConnectionInterfaceAsync(
     def flags(self) -> int:
         """Connection flags
 
-        See :py:class:`ConnectionFlags`
+        See :py:class:`SettingsConnectionFlags
+        <sdbus_async.networkmanager.enums.SettingsConnectionFlags>`.
         """
         raise NotImplementedError
 
@@ -909,7 +924,8 @@ class NetworkManagerVPNPluginInterfaceAsync(
     def state(self) -> int:
         """VPN state
 
-        See :py:class:`VpnState`
+        See :py:class:`VpnServiceState
+        <sdbus_async.networkmanager.enums.VpnServiceState>`.
         """
         raise NotImplementedError
 
@@ -917,7 +933,8 @@ class NetworkManagerVPNPluginInterfaceAsync(
     def state_changed(self) -> int:
         """Signal when VPN state changed with new VPN state.
 
-        See :py:class:`VpnState`
+        See :py:class:`VpnServiceState
+        <sdbus_async.networkmanager.enums.VpnServiceState>`.
         """
         raise NotImplementedError
 
@@ -950,7 +967,8 @@ class NetworkManagerVPNPluginInterfaceAsync(
     def failure(self) -> int:
         """Signal when VPN failure occurs
 
-        See :py:class:`VpnFailure`
+        See :py:class:`VpnFailure
+        <sdbus_async.networkmanager.enums.VpnFailure>`.
         """
         raise NotImplementedError
 
@@ -969,7 +987,8 @@ class NetworkManagerWifiP2PPeerInterfaceAsync(
     def flags(self) -> int:
         """Flags describing capabilities of the point
 
-        See :py:class:`AccessPointCapabilities`
+        See :py:class:`WifiAccessPointCapabilitiesFlags
+        <sdbus_async.networkmanager.enums.WifiAccessPointCapabilitiesFlags>`.
         """
         raise NotImplementedError
 
@@ -1024,14 +1043,13 @@ class NetworkManagerInterfaceAsync(
     ) -> None:
         """Reload NetworkManager configuration
 
-        Flags control what to reload:
+        Flags control what to reload.
 
-        * 0x0 everything
-        * 0x1 NetworkManager.conf
-        * 0x2 DNS configuration
-        * 0x4 Restart DNS plugin
+        Use :py:class:`NetworkManagerReloadFlags
+        <sdbus_async.networkmanager.enums.NetworkManagerReloadFlags>`
+        to create flags.
 
-        :param flags: Reload what?
+        :param flags: What to reload.
         """
         raise NotImplementedError
 
@@ -1166,7 +1184,8 @@ class NetworkManagerInterfaceAsync(
     ) -> int:
         """Get current connectivity state
 
-        See  :py:class:`NetworkManagerConnectivityState`
+        See :py:class:`ConnectivityState
+        <sdbus_async.networkmanager.enums.ConnectivityState>`.
         """
         raise NotImplementedError
 
@@ -1179,7 +1198,8 @@ class NetworkManagerInterfaceAsync(
     ) -> int:
         """Get current NetworkManager state
 
-        See :py:class:`NetworkManagerState`
+        See :py:class:`NetworkManagerState
+        <sdbus_async.networkmanager.enums.NetworkManagerState>`.
         """
         raise NotImplementedError
 
@@ -1290,7 +1310,8 @@ class NetworkManagerInterfaceAsync(
     def metered(self) -> int:
         """Primary connection metered status
 
-        See :py:class:`DeviceMetered`
+        See :py:class:`DeviceMetered
+        <sdbus_async.networkmanager.enums.DeviceMetered>`.
         """
         raise NotImplementedError
 
@@ -1322,7 +1343,8 @@ class NetworkManagerInterfaceAsync(
     def state(self) -> int:
         """Overall state of NetworkManager
 
-        See :py:class:`NetworkManagerState`
+        See :py:class:`NetworkManagerState
+        <sdbus_async.networkmanager.enums.NetworkManagerState>`.
         """
         raise NotImplementedError
 
@@ -1330,7 +1352,8 @@ class NetworkManagerInterfaceAsync(
     def connectivity(self) -> int:
         """Overall state of connectivity
 
-        See :py:class:`NetworkManagerConnectivityState`
+        See :py:class:`ConnectivityState
+        <sdbus_async.networkmanager.enums.ConnectivityState>`.
         """
         raise NotImplementedError
 
@@ -1365,7 +1388,8 @@ class NetworkManagerInterfaceAsync(
     def state_changed(self) -> int:
         """NetworkManager state changed
 
-        See :py:class:`NetworkManagerState`
+        See :py:class:`NetworkManagerState
+        <sdbus_async.networkmanager.enums.NetworkManagerState>`.
         """
         raise NotImplementedError
 

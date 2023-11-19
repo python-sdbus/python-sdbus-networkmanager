@@ -45,7 +45,8 @@ class NetworkManagerDeviceBluetoothInterfaceAsync(
     def bt_capabilities(self) -> int:
         """Bluetooth device capabilities
 
-        See :py:class:`BluetoothCapabilities`
+        See :py:class:`BluetoothCapabilitiesFlags
+        <sdbus_async.networkmanager.enums.BluetoothCapabilitiesFlags>`.
         """
         raise NotImplementedError
 
@@ -92,7 +93,8 @@ class NetworkManagerDeviceIPTunnelInterfaceAsync(
     def mode(self) -> int:
         """Tunnel mode
 
-        See :py:class:`IpTunnelMode`
+        See :py:class:`IpTunnelMode
+        <sdbus_async.networkmanager.enums.IpTunnelMode>`.
         """
         raise NotImplementedError
 
@@ -305,7 +307,8 @@ class NetworkManagerDeviceModemInterfaceAsync(
         Switching the radio technology might require
         firmware reboot.
 
-        See :py:class:`ModemCapabilities`
+        See :py:class:`ModemCapabilitiesFlags
+        <sdbus_async.networkmanager.enums.ModemCapabilitiesFlags>`.
         """
         raise NotImplementedError
 
@@ -707,7 +710,8 @@ class NetworkManagerDeviceWirelessInterfaceAsync(
     def mode(self) -> int:
         """Operating mode of the device
 
-        See :py:class:`WiFiOperationMode`
+        See :py:class:`WiFiOperationMode
+        <sdbus_async.networkmanager.enums.WiFiOperationMode>`.
         """
         raise NotImplementedError
 
@@ -730,7 +734,8 @@ class NetworkManagerDeviceWirelessInterfaceAsync(
     def wireless_capabilities(self) -> int:
         """List of wireless device capabilities
 
-        See :py:class:`WirelessCapabilities`
+        See :py:class:`WifiCapabilitiesFlags
+        <sdbus_async.networkmanager.enums.WifiCapabilitiesFlags>`.
         """
         raise NotImplementedError
 
@@ -850,7 +855,8 @@ class NetworkManagerDeviceInterfaceAsync(
     def capabilities(self) -> int:
         """Capabilities of the device
 
-        See :py:class:`DeviceCapabilities`
+        See :py:class:`DeviceCapabilitiesFlags
+        <sdbus_async.networkmanager.enums.DeviceCapabilitiesFlags>`.
         """
         raise NotImplementedError
 
@@ -858,7 +864,8 @@ class NetworkManagerDeviceInterfaceAsync(
     def state(self) -> int:
         """Device state.
 
-        See :py:class:`DeviceState`
+        See :py:class:`DeviceState
+        <sdbus_async.networkmanager.enums.DeviceState>`.
         """
         raise NotImplementedError
 
@@ -866,7 +873,10 @@ class NetworkManagerDeviceInterfaceAsync(
     def state_reason(self) -> Tuple[int, int]:
         """Current state and the reason.
 
-        See :py:class:`DeviceState` and :py:class:`DeviceStateReason`
+        See :py:class:`DeviceState
+        <sdbus_async.networkmanager.enums.DeviceState>` and
+        :py:class:`DeviceStateReason
+        <sdbus_async.networkmanager.enums.DeviceStateReason>`.
         """
         raise NotImplementedError
 
@@ -938,7 +948,8 @@ class NetworkManagerDeviceInterfaceAsync(
     def device_type(self) -> int:
         """Device type
 
-        See :py:class:`DeviceType`
+        See :py:class:`DeviceType
+        <sdbus_async.networkmanager.enums.DeviceType>`.
         """
         raise NotImplementedError
 
@@ -961,7 +972,8 @@ class NetworkManagerDeviceInterfaceAsync(
     def metered(self) -> int:
         """Whether the traffic is subject to limitations
 
-        See :py:class:`DeviceMetered`
+        See :py:class:`DeviceMetered
+        <sdbus_async.networkmanager.enums.DeviceMetered>`.
         """
         raise NotImplementedError
 
@@ -987,7 +999,8 @@ class NetworkManagerDeviceInterfaceAsync(
     def ip4_connectivity(self) -> int:
         """IPv4 connectivity state
 
-        See :py:class:`ConnectivityState`
+        See :py:class:`ConnectivityState
+        <sdbus_async.networkmanager.enums.ConnectivityState>`.
         """
         raise NotImplementedError
 
@@ -995,7 +1008,8 @@ class NetworkManagerDeviceInterfaceAsync(
     def ip6_connectivity(self) -> int:
         """IPv6 connectivity state
 
-        See :py:class:`ConnectivityState`
+        See :py:class:`ConnectivityState
+        <sdbus_async.networkmanager.enums.ConnectivityState>`.
         """
         raise NotImplementedError
 
@@ -1003,7 +1017,8 @@ class NetworkManagerDeviceInterfaceAsync(
     def interface_flags(self) -> int:
         """Interface flags
 
-        See :py:class:`DeviceInterfaceFlags`
+        See :py:class:`DeviceInterfaceFlags
+        <sdbus_async.networkmanager.enums.DeviceInterfaceFlags>`.
         """
         raise NotImplementedError
 
@@ -1018,7 +1033,10 @@ class NetworkManagerDeviceInterfaceAsync(
 
         Tuple of new state, old state and reason for new state.
 
-        See :py:class:`DeviceState` and :py:class:`DeviceStateReason`
+        See :py:class:`DeviceState
+        <sdbus_async.networkmanager.enums.DeviceState>` and
+        :py:class:`DeviceStateReason
+        <sdbus_async.networkmanager.enums.DeviceStateReason>`.
         """
         raise NotImplementedError
 

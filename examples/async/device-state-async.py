@@ -24,7 +24,7 @@ from sdbus_async.networkmanager import (
     NetworkDeviceGeneric,
     DeviceState,
     DeviceType,
-    DeviceCapabilities as Capabilities,
+    DeviceCapabilitiesFlags,
     ActiveConnection,
     ConnectivityState,
 )
@@ -46,7 +46,9 @@ async def list_active_hardware_networkdevice_states(only_hw: bool) -> None:
         generic = NetworkDeviceGeneric(device_path)
 
         # Demonstrates an enum to match devices using capabilities:
-        if only_hw and await generic.capabilities & Capabilities.IS_SOFTWARE:
+        if only_hw and (
+                DeviceCapabilitiesFlags.IS_SOFTWARE
+                in DeviceCapabilitiesFlags(await generic.capabilities)):
             continue
 
         # Create the strings for the columns using the names of the enums:

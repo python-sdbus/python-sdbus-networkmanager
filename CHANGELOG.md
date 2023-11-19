@@ -1,3 +1,45 @@
+## 3.0.0
+
+### Breaking changes
+
+All enums were revisisted and updated in accordance to NetworkManager documentation.
+
+Some enums and their fields were renamed:
+
+* `AccessPointCapabilities` -> `WifiAccessPointCapabilities`
+* `WirelessCapabilities` -> `WifiCapabilities`
+* `WpaSecurityFlags` -> `WifiAccessPointSecurityFlags`
+  * `P2P_*` -> `PAIR_*`
+  * `BROADCAST_*` -> `GROUP_*`
+  * `AUTH_*` -> `KEY_MGMT_*`
+* `ConnectionState` -> `ActiveConnectionState`
+* `ConnectionStateReason` -> `ActiveConnectionStateReason`
+* `ConnectionFlags` -> `SettingsConnectionFlags`
+* `ConnectionStateFlags` -> `ActivationStateFlags`
+* `DeviceCapabilities` -> `DeviceCapabilitiesFlags`
+* `BluetoothCapabilities` -> `BluetoothCapabilitiesFlags`
+* `ModemCapabilities` -> `ModemCapabilitiesFlags`
+* `SecretAgentCapabilities` -> `SecretAgentCapabilitiesFlags`
+* `VpnState` -> `VpnServiceState`
+* `VpnFailure`
+  * `LOGIN_FAILURE` -> `LOGIN_FAILED`
+
+New enums:
+
+* `NetworkManagerCapabilities`
+* `WimaxNSPNetworkType`
+* `SecretAgentGetSecretsFlags`
+* `CheckpointCreateFlags`
+* `CheckpointRollbackResult`
+* `SettingsAddConnection2Flags`
+* `SettingsUpdate2Flags`
+* `DeviceReapplyFlags`
+* `NetworkManagerReloadFlags`
+* `RadioFlags`
+* `MptcpFlags`
+* `VpnConnectionState`
+* `VpnConnectionStateReason`
+
 ## 2.0.0
 
 ### Warning if you used pre-release version

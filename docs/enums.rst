@@ -1,74 +1,43 @@
 Enums
 ================
 
-.. autoclass:: sdbus_async.networkmanager.AccessPointCapabilities
-    :members:
+Python's Enum quick intro
+-------------------------
 
-.. autoclass:: sdbus_async.networkmanager.WpaSecurityFlags
-    :members:
+There are two types of enums. ``IntEnum`` is used for a discrete values
+and ``IntFlag`` is used for bit flags. For example, ``DeviceType`` identifies
+a single device type as a device cannot be of multiple types.
+``WifiCapabilities`` shows a particular Wifi device capabilities which it
+can have multiple, for example, supporting both 5GHz and 2.4GHz radio bands.
 
-.. autoclass:: sdbus_async.networkmanager.WiFiOperationMode
-    :members:
+Usually ``IntEnum`` is implied unless the enum's name ends with ``Flag``.
 
-.. autoclass:: sdbus_async.networkmanager.SecretAgentCapabilities
-    :members:
+Example code using enums:
 
-.. autoclass:: sdbus_async.networkmanager.ConnectionState
-    :members:
+.. code-block:: python
 
-.. autoclass:: sdbus_async.networkmanager.ConnectionStateFlags
-    :members:
+   from sdbus_async.networkmanager.enums import DeviceType, WifiCapabilities
 
-.. autoclass:: sdbus_async.networkmanager.ConnectionStateReason
-    :members:
+   # Get particular device type from an integer
+   DeviceType(2) == DeviceType.WIFI
+   # Returns: True
 
-.. autoclass:: sdbus_async.networkmanager.BluetoothCapabilities
-    :members:
+   # Check if a specific flag is enabled
+   WifiCapabilities.FREQ_2GHZ in WifiCapabilities(0x00000400 | 0x00000200)
+   # Returns: True
 
-.. autoclass:: sdbus_async.networkmanager.IpTunnelMode
-    :members:
+   # Iterate over all enabled flags
+   list(WifiCapabilities(0x00000400 | 0x00000200))
+   # Returns: [<WifiCapabilities.FREQ_2GHZ: 512>, <WifiCapabilities.FREQ_5GHZ: 1024>]
 
-.. autoclass:: sdbus_async.networkmanager.ModemCapabilities
-    :members:
+`See Python's standard library documentation for more detailed
+tutorial and API reference. <https://docs.python.org/3/library/enum.html>`_
 
-.. autoclass:: sdbus_async.networkmanager.WirelessCapabilities
-    :members:
+NetworkManager's enums
+-------------------------
 
-.. autoclass:: sdbus_async.networkmanager.DeviceCapabilities
-    :members:
-
-.. autoclass:: sdbus_async.networkmanager.DeviceState
-    :members:
-
-.. autoclass:: sdbus_async.networkmanager.DeviceStateReason
-    :members:
-
-.. autoclass:: sdbus_async.networkmanager.DeviceType
-    :members:
-
-.. autoclass:: sdbus_async.networkmanager.DeviceMetered
-    :members:
-
-.. autoclass:: sdbus_async.networkmanager.ConnectivityState
-    :members:
-
-.. autoclass:: sdbus_async.networkmanager.DeviceInterfaceFlags
-    :members:
-
-.. autoclass:: sdbus_async.networkmanager.ConnectionFlags
-    :members:
-
-.. autoclass:: sdbus_async.networkmanager.VpnState
-    :members:
-
-.. autoclass:: sdbus_async.networkmanager.VpnFailure
-    :members:
-
-.. autoclass:: sdbus_async.networkmanager.NetworkManagerConnectivityState
-    :members:
-
-.. autoclass:: sdbus_async.networkmanager.NetworkManagerState
-    :members:
+.. automodule:: sdbus_async.networkmanager.enums
+   :members:
 
 Helper classes
 -----------------------
