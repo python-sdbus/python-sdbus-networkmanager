@@ -13,6 +13,7 @@ of `NetworkManager <https://wiki.gnome.org/Projects/NetworkManager>`_.
     :maxdepth: 3
     :caption: Contents:
 
+    quickstart
     objects
     examples
     device_interfaces
