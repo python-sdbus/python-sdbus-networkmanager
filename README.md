@@ -17,6 +17,8 @@ See [python-sdbus requirements](https://github.com/igo95862/python-sdbus#require
 
 # [Documentation](https://python-sdbus-networkmanager.readthedocs.io/en/latest/)
 
+See [this quickstart guide for brief introduction to NetworkManager D-Bus API](https://python-sdbus-networkmanager.readthedocs.io/en/latest/quickstart.html).
+
 This is the sub-project of [python-sdbus](https://github.com/igo95862/python-sdbus).
 
 See the [python-sdbus documentation](https://python-sdbus.readthedocs.io/en/latest/).
