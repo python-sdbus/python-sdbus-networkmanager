@@ -68,6 +68,7 @@ class.
 .. code-block:: python
 
   from sdbus_block.networkmanager import NetworkManagerSettings
+  from sdbus_block.networkmanager import NetworkConnectionSettings
 
   networwork_manager_settings = NetworkManagerSettings()
 
