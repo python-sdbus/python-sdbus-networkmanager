@@ -42,8 +42,17 @@ can be used to determine particular type of a device.
 
 .. code-block:: python
 
-  from sdbus_block.networkmanager import NetworkDeviceGeneric, NetworkDeviceWireless
+  import sdbus
+
+  from sdbus_block.networkmanager import (
+      NetworkDeviceGeneric,
+      NetworkDeviceWireless,
+      NetworkManager,
+  )
   from sdbus_block.networkmanager.enums import DeviceType
+
+  sdbus.set_default_bus(sdbus.sd_bus_open_system())
+  network_manager = NetworkManager()
 
   all_devices = {path: NetworkDeviceGeneric(path) for path in network_manager.devices}
 
@@ -67,11 +76,22 @@ class.
 
 .. code-block:: python
 
-  from sdbus_block.networkmanager import NetworkManagerSettings
+  import sdbus
+
+  from sdbus_block.networkmanager import (
+      NetworkConnectionSettings,
+      NetworkManager,
+      NetworkManagerSettings,
+  )
+
+  sdbus.set_default_bus(sdbus.sd_bus_open_system())
+  network_manager = NetworkManager()
 
   networwork_manager_settings = NetworkManagerSettings()
 
-  all_connections = [NetworkConnectionSettings(x) for x in networwork_manager_settings.connections]
+  all_connections = [
+      NetworkConnectionSettings(x) for x in networwork_manager_settings.connections
+  ]
 
 The actual connection settings are represented by a complex double nested dictionary
 of D-Bus variants. For convenience a `dataclass <https://docs.python.org/3/library/dataclasses.html>`_
@@ -83,9 +103,23 @@ are two main methods to interact with connection settings helper.
 
 .. code-block:: python
 
-  connection = all_connections[0]
+  import sdbus
+
+  from sdbus_block.networkmanager import (
+      NetworkConnectionSettings,
+      NetworkManager,
+      NetworkManagerSettings,
+  )
+
+  sdbus.set_default_bus(sdbus.sd_bus_open_system())
+  network_manager = NetworkManager()
+
+  networwork_manager_settings = NetworkManagerSettings()
+
+
+  connection = NetworkConnectionSettings(networwork_manager_settings.connections[0])
   setting_dataclass = connection.get_profile()
-  print("uuid:", profile.connection.uuid)
+  print("uuid:", setting_dataclass.connection.uuid)
 
 Active Connection
 -----------------
