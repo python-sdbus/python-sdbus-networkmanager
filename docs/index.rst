@@ -22,5 +22,5 @@ of `NetworkManager <https://wiki.gnome.org/Projects/NetworkManager>`_.
     enums
     exceptions
 
-See `python-sdbus <https://github.com/igo95862/python-sdbus>`_ homepage if you are
+See `python-sdbus <https://github.com/python-sdbus/python-sdbus>`_ homepage if you are
 unfamiliar with python-sdbus.
