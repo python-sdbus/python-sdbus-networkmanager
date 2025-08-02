@@ -27,6 +27,31 @@ from __future__ import annotations
 from enum import Enum, IntEnum, IntFlag
 
 
+class NetworkManagerVersionInfoCapability(IntEnum):
+    """The numeric values represent the bit index of the capability.
+
+    These capabilities can be queried in the ``version_info`` D-Bus property.
+
+    Since NetworkManager 1.42.
+    """
+
+    SYNC_ROUTE_WITH_TABLE = 0
+    """Contains the fix to a bug that caused that routes in table other
+    than main were not removed on reapply nor on connection down.
+    """
+    IP4_FORWARDING = 1
+    """Indicates that NetworkManager supports configuring per-device IPv4
+    sysctl forwarding setting.
+
+    Since NetworkManager 1.54.
+    """
+    SRIOV_PRESERVE_ON_DOWN = 2
+    """NetworkManager supports the "sriov.preserve-on-down" property.
+
+    Since NetworkManager 1.54.
+    """
+
+
 class NetworkManagerCapabilitiesFlags(IntFlag):
     """NetworkManager loaded plugins.
 
@@ -197,7 +222,7 @@ class DeviceType(IntEnum):
     WPAN = 27
     """A IEEE 802.15.4 (WPAN) MAC Layer Device."""
     SIXLOWPAN = 28
-    """6LoWPAN interfac.e"""
+    """6LoWPAN interface."""
     WIREGUARD = 29
     """A WireGuard interface."""
     WIFI_P2P = 30
@@ -214,6 +239,16 @@ class DeviceType(IntEnum):
     """A loopback interface.
 
     Since NetworkManager 1.42.
+    """
+    HSR = 33
+    """A HSR/PRP device.
+
+    Since NetworkManager 1.46.
+    """
+    IPVLAN = 34
+    """A IPVLAN device.
+
+    Since NetworkManager 1.52.
     """
 
 
@@ -618,6 +653,58 @@ class DeviceStateReason(IntEnum):
     """Configuration of SR-IOV parameters failed."""
     PEER_NOT_FOUND = 67
     """The Wi-Fi P2P peer could not be found."""
+    DEVICE_HANDLER_FAILED = 68
+    """The device handler dispatcher returned an error.
+
+    Since NetworkManager 1.46.
+    """
+    UNMANAGED_BY_DEFAULT = 69
+    """The device is unmanaged because the device type is unmanaged by default.
+
+    Since NetworkManager 1.48.
+    """
+    UNMANAGED_EXTERNAL_DOWN = 70
+    """The device is unmanaged because it is an external device and is
+    unconfigured (down or without addresses).
+
+    Since NetworkManager 1.48.
+    """
+    UNMANAGED_LINK_NOT_INIT = 71
+    """The device is unmanaged because the link is not initialized by udev.
+
+    Since NetworkManager 1.48.
+    """
+    UNMANAGED_QUITTING = 72
+    """The device is unmanaged because NetworkManager is quitting.
+
+    Since NetworkManager 1.48.
+    """
+    UNMANAGED_SLEEPING = 73
+    """The device is unmanaged because networking is disabled or the system
+    is suspended.
+
+    Since NetworkManager 1.48.
+    """
+    UNMANAGED_USER_CONF = 74
+    """The device is unmanaged by user decision in NetworkManager.conf.
+
+    Since NetworkManager 1.48.
+    """
+    UNMANAGED_USER_EXPLICIT = 75
+    """The device is unmanaged by explicit user decision.
+
+    Since NetworkManager 1.48.
+    """
+    UNMANAGED_USER_SETTINGS = 76
+    """The device is unmanaged by user decision via settings plugin.
+
+    Since NetworkManager 1.48.
+    """
+    UNMANAGED_USER_UDEV = 77
+    """The device is unmanaged via udev rule.
+
+    Since NetworkManager 1.48.
+    """
 
 
 class DeviceMetered(IntEnum):
@@ -863,6 +950,14 @@ class CheckpointCreateFlags(IntFlag):
 
     Since NetworkManager 1.38.
     """
+    TRACK_INTERNAL_GLOBAL_DNS = 0x20
+    """during rollback, by default changes to global DNS via D-BUS interface
+    are preserved. With this flag, the rollback reverts the global DNS changes
+    made via D-Bus interface. Global DNS defined in [global-dns] section of
+    NetworkManager.conf is not impacted by this flag.
+
+    Since NetworkManager 1.48.
+    """
 
 
 class CheckpointRollbackResult(IntEnum):
@@ -1100,6 +1195,68 @@ class DeviceInterfaceFlags(IntFlag):
 
     Since NetworkManager 1.32.
     """
+
+
+class ClientPermission(IntEnum):
+    """Permissions that NetworkManager clients can obtain."""
+
+    NONE = 0
+    """Unknown or no permission."""
+    ENABLE_DISABLE_NETWORK = 1
+    """Controls whether networking can be globally enabled or disabled."""
+    DISABLE_WIFI = 2
+    """Controls whether Wi-Fi can be globally enabled or disabled."""
+    DISABLE_WWAN = 3
+    """Controls whether WWAN (3G) can be globally enabled or disabled."""
+    DISABLE_WIMAX = 4
+    """Controls whether WiMAX can be globally enabled or disabled."""
+    SLEEP_WAKE = 5
+    """Controls whether the client can ask NetworkManager to sleep and wake."""
+    NETWORK_CONTROL = 6
+    """Controls whether networking connections can be started, stopped, and
+    changed.
+    """
+    WIFI_SHARE_PROTECTED = 7
+    """Controls whether a password protected Wi-Fi hotspot can be created."""
+    WIFI_SHARE_OPEN = 8
+    """Controls whether an open Wi-Fi hotspot can be created."""
+    SETTINGS_MODIFY_SYSTEM = 9
+    """Controls whether connections that are available to all users
+    can be modified.
+    """
+    MODIFY_OWN = 10
+    """Controls whether connections owned by the current user
+    can be modified.
+    """
+    MODIFY_HOSTNAME = 11
+    """Controls whether the persistent hostname can be changed."""
+    MODIFY_GLOBAL_DNS = 12
+    """Modify persistent global DNS configuration."""
+    RELOAD = 13
+    """Controls access to reload."""
+    CHECKPOINT_ROLLBACK = 14
+    """Permission to create checkpoints."""
+    ENABLE_DISABLE_STATISTICS = 15
+    """Controls whether device statistics can be globally enabled
+    or disabled.
+    """
+    ENABLE_DISABLE_CONNECTIVITY_CHECK = 16
+    """Controls whether connectivity check can be enabled or disabled."""
+    WIFI_SCAN = 17
+    """Controls whether wifi scans can be performed."""
+
+
+class ClientPermissionResult(IntEnum):
+    """Indicate what authorizations and permissions required for permission."""
+
+    UNKNOWN = 0
+    """Unknown or no authorization."""
+    YES = 1
+    """Permission is available."""
+    AUTH = 2
+    """Authorization is necessary before the permission is available."""
+    NO = 3
+    """Permission to perform the operation is denied by system policy."""
 
 
 class RadioFlags(IntFlag):
