@@ -154,6 +154,7 @@ class NetworkManagerSettings(NetworkManagerSettingsInterface):
             NETWORK_MANAGER_SERVICE_NAME,
             '/org/freedesktop/NetworkManager/Settings',
             bus)
+        self._nm_used_bus = bus
 
     def get_connections_by_id(self, connection_id: str) -> List[str]:
         """Helper method to get a list of connection profile paths
@@ -165,7 +166,7 @@ class NetworkManagerSettings(NetworkManagerSettingsInterface):
         """
         connection_paths_with_matching_id = []
         for connection_path in self.connections:
-            profile = NetworkConnectionSettings(connection_path)
+            profile = NetworkConnectionSettings(connection_path, self._nm_used_bus)
             # profile.get_settings()["connection"]["id"][1] gives the id value:
             if profile.get_settings()["connection"]["id"][1] == connection_id:
                 connection_paths_with_matching_id.append(connection_path)
