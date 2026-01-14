@@ -126,6 +126,10 @@ class WireguardPeers(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'allowed-ips', 'dbus_type': 'as'},
         default=None,
     )
+    persistent_keepalive: Optional[str] = field(
+        metadata={"dbus_name": "persistent-keepalive", "dbus_type": "u"},
+        default=None,
+    )
 
 
 @dataclass
