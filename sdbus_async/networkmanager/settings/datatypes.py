@@ -118,7 +118,7 @@ class WireguardPeers(NetworkManagerSettingsMixin):
         metadata={'dbus_name': 'public-key', 'dbus_type': 's'},
         default=None,
     )
-    endpoint: Optional[int] = field(
+    endpoint: Optional[str] = field(
         metadata={'dbus_name': 'endpoint', 'dbus_type': 's'},
         default=None,
     )
