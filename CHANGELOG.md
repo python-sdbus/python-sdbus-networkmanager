@@ -1,10 +1,13 @@
-## 3.0.0
+## 2.1.0
 
-### Breaking changes
+### Major changes
+
+#### Enum updates
 
 All enums were revisisted and updated in accordance to NetworkManager documentation.
 
-Some enums and their fields were renamed:
+Some enums and their fields were renamed. Old names are still provided for backwards
+compatibility
 
 * `AccessPointCapabilities` -> `WifiAccessPointCapabilities`
 * `WirelessCapabilities` -> `WifiCapabilities`

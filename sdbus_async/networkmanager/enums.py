@@ -368,6 +368,34 @@ class WifiAccessPointSecurityFlags(IntFlag):
     Since NetworkManager 1.30.
     """
 
+    # Deprecated aliases
+    P2P_WEP40 = 0x00000001
+    """Deprecated alias of ``PAIR_WEP40``"""
+    P2P_WEP104 = 0x00000002
+    """Deprecated alias of ``PAIR_WEP104``"""
+    P2P_TKIP = 0x00000004
+    """Deprecated alias of ``PAIR_TKIP``"""
+    P2P_CCMP = 0x00000008
+    """Deprecated alias of ``PAIR_CCMP``"""
+    BROADCAST_WEP40 = 0x00000010
+    """Deprecated alias of ``GROUP_WEP40``"""
+    BROADCAST_WEP104 = 0x00000020
+    """Deprecated alias of ``GROUP_WEP104``"""
+    BROADCAST_TKIP = 0x00000040
+    """Deprecated alias of ``GROUP_TKIP``"""
+    BROADCAST_CCMP = 0x00000080
+    """Deprecated alias of ``GROUP_CCMP``"""
+    AUTH_PSK = 0x00000100
+    """Deprecated alias of ``KEY_MGMT_PSK``"""
+    AUTH_802_1X = 0x00000200
+    """Deprecated alias of ``KEY_MGMT_802_1X``"""
+    AUTH_SAE = 0x00000400
+    """Deprecated alias of ``KEY_MGMT_SAE``"""
+    AUTH_OWE = 0x00000800
+    """Deprecated alias of ``KEY_MGMT_OWE``"""
+    AUTH_OWE_TM = 0x00001000
+    """Deprecated alias of ``KEY_MGMT_OWE_TM``"""
+
 
 class WiFiOperationMode(IntEnum):
     """Indicates the 802.11 mode an access point or device is currently in."""
@@ -1427,6 +1455,23 @@ class VpnFailure(IntEnum):
     """Connect failed."""
     BAD_IP_CONFIG = 2
     """Invalid IP configuration returned from the VPN plugin."""
+    LOGIN_FAILURE = 0
+    """Deprecated alias of ``LOGIN_FAILED``"""
+
+
+# Backwards compatibility with version 2.0.0
+AccessPointCapabilities = WifiAccessPointCapabilitiesFlags
+WirelessCapabilities = WifiCapabilitiesFlags
+WpaSecurityFlags = WifiAccessPointSecurityFlags
+ConnectionState = ActiveConnectionState
+ConnectionStateReason = ActiveConnectionStateReason
+ConnectionFlags = ActiveConnectionState
+ConnectionStateFlags = ActivationStateFlags
+DeviceCapabilities = DeviceCapabilitiesFlags
+BluetoothCapabilities = BluetoothCapabilitiesFlags
+ModemCapabilities = ModemCapabilitiesFlags
+SecretAgentCapabilities = SecretAgentCapabilitiesFlags
+VpnState = VpnServiceState
 
 # Connection Types, e.g. from connecion_profile.connection.type:
 #
