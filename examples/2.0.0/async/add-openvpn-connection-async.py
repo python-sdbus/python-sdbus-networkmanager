@@ -37,7 +37,7 @@ import asyncio
 import functools
 import logging
 import sdbus
-from uuid import uuid4
+from uuid import UUID, uuid4
 from argparse import ArgumentParser
 from pprint import pformat
 from sdbus_async.networkmanager import (
@@ -57,7 +57,7 @@ async def add_vpn_connection_async(conn_id: str,
                                    dev: str,
                                    remote: str,
                                    remote_cert_tls: str,
-                                   uuid,
+                                   uuid: UUID | str,
                                    auto: bool,
                                    save: bool,
                                    ca: str,
