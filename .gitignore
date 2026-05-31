@@ -22,7 +22,6 @@
 *.pyc
 __pycache__
 build
-dev*
 strace*.txt
 *.so
 .cache
